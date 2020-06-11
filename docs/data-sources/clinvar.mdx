@@ -1,5 +1,8 @@
+---
+title: ClinVar
+---
 
-# ClinVar
+import JSON from './clinvar-json.md'
 
 ## RCV Files
 
@@ -8,7 +11,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <ReleaseSet Dated="2016-07-04" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Type="full"
             xsi:noNamespaceSchemaLocation="http://ftp.ncbi.nlm.nih.gov/pub/clinvar/xsd_public/clinvar_public_1.35.xsd">
- 
+
     <ClinVarSet ID="47064274">
         <RecordStatus>current</RecordStatus>
         <Title>NM_000235.4(LIPA):c.894+1G&gt;A AND Wolman disease</Title>
@@ -225,24 +228,153 @@
             </TraitSet>
         </ClinVarAssertion>
     </ClinVarSet>
- 
+
 </ReleaseSet>
 ```
 ### Parsing
 
-| RCV field | XML field | Comment |
-|--|--|--|
-| ID |  |  |
-| LastUpdatedDate|  |  |
-| Significance|  |  |
-| ReviewStatus|  |  |
-| Phenotypes |  |  |
-| Location and VariantId |  |  |
-| MedGen, OMIM, Orphanet IDs |  |  |
-| AlleleOrigins |  |  We only extract all Allele Origins from Submissions (SCV) entries.|
-| PubMedIds |  |  We only extract all Pubmed Ids from Submissions (SCV) entries.|
+In the following section, we discuss which field of the XML was used to extract information that is presented in the JSON output.
 
+**ID**
 
+```xml {3}
+<ClinVarSet>
+   <ReferenceClinVarAssertion>    
+       <ClinVarAccession Acc="RCV000000001" Version="2">
+</ClinVarSet>
+```
+The Acc and Version fields are merged to form the ID (RCV000000001.2)
+
+**LastUpdatedDate**
+
+```xml {2}
+<ClinVarSet>
+   <ReferenceClinVarAssertion DateCreated="2012-08-13" DateLastUpdated="2016-02-17" ID="57604" >
+</ClinVarSet>
+```
+
+**Significance**
+
+```xml {5}
+<ClinVarSet>
+   <ReferenceClinVarAssertion>
+       <ClinicalSignificance DateLastEvaluated="1996-04-01">        
+           <ReviewStatus>no assertion criteria provided</ReviewStatus>              
+           <Description>Pathogenic</Description>            
+       </ClinicalSignificance>
+</ClinVarSet>
+```
+
+**ReviewStatus**
+
+```xml {4}
+<ClinVarSet>
+   <ReferenceClinVarAssertion>    
+       <ClinicalSignificance DateLastEvaluated="1996-04-01">        
+           <ReviewStatus>no assertion criteria provided</ReviewStatus>             
+           <Description>Pathogenic</Description>            
+       </ClinicalSignificance>
+</ClinVarSet>
+```
+
+**Phenotypes**
+
+```xml {2-8}
+<ReferenceClinVarAssertion>
+   <TraitSet Type="Disease" ID="62">
+       <Trait Type="Disease">
+            <Name>
+               <ElementValue Type="Preferred">Joubert syndrome 9</ElementValue>
+            </Name>
+        </Trait>
+   </TraitSet>
+</ReferenceClinVarAssertion>
+```
+We only use the field with Type="Preferred". Multiple phenotypes may be reported
+
+**Location and Variant Id**
+
+```xml {3,5-12}
+<ReferenceClinVarAssertion>
+<GenotypeSet Type="CompoundHeterozygote" ID="424709">
+   <MeasureSet Type="Variant" ID="81">
+       <Measure Type="single nucleotide variant" ID="15120">
+        <SequenceLocation Assembly="GRCh38" AssemblyAccessionVersion="GCF_000001405.38"  
+          AssemblyStatus="current" Chr="10" Accession="NC_000010.11" start="89222510"  
+          stop="89222510" display_start="89222510" display_stop="89222510" variantLength="1"  
+          positionVCF="89222510" referenceAlleleVCF="C" alternateAlleleVCF="T"/>  
+        <SequenceLocation Assembly="GRCh37" AssemblyAccessionVersion="GCF_000001405.25"  
+          AssemblyStatus="previous" Chr="10" Accession="NC_000010.10" start="90982267"  
+          stop="90982267" display_start="90982267" display_stop="90982267" variantLength="1"  
+          positionVCF="90982267" referenceAlleleVCF="C" alternateAlleleVCF="T"/>
+       </Measure>
+   </MeasureSet>
+ </GenotypeSet>
+</ReferenceClinVarAssertion>
+```
+
+- The variant position is extracted from the fields for their respective assemblies.
+- Updated records contain positionVCF, referenceAlleleVCF and alternateAlleleVCF fields and when present, we use them to create the variant.
+- For older records, since "start' and "stop" fields are not always available, we use the "display_start" and "display_end" fields.
+- If a required allele is not available, we extract it from the reference sequence.
+- Only variants having a dbSNP id are extracted.
+- Note that a ClinVar accession may have multiple variants associated with it (possible in different locations)
+- VariantId is extracted from the MeasureSet attributes.
+
+**MedGen, OMIM, Orphanet IDs**
+
+```xml {4-7}
+<ReferenceClinVarAssertion>
+   <TraitSet Type="Disease" ID="175">
+       <Trait ID="3036" Type="Disease">
+           <XRef ID="C0086651" DB="MedGen"/>
+           <XRef ID="309297" DB="Orphanet"/>
+           <XRef ID="582" DB="Orphanet"/>
+           <XRef Type="MIM" ID="253000" DB="OMIM"/>
+       </Trait>
+   </TraitSet>
+</ReferenceClinVarAssertion>
+```
+
+**AlleleOrigins**
+
+```xml {2}
+<ClinVarAssertion>
+     <Origin>germline</Origin>
+</ClinVarAssertion>
+```
+
+We only extract all Allele Origins from Submissions (SCV) entries.
+
+**PubMedIds**
+
+```xml {4,10,16,21}
+<ClinVarAssertion>
+   <ClinicalSignificance DateLastEvaluated="1996-04-01">
+       <Citation Type="general">
+           <ID Source="PubMed">12114475</ID>
+       </Citation>
+   </ClinicalSignificance>
+   <AttributeSet>
+       <Attribute Type="AssertionMethod">LMM Criteria</Attribute>
+       <Citation>
+            <ID Source="PubMed">24033266</ID>
+       </Citation>
+   </AttributeSet>
+   <ObservedIn>
+       <ObservedData ID="9727445">
+           <Citation Type="general">
+               <ID Source="PubMed">9113933</ID>
+           </Citation>
+       </ObservedData>
+   </ObservedIn>
+   <Citation Type="general">
+       <ID Source="PubMed">23757202</ID>
+   </Citation>
+</ClinVarAssertion>
+```
+
+We only extract all Pubmed Ids from Submissions (SCV) entries.
 
 ## VCV Files
 ### Example
@@ -276,8 +408,7 @@
       <VariantType>copy number gain</VariantType>
       <Location>
         <CytogeneticLocation>1p36.31</CytogeneticLocation>
-        <SequenceLocation Assembly="GRCh37" AssemblyAccessionVersion="GCF_000001405.25" forDisplay="true" AssemblyStatus="previous" Chr="1" Accession="NC_000001.10" start="6051187" stop="6158763" display_start="6051187" display_stop="6158763"/>
-      </Location>
+        <SequenceLocation Assembly="GRCh37" AssemblyAccessionVersion="GCF_000001405.25" forDisplay="true" AssemblyStatus="previous" Chr="1" Accession="NC_000001.10" start="6051187" stop="6158763" display_start="6051187" display_stop="6158763"/>      </Location>
       <Interpretations>
         <Interpretation NumberOfSubmissions="0" NumberOfSubmitters="0" Type="Clinical significance">
           <Description>no interpretation for the single variant</Description>
@@ -305,122 +436,82 @@
 ```
 ### Parsing
 
+In the following section, we discuss which field of the XML was used to extract information that is presented in the JSON output.
+
+**id**
+```xml
+<VariationArchive VariationID="431749" VariationName="GRCh37/hg19 1p36.31(chr1:6051187-6158763)" VariationType="copy number gain" DateCreated="2017-08-12" DateLastUpdated="2019-09-10" Accession="VCV000431749" Version="1" RecordType="included" NumberOfSubmissions="0" NumberOfSubmitters="0">
+```
+The Acc and Version fields are merged to form the ID (RCV000000001.2)
+
+**significance**
+```xml {7}
+<ClinVarVariationRelease>
+  <VariationArchive>
+    <IncludedRecord>
+      <SimpleAllele>
+        <Interpretations>
+          <Interpretation NumberOfSubmissions="0" NumberOfSubmitters="0" Type="Clinical significance">
+            <Description>no interpretation for the single variant</Description>
+          </Interpretation>
+        </Interpretations>
+      </SimpleAllele>
+    </IncludedRecord>
+  </VariationArchive>
+</ClinVarVariationRelease>
+```
+
+May have multiple significances listed.
+
+**reviewStatus**
+```xml {4}
+<ClinVarVariationRelease>
+  <VariationArchive>
+    <IncludedRecord>
+      <ReviewStatus>no interpretation for the single variant</ReviewStatus>
+    </IncludedRecord>
+  </VariationArchive>
+</ClinVarVariationRelease>
+```
+
 ## Parsing Significance
+
 Extracting significance(s) may involve parsing multiple fields. Take the following snippets into consideration.
 
-```xml
+```xml {3,8,13-14}
 <ClinicalSignificance DateLastEvaluated="1996-04-01">
     <ReviewStatus>no assertion criteria provided</ReviewStatus>
     <Description>Pathogenic</Description>
 </ClinicalSignificance>
 
-<ClinicalSignificance DateLastEvaluated="2016-10-13">  
-   <ReviewStatus>criteria provided, multiple submitters, no conflicts</ReviewStatus>  
-   <Description>Pathogenic/Likely pathogenic</Description>  
+<ClinicalSignificance DateLastEvaluated="2016-10-13">
+    <ReviewStatus>criteria provided, multiple submitters, no conflicts</ReviewStatus>
+    <Description>Pathogenic/Likely pathogenic</Description>
 </ClinicalSignificance>
 
-<ClinicalSignificance DateLastEvaluated="2012-06-07">  
-     <ReviewStatus>no assertion criteria provided</ReviewStatus>  
-     <Description>Conflicting interpretations of pathogenicity</Description>  
-     <Explanation DataSource="ClinVar" Type="public">Pathogenic(1);Uncertain significance(1)</Explanation>  
- </ClinicalSignificance>
+<ClinicalSignificance DateLastEvaluated="2012-06-07">
+    <ReviewStatus>no assertion criteria provided</ReviewStatus>
+    <Description>Conflicting interpretations of pathogenicity</Description>
+    <Explanation DataSource="ClinVar" Type="public">Pathogenic(1);Uncertain significance(1)</Explanation>
+</ClinicalSignificance>
 ```
 
 Given the evidence, we converted significance field into an array of string which may be parsed out of the Descriptions or Explanation fields. Note that the delimiters in each field may vary. Currently, the delimiters for Description are ',' and '/'. For, Explanation we use ';' and '/'.
+
 ## Known Issues
 
- - XML contains ~1k entries more (out of 162K) compared to the VCF file
+:::caution Known Issues
+:::
+
+ - XML contains ~1k entries more (out of 162K) compared to the VCF file.
  - Web verification shows a 2.45% discrepancies in field values.
  - XML had no field indicating a record to be associated with reference, something that was present in VCF.
  - XML contains entries (e.g. RCV000016645 version=1) which have irregular bases ("R", "Y", "H", etc.) as their alternate alleles. These entries are not present in VCF.
 
-### Star rating
-ClinVar provides star ratings in the webpage for each RCV entry and for also the variant record and they can be different. For example, for [https://www.ncbi.nlm.nih.gov/clinvar/RCV000144626/](https://www.ncbi.nlm.nih.gov/clinvar/RCV000144626/), the star rating is 1. But if we go to the variant record page ([https://www.ncbi.nlm.nih.gov/clinvar/variation/36581/](https://www.ncbi.nlm.nih.gov/clinvar/variation/36581/)) we see 3 stars. Since Olympia linkout takes the user to the variant record page, the star ratings may differ.
-
 ## Download URL
+
 [ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_00-latest.xml.gz](ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_00-latest.xml.gz)
+
 ## JSON Output
-```json
-"clinvar":[
-   {
-      "id":"VCV000036581.3",
-      "reviewStatus":"reviewed by expert panel",
-      "significance":[
-         "benign"
-      ],
-      "refAllele":"G",
-      "altAllele":"A",
-      "lastUpdatedDate":"2020-03-01",
-      "isAlleleSpecific":true
-   },
-   {
-      "id":"RCV000030258.4",
-      "variationId":"VCV000036581.3",
-      "reviewStatus":"reviewed by expert panel",
-      "alleleOrigins":[
-         "germline"
-      ],
-      "refAllele":"G",
-      "altAllele":"A",
-      "phenotypes":[
-         "Lynch syndrome"
-      ],
-      "medGenIds":[
-         "C1333990"
-      ],
-      "omimIds":[
-         "120435"
-      ],
-      "significance":[
-         "benign"
-      ],
-      "lastUpdatedDate":"2017-05-01",
-      "isAlleleSpecific":true
-   },
-   {
-      "id":"RCV000144626.1",
-      "variationId":"VCV000036581.3",
-      "reviewStatus":"no assertion criteria provided",
-      "alleleOrigins":[
-         "germline"
-      ],
-      "refAllele":"G",
-      "altAllele":"A",
-      "phenotypes":[
-         "Lynch syndrome I"
-      ],
-      "medGenIds":[
-         "C2936783"
-      ],
-      "omimIds":[
-         "120435"
-      ],
-      "orphanetIds":[
-         "144"
-      ],
-      "significance":[
-         "benign"
-      ],
-      "lastUpdatedDate":"2017-04-05",
-      "pubMedIds":[
-         "18523027",
-         "22703879",
-         "22949387"
-      ],
-      "isAlleleSpecific":true
-   }
-]
-```
 
-The ClinVar array contains VCV and RCV records. Each has its own set of fields.
-
-| Field | Type | Required | Notes |
-|:--|:--:|:--:|:--|
-| id | string | Yes | ClinVar VCV ID |
-| reviewStatus| string | Yes  | Can be one of the following values:<br />- no assertion provided<br />- no assertion criteria provided |
-| significance| string array | Yes  |
-| refAllele| string | Yes  |
-| altAllele| string | Yes  |
-| lastUpdatedDate | string | No | yyyy-MM-dd |
-| isAlleleSpecific | bool | No | set to true if the current variant alternate allele matches the ClinVar alternate allele |
-
+<JSON />
