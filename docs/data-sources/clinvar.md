@@ -326,7 +326,7 @@ Extracting significance(s) may involve parsing multiple fields. Take the followi
  </ClinicalSignificance>
 ```
 
-Given the evidence, we converted significance field into an array of string which may be parsed out of the <Descriptions> or <Explanation> fields. Note that the delimiters in each field may vary. Currently, the delimiters for <Description> are ',' and '/'. For, <Explanation> we use ';' and '/'.
+Given the evidence, we converted significance field into an array of string which may be parsed out of the Descriptions or Explanation fields. Note that the delimiters in each field may vary. Currently, the delimiters for Description are ',' and '/'. For, Explanation we use ';' and '/'.
 ## Known Issues
 
  - XML contains ~1k entries more (out of 162K) compared to the VCF file
