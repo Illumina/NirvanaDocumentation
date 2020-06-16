@@ -1,12 +1,15 @@
 ---
 title: Introduction
+hide_title: true
 ---
 
-<img alt="Nirvana Logo" src={useBaseUrl('/img/Nirvana-logo.png')} />
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
-Nirvana provides **clinical-grade annotation of genomic variants** (SNVs, MNVs, insertions, deletions, indels, STRs, gene fusions, and SVs (including CNVs). It can be run as a stand-alone package or integrated into larger software tools that require variant annotation.
+<img alt="Nirvana Logo" src={useBaseUrl('/img/NirvanaLogo.png')} />
 
-The input to Nirvana are VCFs and the output is a structured JSON representation of all annotation and sample information (as extracted from the VCF). Nirvana handles multiple alternate alleles and multiple samples with ease.
+Nirvana provides clinical-grade annotation of genomic variants (SNVs, MNVs, insertions, deletions, indels, STRs, gene fusions, and SVs (including CNVs). It can be run as a stand-alone package or integrated into larger software tools that require variant annotation.
+
+The input to Nirvana are VCFs and the output is a [structured JSON representation](file-formats/nirvana-json-file-format.mdx) of all annotation and sample information (as extracted from the VCF). Nirvana handles multiple alternate alleles and multiple samples with ease.
 
 The software is being developed under a rigorous SDLC and testing process to ensure accuracy of the results and enable embedding in other software with regulatory needs. Nirvana uses a continuous integration pipeline where millions of variant annotations are monitored against baseline values daily.
 
@@ -70,14 +73,14 @@ The data used by Nirvana is publicly available, however some data sources have s
 
 ## Nirvana Team
 ### Core Team
-| ![Michael](Michael.jpg) | ![Rajat](Rajat.jpg) | ![Haochen](Haochen.jpg) |
+| <img alt="Michael" src={useBaseUrl('/img/Michael.jpg')} /> | <img alt="Rajat" src={useBaseUrl('/img/Rajat.jpg')} /> | <img alt="Haochen" src={useBaseUrl('/img/Haochen.jpg')} /> |
 | :--------------------: |:--------------------:| :----------------:|
 | **[Michael Strömberg](https://www.linkedin.com/in/michaelstromberg)** | **[Rajat Shuvro Roy](https://www.linkedin.com/in/rajatshuvro)** | **[Haochen Li](https://www.linkedin.com/in/haochen-li-8310b054/)** |
 | _Project Lead_ | _Lead Developer_ | _Lead Tester_ |
 
 ### *Emeritus* Team
 
-| ![Julien](Julien.jpg) | ![Shuli](Shuli.jpg) | ![Yu](Yu.jpg) |
+| <img alt="Julien" src={useBaseUrl('/img/Julien.jpg')} /> | <img alt="Shuli" src={useBaseUrl('/img/Shuli.jpg')} /> | <img alt="Yu" src={useBaseUrl('/img/Yu.jpg')} /> |
 | :-------------------: | :------------------: | :----------------:|
 | **[Julien Lajugie](https://www.linkedin.com/in/julienlajugie)** | **[Shuli Kang](https://www.linkedin.com/in/shulik/)** | **[Yu Jiang](https://www.linkedin.com/in/yu-jiang-87a06b3a)** |
 | _Tester_ | _Developer_ | _Developer_ |

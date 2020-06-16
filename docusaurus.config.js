@@ -10,16 +10,10 @@ module.exports = {
     navbar: {
       title: 'Nirvana',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Nirvana',
+        src: 'img/NirvanaIcon.svg',
       },
       links: [
-        {
-          to: 'docs/',
-          activeBasePath: 'docs',
-          label: 'Docs',
-          position: 'left',
-        },
         {
           href: 'https://github.com/Illumina/Nirvana',
           label: 'GitHub',
@@ -29,43 +23,7 @@ module.exports = {
     },
     footer: {
       style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            {
-              label: 'Style Guide',
-              to: 'docs/',
-            },
-            {
-              label: 'Second Doc',
-              to: 'docs/doc2/',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
-            },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
-            },
-          ],
-        },
-      ],
+      links: [],
       copyright: `© ${new Date().getFullYear()} Illumina, Inc. All rights reserved.`,
     },
   },
@@ -74,12 +32,11 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
-          // It is recommended to set document id as docs home page (`docs/` path).
-          homePageId: 'doc1',
+          routeBasePath: '/',
+          homePageId: 'introduction',
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            'https://github.com/Illumina/NirvanaDocumentation/edit/master/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
