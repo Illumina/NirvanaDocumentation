@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[31],{164:function(a){a.exports=JSON.parse('{"allTagsPath":"/NirvanaDocumentation/blog/tags","slug":"facebook","name":"facebook","count":1,"permalink":"/NirvanaDocumentation/blog/tags/facebook"}')}}]);
