@@ -26,7 +26,7 @@ module.exports = {
   organizationName: 'illumina',
   projectName: 'NirvanaDocumentation',
   themeConfig: {
-    googleAnalytics: {
+    gtag: {
       trackingID: 'G-5KXNW9LCD7',
     },
     algolia: {
@@ -78,7 +78,7 @@ module.exports = {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            'https://github.com/Illumina/NirvanaDocumentation/edit/master/',
           lastVersion: 'current',
           versions: {
             current: {
