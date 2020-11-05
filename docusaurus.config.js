@@ -25,14 +25,6 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'illumina',
   projectName: 'NirvanaDocumentation',
-  plugins: [
-    [
-      "@docusaurus/plugin-google-analytics",
-      {
-        id: "plugin-google-analytics-1",
-      },
-    ],
-  ],
   themeConfig: {
     googleAnalytics: {
       trackingID: '251695616',
