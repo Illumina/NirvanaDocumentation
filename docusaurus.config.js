@@ -27,7 +27,7 @@ module.exports = {
   projectName: 'NirvanaDocumentation',
   themeConfig: {
     googleAnalytics: {
-      trackingID: '251695616',
+      trackingID: 'G-5KXNW9LCD7',
     },
     algolia: {
       apiKey: 'e908c17192dca08b01d9d994b576335b',
