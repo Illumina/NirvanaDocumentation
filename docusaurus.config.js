@@ -35,7 +35,7 @@ module.exports = {
   ],
   themeConfig: {
     googleAnalytics: {
-      trackingID: 'G-5KXNW9LCD7',
+      trackingID: '251695616',
     },
     algolia: {
       apiKey: 'e908c17192dca08b01d9d994b576335b',
