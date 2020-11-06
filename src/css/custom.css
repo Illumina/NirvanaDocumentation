@@ -18,6 +18,14 @@
   --ifm-heading-font-family: 'Raleway', sans-serif;
   --ifm-font-family-monospace: 'Source Code Pro', monospace;
   --ifm-font-family-base: 'Open Sans', sans-serif;
+  --ifm-table-head-background: #016DAD;
+  --ifm-table-border-width: 0;
+  --ifm-table-stripe-background: #F8F8F8;
+}
+
+thead {
+  color: white;
+  font-family: var(--ifm-heading-font-family);
 }
 
 .admonition-note {
@@ -62,7 +70,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Raleway', sans-serif;
+  font-family: var(--ifm-heading-font-family);
 }
 
 .header-github-link:hover {
