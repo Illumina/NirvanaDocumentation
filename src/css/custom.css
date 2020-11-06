@@ -28,6 +28,10 @@ thead {
   font-family: var(--ifm-heading-font-family);
 }
 
+.alert a {
+  color: var(--ifm-link-color);
+}
+
 .admonition-note {
   color: var(--ifm-font-color-secondary);
   background-color: rgb(235, 237, 240);
