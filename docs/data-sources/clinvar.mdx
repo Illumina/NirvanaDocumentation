@@ -501,12 +501,11 @@ Given the evidence, we converted significance field into an array of string whic
 ## Known Issues
 
 :::caution Known Issues
+* The XML file contains ~1k more entries (out of 162K) than the VCF file
+* The XML file does not have a field indicating that a record is associated with the reference base - something that was present in VCF
+* The XML file contains entries (e.g. RCV000016645 version=1) which have IUPAC ambiguous bases ("R", "Y", "H", 
+etc.) as their alternate allele
 :::
-
- - XML contains ~1k entries more (out of 162K) compared to the VCF file.
- - Web verification shows a 2.45% discrepancies in field values.
- - XML had no field indicating a record to be associated with reference, something that was present in VCF.
- - XML contains entries (e.g. RCV000016645 version=1) which have irregular bases ("R", "Y", "H", etc.) as their alternate alleles. These entries are not present in VCF.
 
 ## Download URL
 

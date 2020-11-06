@@ -20,6 +20,42 @@
   --ifm-font-family-base: 'Open Sans', sans-serif;
 }
 
+.admonition-note {
+  color: var(--ifm-font-color-secondary);
+  background-color: rgb(235, 237, 240);
+}
+
+.admonition-note .admonition-icon svg {
+  fill: grey;
+}
+
+.admonition-tip {
+  color: rgb(30, 70, 32);
+  background-color: rgb(237, 247, 237);
+}
+
+.admonition-tip .admonition-icon svg {
+  fill: #4caf50;
+}
+
+.admonition-info {
+  color: rgb(13, 60, 97);
+  background-color: rgb(232, 244, 253);
+}
+
+.admonition-info .admonition-icon svg {
+  fill: #2196f3;
+}
+
+.admonition-caution {
+  color: rgb(102, 60, 0);
+  background-color: rgb(255, 244, 229);
+}
+
+.admonition-caution .admonition-icon svg {
+  fill: #ff9800;
+}
+
 h1,
 h2,
 h3,
