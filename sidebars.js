@@ -21,6 +21,7 @@ module.exports = {
       label: 'File Formats',
       items: [
         'file-formats/nirvana-json-file-format',
+        'file-formats/custom-annotations'
       ],
     },
   ],
