@@ -33,25 +33,30 @@ a tool knows that this is an allele frequency, it can validate user input to ens
 
 ### Basic Allele Frequency Example
 
-Imagine that you want to create a basic allele frequency custom annotation for small variants. It would look something like this:
+#### Create the Custom Annotation TSV
+
+Imagine that you want to create a basic allele frequency custom annotation for small variants. If we visualized the tab-delimited file 
+(TSV), it would look something like this:
 
 
-| Column 1                | 2   | 3   | 4     | 5               |
-|:------------------------|:----|:----|:------|:----------------|
-| #title=MyDataSource     |     |     |       |                 |
-| #assembly=GRCh37        |     |     |       |                 |
-| #matchVariantsBy=allele |     |     |       |                 |
-| #CHROM                  | POS | REF | ALT   | allAf           |
-| #categories             | .   | .   | .     | AlleleFrequency |
-| #descriptions           | .   | .   | .     | ALL             |
-| #type                   | .   | .   | .     | number          |
-| chr1                    | 100 | A   | C     | 0.000159        |
-| chr1                    | 102 | T   | G     | 0.000325        | 
-| chr1                    | 106 | A   | T     | 0.001421        |
+| Col 1                   | Col 2    | Col 3 | Col 4 | Col 5           |
+|:------------------------|:---------|:------|:------|:----------------|
+| #title=MyDataSource     |          |       |       |                 |
+| #assembly=GRCh37        |          |       |       |                 |
+| #matchVariantsBy=allele |          |       |       |                 |
+| #CHROM                  | POS      | REF   | ALT   | allAf           |
+| #categories             | .        | .     | .     | AlleleFrequency |
+| #descriptions           | .        | .     | .     | ALL             |
+| #type                   | .        | .     | .     | number          |
+| chr16                   | 23603511 | TGA   | T     | 0.000006579     |
+| chr16                   | 68801894 | G     | A     | 0.000006569     | 
+| chr19                   | 11107436 | G     | A     | 0.00003291      |
+
+You can also [download this example TSV](CA/MyDataSource.tsv).
 
 Let's go over the header and discuss the contents:
 * `title` indicates the name of the JSON key
-* `assembly` indicates that this data is only valid for `GRCh37`
+* `assembly` indicates that this data is only valid for `GRCh38`
 * `matchVariantsBy` indicates that we should only match the annotations if they are allele-specific
 * `categories` provides hints to downstream tools on how they might want to treat the data. In this case, we indicate that it's an allele 
 frequency.
@@ -59,25 +64,94 @@ frequency.
 downstream tool that this means a global allele frequency using all sub-populations. In this case, `ALL` indicates the intended population.
 * `type` indicates to downstream tools the data type. Since allele frequencies are numbers, we'll write `number` in this column.
 
-If we converted this custom annotation to Nirvana format and ran Nirvana on the following VCF file:
+#### Convert to Nirvana Format
+
+First we need to convert the TSV file to Nirvana's native file format and let's put that file in a new directory called CA:
+
+```Bash
+$ mkdir CA
+$ dotnet bin/Release/netcoreapp2.1/SAUtils.dll customvar \
+  -r Data/References/Homo_sapiens.GRCh38.Nirvana.dat -i MyDataSource.tsv -o CA
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2020 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.12.0
+---------------------------------------------------------------------------
+
+Chromosome 16 completed in 00:00:00.1
+Chromosome 19 completed in 00:00:00.0
+
+Time: 00:00:00.2
+```
+
+#### Annotate with Nirvana
+
+Let's annotate the following VCF (notice that it's one of the variants that we have in our custom annotation):
 
 ```
 ##fileformat=VCFv4.1
-#CHROM POS ID REF ALT QUAL FILTER INFO
-chr1	100	.	A	C	.	.	.
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+16	68801894	.	G	A	.	.	.
 ```
+
+You can also [download this example VCF](CA/TestCA.vcf).
+
+Since Nirvana can handle multiple directories with external annotations, all we need to do is specify our new CA directory in addition to
+the normal Nirvana command-line.
+
+```Bash {3}
+$ dotnet bin/Release/netcoreapp2.1/Nirvana.dll -c Data/Cache/GRCh38/Both \
+  -r Data/References/Homo_sapiens.GRCh38.Nirvana.dat \
+  --sd Data/SupplementaryAnnotation/GRCh38 --sd CA -i TestCA.vcf -o TestCA
+---------------------------------------------------------------------------
+Nirvana                                             (c) 2020 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.12.0
+---------------------------------------------------------------------------
+
+Initialization                                         Time     Positions/s
+---------------------------------------------------------------------------
+Cache                                               00:00:01.8
+SA Position Scan                                    00:00:00.0           19
+
+Reference                                Preload    Annotation   Variants/s
+---------------------------------------------------------------------------
+chr16                                   00:00:00.2  00:00:01.3            1
+
+Summary                                                Time         Percent
+---------------------------------------------------------------------------
+Initialization                                      00:00:01.9       25.5 %
+Preload                                             00:00:00.2        3.3 %
+Annotation                                          00:00:01.3       18.2 %
+
+Time: 00:00:06.3
+```
+
+#### Investigate the Results
 
 We would expect the following data to show up in our JSON output file:
 
-```json
-   "MyDataSource":[
-      {
-         "refAllele":"A",
-         "altAllele":"C",
-         "allAf":0.000159
-      }
-   ]
+```json {12-16}
+      "variants": [
+        {
+          "vid": "16-68801894-G-A",
+          "chromosome": "16",
+          "begin": 68801894,
+          "end": 68801894,
+          "refAllele": "G",
+          "altAllele": "A",
+          "variantType": "SNV",
+          "hgvsg": "NC_000016.10:g.68801894G>A",
+          "phylopScore": 1,
+          "MyDataSource": {
+            "refAllele": "G",
+            "altAllele": "A",
+            "allAf": 7e-06
+          },
+          "clinvar": [
 ```
+
+You can also [download the full JSON file](CA/TestCA.json.gz).
+
+Nirvana preserves up to 6 decimal places for allele frequency data.
 
 ## Gene File Format
 
