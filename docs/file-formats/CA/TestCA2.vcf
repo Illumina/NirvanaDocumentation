@@ -1,0 +1,5 @@
+##fileformat=VCFv4.1
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+16	23603511	.	TG	T	.	.	.
+16	68801894	.	G	A	.	.	.
+19	11107436	.	G	C	.	.	.

@@ -42,7 +42,7 @@ Imagine that you want to create a basic allele frequency custom annotation for s
 | Col 1                   | Col 2    | Col 3 | Col 4 | Col 5           |
 |:------------------------|:---------|:------|:------|:----------------|
 | #title=MyDataSource     |          |       |       |                 |
-| #assembly=GRCh37        |          |       |       |                 |
+| #assembly=GRCh38        |          |       |       |                 |
 | #matchVariantsBy=allele |          |       |       |                 |
 | #CHROM                  | POS      | REF   | ALT   | allAf           |
 | #categories             | .        | .     | .     | AlleleFrequency |
@@ -52,7 +52,7 @@ Imagine that you want to create a basic allele frequency custom annotation for s
 | chr16                   | 68801894 | G     | A     | 0.000006569     | 
 | chr19                   | 11107436 | G     | A     | 0.00003291      |
 
-You can also [download this example TSV](CA/MyDataSource.tsv).
+Here's [the full TSV file](CA/MyDataSource.tsv).
 
 Let's go over the header and discuss the contents:
 * `title` indicates the name of the JSON key
@@ -63,6 +63,10 @@ frequency.
 * `descriptions` are used in special circumstances to provide more context. Even though column 5 is called `allAf`, it might not be clear to a 
 downstream tool that this means a global allele frequency using all sub-populations. In this case, `ALL` indicates the intended population.
 * `type` indicates to downstream tools the data type. Since allele frequencies are numbers, we'll write `number` in this column.
+
+:::caution Reference Base Checking
+Nirvana validates all the reference bases in a custom annotation. If a variant or genomic region is specified that has the wrong reference base, an error will be produced.
+:::
 
 #### Convert to Nirvana Format
 
@@ -93,7 +97,7 @@ Let's annotate the following VCF (notice that it's one of the variants that we h
 16	68801894	.	G	A	.	.	.
 ```
 
-You can also [download this example VCF](CA/TestCA.vcf).
+Here's [the full VCF file](CA/TestCA.vcf).
 
 Since Nirvana can handle multiple directories with external annotations, all we need to do is specify our new CA directory in addition to
 the normal Nirvana command-line.
@@ -149,9 +153,228 @@ We would expect the following data to show up in our JSON output file:
           "clinvar": [
 ```
 
-You can also [download the full JSON file](CA/TestCA.json.gz).
+Here's [the full JSON file](CA/TestCA.json.gz).
 
 Nirvana preserves up to 6 decimal places for allele frequency data.
+
+### Categories & Descriptions Example
+
+#### Create the Custom Annotation TSV
+
+Building on the previous example, we can add other types of annotations like predictions and general notes.
+
+| Col 1                   | Col 2    | Col 3 | Col 4 | Col 5           | Col 6         | Col 7 |
+|:------------------------|:---------|:------|:------|:----------------|:--------------|:------|
+| #title=MyDataSource     |          |       |       |                 |               | |
+| #assembly=GRCh38        |          |       |       |                 |               | |
+| #matchVariantsBy=allele |          |       |       |                 |               | |
+| #CHROM                  | POS      | REF   | ALT   | allAf           | pathogenicity | notes |
+| #categories             | .        | .     | .     | AlleleFrequency | Prediction    | . |
+| #descriptions           | .        | .     | .     | ALL             | .             | . |
+| #type                   | .        | .     | .     | number          | string        | string |
+| chr16                   | 23603511 | TGA   | T     | 0.000006579     | P             | . |
+| chr16                   | 68801894 | G     | A     | 0.000006569     | LP            | Seen in case 123 |
+| chr19                   | 11107436 | G     | A     | 0.00003291      | .             | . |
+
+Here's [the full TSV file](CA/MyDataSource2.tsv).
+
+:::tip Placeholders
+You can use a period to denote an empty value (much in the same way as periods are used in VCF files to signify missing values). While 
+Nirvana also accepts empty columns in the TSV file, we use them in these examples to promote readability.
+:::
+
+Let's go over what's new in this example:
+* **Column 6** adds a field called `pathogenicity` which uses the `Prediction` category. When using this category, Nirvana will 
+validate to make 
+sure that the field contains either the abbreviations (B, LB, VUS, LP, and P) or the long-form equivalents (e.g. benign or pathogenic).
+* **Column 7** adds a field called `notes` and it doesn't have a category or description. We're just going to use it to add some internal 
+notes.
+
+#### Annotate with Nirvana
+
+Let's use a new VCF file. It includes all the same positions as our custom annotation file, but only the middle variant also matches the 
+alternate allele (allele-specific match):
+
+```
+##fileformat=VCFv4.1
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
+16	23603511	.	TG	T	.	.	.
+16	68801894	.	G	A	.	.	.
+19	11107436	.	G	C	.	.	.
+```
+
+Here's [the full VCF file](CA/TestCA2.vcf).
+
+#### Investigate the Results
+
+Because we specified `#matchVariantsBy=allele` in our custom annotation file, only the middle variant will get an annotation:
+
+```json {12-18}
+      "variants": [
+        {
+          "vid": "16-68801894-G-A",
+          "chromosome": "16",
+          "begin": 68801894,
+          "end": 68801894,
+          "refAllele": "G",
+          "altAllele": "A",
+          "variantType": "SNV",
+          "hgvsg": "NC_000016.10:g.68801894G>A",
+          "phylopScore": 1,
+          "MyDataSource": {
+            "refAllele": "G",
+            "altAllele": "A",
+            "allAf": 7e-06,
+            "pathogenicity": "LP",
+            "notes": "Seen in case 123"
+          },
+          "clinvar": [
+```
+
+Here's [the full JSON file](CA/TestCA2.json.gz).
+
+#### Using Positional Matches
+
+What would happen if we changed to `#matchVariantsBy=position`? Two things will happen. First, our positional variants will now match:
+
+```json {12-17}
+      "variants": [
+        {
+          "vid": "16-23603511-TG-T",
+          "chromosome": "16",
+          "begin": 23603512,
+          "end": 23603512,
+          "refAllele": "G",
+          "altAllele": "-",
+          "variantType": "deletion",
+          "hgvsg": "NC_000016.10:g.23603512delG",
+          "MyDataSource": [
+            {
+              "refAllele": "GA",
+              "altAllele": "-",
+              "allAf": 7e-06,
+              "pathogenicity": "P"
+            }
+          ],
+          "clinvar": [
+```
+
+In addition, you will now see an extra flag for our allele-specific variant:
+
+```json {12-20}
+      "variants": [
+        {
+          "vid": "16-68801894-G-A",
+          "chromosome": "16",
+          "begin": 68801894,
+          "end": 68801894,
+          "refAllele": "G",
+          "altAllele": "A",
+          "variantType": "SNV",
+          "hgvsg": "NC_000016.10:g.68801894G>A",
+          "phylopScore": 1,
+          "MyDataSource": [
+            {
+              "refAllele": "G",
+              "altAllele": "A",
+              "allAf": 7e-06,
+              "pathogenicity": "LP",
+              "notes": "Seen in case 123",
+              "isAlleleSpecific": true
+            }
+          ],
+          "clinvar": [
+```
+
+### Genomic Region Example
+
+#### Create the Custom Annotation TSV
+
+In the previous example, we added a note for the middle variant, but sometimes it's handy to annotate a genomic region. Consider the following example:
+
+| Col 1                   | Col 2    | Col 3 | Col 4 | Col 5 |
+|:------------------------|:---------|:------|:------|:------|
+| #title=MyDataSource     |          |       |       | |
+| #assembly=GRCh38        |          |       |       | |
+| #matchVariantsBy=allele |          |       |       | |
+| #CHROM                  | POS      | REF   | END   | notes |
+| #categories             | .        | .     | .     | . |
+| #descriptions           | .        | .     | .     | . |
+| #type                   | .        | .     | .     | string |
+| chr16                   | 20000000 | T     | 70000000 | Lots of false positives in this region |
+
+Here's [the full TSV file](CA/MyDataSource3.tsv).
+
+Let's go over what's new in this example:
+* **Column 5** now has a field called `notes`. In essence, it looks exactly like column 7 from our previous example.
+* The main difference is that now one of our custom annotation entries is actually a genomic region. Any variant that overlaps with that region will get a custom annotation.
+
+In the previous example we learned about positional matching vs allele-specific matching. For genomic regions, `#matchVariantsBy=allele` and `#matchVariantsBy=position` produce 
+the same result.
+
+#### Annotate with Nirvana
+
+Let's use the same VCF file as our previous example.
+
+#### Investigate the Results
+
+```json {9-17}
+    {
+      "chromosome": "16",
+      "position": 23603511,
+      "refAllele": "TG",
+      "altAlleles": [
+        "T"
+      ],
+      "cytogeneticBand": "16p12.2",
+      "MyDataSource": [
+        {
+          "start": 20000000,
+          "end": 70000000,
+          "notes": "Lots of false positives in this region",
+          "reciprocalOverlap": 0,
+          "annotationOverlap": 0
+        }
+      ],
+      "variants": [
+```
+
+Here's [the full JSON file](CA/TestCA3.json.gz).
+
+:::tip Reciprocal & Annotation Overlap
+For all intervals, Nirvana internally calculates two overlaps: a **variant overlap** and an **annotation overlap**. Variant overlap is the percentage of the variant's length that is 
+overlapped. Annotation overlap is the percentage of the annotation's length that is overlap. 
+
+**Reciprocal overlap** is the minimum of those two overlaps. Given that the annotation is 50 Mbp and the deletion is one 1 bp, both overlaps will be pretty close to 0.
+:::
+
+We will also see this annotation for the other variant on chr16:
+
+```json {9-17}
+    {
+      "chromosome": "16",
+      "position": 68801894,
+      "refAllele": "G",
+      "altAlleles": [
+        "A"
+      ],
+      "cytogeneticBand": "16q22.1",
+      "MyDataSource": [
+        {
+          "start": 20000000,
+          "end": 70000000,
+          "notes": "Lots of false positives in this region",
+          "reciprocalOverlap": 0,
+          "annotationOverlap": 0
+        }
+      ],
+      "variants": [
+```
+
+:::tip Targeting CNVs & SVs
+Often we use genomic regions to represent other known CNVs and SVs in the genome. In this use case, we usually don't want to match these regions to other small variants. To 
+force Nirvana to match regions only to other SVs, use the `#matchVariantsBy=sv` option in the header.
+:::
 
 ## Gene File Format
 
