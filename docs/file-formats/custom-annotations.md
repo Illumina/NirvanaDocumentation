@@ -371,10 +371,110 @@ We will also see this annotation for the other variant on chr16:
       "variants": [
 ```
 
-:::tip Targeting CNVs & SVs
+:::tip Targeting Structural Variants
 Often we use genomic regions to represent other known CNVs and SVs in the genome. In this use case, we usually don't want to match these regions to other small variants. To 
 force Nirvana to match regions only to other SVs, use the `#matchVariantsBy=sv` option in the header.
 :::
+
+### Mixing Small Variants and Genomic Regions
+
+#### Create the Custom Annotation TSV
+
+Previously we looked at examples that either had small variants or genomic regions. Let's create a file that contains both:
+
+| Col 1                   | Col 2    | Col 3 | Col 4             | Col 5    | Col 6  |
+|:------------------------|:---------|:------|:------------------|:---------|:-------|
+| #title=MyDataSource     |          |       |                   |          |        |
+| #assembly=GRCh38        |          |       |                   |          |        |
+| #matchVariantsBy=allele |          |       |                   |          |        |
+| #CHROM                  | POS      | REF   | ALT               | END      | notes  |
+| #categories             | .        | .     | .                 | .        | .      |
+| #descriptions           | .        | .     | .                 | .        | .      |
+| #type                   | .        | .     | .                 | .        | string |
+| chr16                   | 23603511 | TGA   | T                 | .        | .      |
+| chr16                   | 68801894 | G     | A                 | .        | .      |
+| chr19                   | 11107436 | G     | A                 | .        | .      |
+| chr21                   | 10510818 | C     | .                 | 10699435 | Interval #1          |
+| chr21                   | 10510818 | C     | &lt;DEL&gt;       | 10699435 | Interval #2          |
+| chr22                   | 12370388 | T     | T[chr22:12370729[ | .        | Known false-positive |
+
+Here's [the full TSV file](CA/MyDataSource4.tsv).
+
+Let's go over what's new in this example:
+* **Column 4** now has the `REF` field. Exception for the case listed below, this is only used by small variants or translocation breakends.
+* **Column 5** now has the `END` field. This is only used by genomic regions.
+* There are two custom annotations on chr21 and the start and end coordinates look the same, so what's different? Interval #2 has **a symbolic allele in the ALT column**. When this is used in custom annotation, the start position is treated as the padding base (using VCF conventions). When Nirvana matches a variant to interval #2, it will ignore the padding base and consider the start position to be at position 10510819.
+
+#### Annotate with Nirvana
+
+Let's use a new VCF file to study how matching works for intervals #1 and #2:
+
+```
+##fileformat=VCFv4.1
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+21	10510818	.	C	<DUP>	.	.	END=10699435;SVTYPE=DUP
+22	12370388	.	T	T[chr22:12370729[	.	.	SVTYPE=BND
+```
+
+Here's [the full VCF file](CA/TestCA3.vcf).
+
+The first variant is similar to the custom annotation labelled "interval #2". Position 10510818 is the padding base, so it effectively starts at position 10510819.
+
+#### Investigate the Results
+
+```json {11-26}
+  "positions": [
+    {
+      "chromosome": "21",
+      "position": 10510818,
+      "svEnd": 10699435,
+      "refAllele": "C",
+      "altAlleles": [
+        "<DUP>"
+      ],
+      "cytogeneticBand": "21p11.2",
+      "MyDataSource": [
+        {
+          "start": 10510818,
+          "end": 10699435,
+          "notes": "Interval #1",
+          "reciprocalOverlap": 0.99999,
+          "annotationOverlap": 0.99999
+        },
+        {
+          "start": 10510819,
+          "end": 10699435,
+          "notes": "Interval #2",
+          "reciprocalOverlap": 1,
+          "annotationOverlap": 1
+        }
+      ],
+```
+
+Here's [the full JSON file](CA/TestCA4.json.gz).
+
+As expected, the variant and interval #2 have matching endpoints, therefore there is 100% overlap. Interval #1 technically starts 1 bp earlier, so its overlap 99.9%.
+
+Further down the JSON file, we find the annotated translocation breakend:
+
+```json {11-15}
+      "variants": [
+        {
+          "vid": "22-12370388-T-T[chr22:12370729[",
+          "chromosome": "22",
+          "begin": 12370388,
+          "end": 12370388,
+          "isStructuralVariant": true,
+          "refAllele": "T",
+          "altAllele": "T[chr22:12370729[",
+          "variantType": "translocation_breakend",
+          "MyDataSource": {
+            "refAllele": "T",
+            "altAllele": "T[chr22:12370729[",
+            "notes": "Known false-positive"
+          }
+        }
+```
 
 ## Gene File Format
 

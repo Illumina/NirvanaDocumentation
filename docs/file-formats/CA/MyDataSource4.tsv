@@ -1,0 +1,13 @@
+#title=MyDataSource
+#assembly=GRCh38
+#matchVariantsBy=allele
+#CHROM	POS	REF	ALT	END	notes
+#categories	.	.	.	.	.
+#descriptions	.	.	.	.	.
+#type	.	.	.	.	string
+chr16	23603511	TGA	T	.	.
+chr16	68801894	G	A	.	.
+chr19	11107436	G	A	.	.
+chr21	10510818	C	.	10699435	Interval #1
+chr21	10510818	C	<DEL>	10699435	Interval #2
+chr22	12370388	T	T[chr22:12370729[	.	Known false-positive
