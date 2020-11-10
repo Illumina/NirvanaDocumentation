@@ -1,0 +1,7 @@
+#title=MyDataSource
+#geneSymbol	geneId	phenotype	notes
+#categories	.	.	.
+#descriptions	.	.	.
+#type	.	string	string
+TP53	7157	Colorectal cancer, hereditary nonpolyposis, type 5	.
+KRAS	ENSG00000133703	Mismatch repair cancer syndrome	Seen in cohort 123
