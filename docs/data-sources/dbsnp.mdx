@@ -44,7 +44,10 @@ C or T will be arbitrarily assigned to be the Global major or minor allele.
 Here T is the Global major allele while C is selected as the global minor.
 
 ## Conflict resolution
-In case of multiple dbSNP entries for the same position and alternate allele, we join all ids into a comma separated list of ids; if there are multiple entries with different CAF values for the same allele, we use the first CAF value.
+
+:::caution Entries with Conflicting CAF values
+If there are multiple entries with different CAF values for the same allele, we use the first CAF value.
+:::
 
 ## Download URL
 https://ftp.ncbi.nih.gov/snp/organisms/

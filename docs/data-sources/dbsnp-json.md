@@ -3,6 +3,6 @@
    "rs1042821"
 ]
 ```
-| Field            | Type         | Required | Notes                     |
-|:-----------------|:------------:|:--------:|:--------------------------|
-| dbsnp            | string array | No       | values are dbSNP rsIDs    |
+| Field            | Type         | Notes                     |
+|:-----------------|:------------:|:--------------------------|
+| dbsnp            | string array | values are dbSNP rsIDs    |
