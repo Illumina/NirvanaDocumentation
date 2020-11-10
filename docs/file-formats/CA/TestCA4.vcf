@@ -1,0 +1,4 @@
+##fileformat=VCFv4.1
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+12	25227255	.	A	T	.	.	.
+17	7675074	.	C	A	.	.	.

@@ -68,6 +68,10 @@ downstream tool that this means a global allele frequency using all sub-populati
 Nirvana validates all the reference bases in a custom annotation. If a variant or genomic region is specified that has the wrong reference base, an error will be produced.
 :::
 
+:::caution Sorting
+The variants within each chromosome must be sorted by genomic position.
+:::
+
 #### Convert to Nirvana Format
 
 First we need to convert the TSV file to Nirvana's native file format and let's put that file in a new directory called CA:
@@ -478,7 +482,85 @@ Further down the JSON file, we find the annotated translocation breakend:
 
 ## Gene File Format
 
+### Basic Gene Example
 
+#### Create the Custom Annotation TSV
+
+Previously we looked at examples that either had small variants or genomic regions, however, sometimes we would like to add custom gene annotations. The gene custom annotation file format 
+looks slightly different:
+
+| Col 1                   | Col 2           | Col 3                                              | Col 4    |
+|:------------------------|:----------------|:---------------------------------------------------|:---------|
+| #title=MyDataSource     |                 |                                                    |          |
+| #geneSymbol             | geneId          | phenotype                                          | notes    |
+| #categories             | .               | .                                                  | .        |
+| #descriptions           | .               | .                                                  | .        |
+| #type                   | .               | string                                             | string   |
+| TP53                    | 7157            | Colorectal cancer, hereditary nonpolyposis, type 5 | .        |        
+| KRAS                    | ENSG00000133703 | Mismatch repair cancer syndrome                    | Seen in cohort 123 |
+
+Here's [the full TSV file](CA/MyDataSource5.tsv).
+
+Let's go over what's in this example:
+* **Column 2** has the `geneId` field. This can be either an **Entrez Gene ID** or an **Ensembl ID**.
+
+:::caution Gene Symbols
+Gene symbols are always in flux and are being updated on a daily basis at the NCBI and at HGNC. Due to this, Nirvana uses the `geneId` to match genes rather than the gene symbol. However, to 
+make the custom annotation files easier to read, we've included the `geneSymbol` column as well.
+:::
+
+:::caution Unknown Gene IDs
+When Nirvana parses the gene custom annotation file, it will note any gene IDs that are currently not recognized in Nirvana. In such a case, Nirvana will display an error showing all the 
+unrecognized gene IDs.
+:::
+
+#### Annotate with Nirvana
+
+Let's use a VCF file that contain variants in TP53 and KRAS:
+
+```
+##fileformat=VCFv4.1
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+12	25227255	.	A	T	.	.	.
+17	7675074	.	C	A	.	.	.
+```
+
+Here's [the full VCF file](CA/TestCA4.vcf).
+
+#### Investigate the Results
+
+```json {24-27}
+  "genes": [
+    {
+      "name": "KRAS",
+      "clingenGeneValidity": [
+        {
+          "diseaseId": "MONDO_0009026",
+          "disease": "Costello syndrome",
+          "classification": "disputed",
+          "classificationDate": "2018-07-24"
+        }
+      ],
+      "clingenDosageSensitivityMap": {
+        "haploinsufficiency": "no evidence to suggest that dosage sensitivity is associated with clinical phenotype",
+        "triplosensitivity": "no evidence to suggest that dosage sensitivity is associated with clinical phenotype"
+      },
+      "gnomAD": {
+        "pLi": 0.000788,
+        "pRec": 0.789,
+        "pNull": 0.21,
+        "synZ": 0.336,
+        "misZ": 2.32,
+        "loeuf": 1.24
+      },
+      "MyDataSource": {
+        "phenotype": "Mismatch repair cancer syndrome",
+        "notes": "Seen in cohort 123"
+      }
+    },
+```
+
+This is the abbreviated output for KRAS. Here's [the full JSON file](CA/TestCA5.json.gz) if you want to see the complete KRAS entry.
 
 ## Customizing the Header
 
