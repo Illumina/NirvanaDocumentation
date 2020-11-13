@@ -34,57 +34,25 @@
       ],
       "lastUpdatedDate":"2017-05-01",
       "isAlleleSpecific":true
-   },
-   {
-      "id":"RCV000144626.1",
-      "variationId":"VCV000036581.3",
-      "reviewStatus":"no assertion criteria provided",
-      "alleleOrigins":[
-         "germline"
-      ],
-      "refAllele":"G",
-      "altAllele":"A",
-      "phenotypes":[
-         "Lynch syndrome I"
-      ],
-      "medGenIds":[
-         "C2936783"
-      ],
-      "omimIds":[
-         "120435"
-      ],
-      "orphanetIds":[
-         "144"
-      ],
-      "significance":[
-         "benign"
-      ],
-      "lastUpdatedDate":"2017-04-05",
-      "pubMedIds":[
-         "18523027",
-         "22703879",
-         "22949387"
-      ],
-      "isAlleleSpecific":true
    }
 ]
 ```
-| Field            | Type         | Required | Notes                     |
-|:-----------------|:------------:|:--------:|:--------------------------|
-| id               | string       | Yes      | ClinVar ID                |
-| variationId      | string       | Yes      | ClinVar VCV ID            |
-| reviewStatus     | string       | Yes      | see possible values below |
-| alleleOrigins    | string array | Yes      | see possible values below |
-| refAllele        | string       | Yes      |                           |
-| altAllele        | string       | Yes      |                           |
-| phenotypes       | string array | Yes      |                           |
-| medGenIds        | string array | Yes      | MedGen IDs                |
-| omimIds          | string array | Yes      | OMIM IDs                  |
-| orphanetIds      | string array | Yes      | Orphanet IDs              |
-| significance     | string array | Yes      | see possible values below |
-| lastUpdatedDate  | string       | No       | yyyy-MM-dd                |
-| pubMedIds        | string array | Yes      | PubMed IDs                |
-| isAlleleSpecific | bool         | No       | set to true if the current variant alternate allele matches the ClinVar alternate allele |
+| Field            | Type         | Notes                     |
+|:-----------------|:------------:|:--------------------------|
+| id               | string       | ClinVar ID                |
+| variationId      | string       | ClinVar VCV ID            |
+| reviewStatus     | string       | see possible values below |
+| alleleOrigins    | string array | see possible values below |
+| refAllele        | string       |                           |
+| altAllele        | string       |                           |
+| phenotypes       | string array |                           |
+| medGenIds        | string array | MedGen IDs                |
+| omimIds          | string array | OMIM IDs                  |
+| orphanetIds      | string array | Orphanet IDs              |
+| significance     | string array | see possible values below |
+| lastUpdatedDate  | string       | yyyy-MM-dd                |
+| pubMedIds        | string array | PubMed IDs                |
+| isAlleleSpecific | bool         | true when the current variant alternate allele matches the ClinVar alternate allele |
 
 **reviewStatus:**
 - no assertion provided
