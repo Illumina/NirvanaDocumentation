@@ -5,4 +5,4 @@
 ```
 | Field            | Type         | Notes                     |
 |:-----------------|:------------:|:--------------------------|
-| dbsnp            | string array | values are dbSNP rsIDs    |
+| dbsnp            | string array | dbSNP rsIDs               |
