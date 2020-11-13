@@ -72,19 +72,19 @@ For each gene that was referenced in the transcripts found in the positions sect
    },
 ```
 
-| Field          | Type         | Required | Notes |
-|:---------------|:------------:|:--------:|:------|
-| annotator      | string       | Yes      | the name of the annotator and the current version                |
-| creationTime   | string       | Yes      | yyyy-MM-dd hh:mm:ss |
-| genomeAssembly | string       | Yes      | see possible values below |
-| schemaVersion  | integer      | Yes      | Incremented whenever the core structure of the JSON file introduces breaking changes |
-| dataVersion    | string       | Yes      | |
-| dataSources    | object array | Yes      | |
-| - name         | string       | Yes      | |
-| - version      | string       | Yes      | |
-| - description  | string       | No       | Optional description of the data source. e.g. Ensembl/RefSeq when describing the transcript source |
-| - releaseDate  | string       | No       | yyyy-MM-dd |
-| samples        | string array | No       | the order of these sample names will be used throughout the JSON file when enumerating samples |
+| Field          | Type         | Notes |
+|:---------------|:------------:|:------|
+| annotator      | string       | the name of the annotator and the current version                |
+| creationTime   | string       | yyyy-MM-dd hh:mm:ss |
+| genomeAssembly | string       | see possible values below |
+| schemaVersion  | integer      | incremented whenever the core structure of the JSON file introduces breaking changes |
+| dataVersion    | string       | |
+| dataSources    | object array | |
+| - name         | string       | |
+| - version      | string       | |
+| - description  | string       | Optional description of the data source. e.g. Ensembl/RefSeq when describing the transcript source |
+| - releaseDate  | string       | yyyy-MM-dd |
+| samples        | string array | the order of these sample names will be used throughout the JSON file when enumerating samples |
 
 **genomeAssembly:**
 - GRCh37
@@ -124,23 +124,23 @@ For each gene that was referenced in the transcripts found in the positions sect
       "cytogeneticBand":"2p16.3",
 ```
 
-| Field                     | Type          | Required | Variant Type  | Notes |
-|:--------------------------|:-------------:|:--------:|:-------------:|:------|
-| chromosome                | string        | Yes      | all           | exactly as displayed in the vcf |
-| postion                   | integer       | Yes      | all           | exactly as displayed in the vcf (1-based notation). Range: 1 - 250 million |
-| repeatUnit                | string        | No       | STR           | provided by ExpansionHunter |
-| refRepeatCount            | integer       | No       | STR           | provided by ExpansionHunter |
-| svEnd                     | integer       | No       | SV            | |
-| refAllele                 | string        | Yes      | all           | exactly as displayed in the vcf|
-| altAllele                 | string array  | Yes      | all           | exactly as displayed in the vcf|
-| quality                   | float         | Yes      | all           | exactly as displayed in the vcf (Normally an integer, but some variant callers using floating point. Has been observed as high as 500k)|
-| filters                   | string array  | No       | all           | exactly as displayed in the vcf |
-| ciPos                     | integer array | No       | SV            | |
-| ciEnd                     | integer array | No       | SV            | |
-| svLength                  | integer       | No       | SV            | |
-| strandBias                | float         | No       | small variant | provided by GATK (from SB) |
-| jointSomaticNormalQuality | integer       | No       | SV            | provided by the Manta variant caller (SOMATICSCORE) |
-| cytogeneticBand           | string        | No       | all           | e.g. 17p13.1 |
+| Field                     | Type          | Variant Type  | Notes |
+|:--------------------------|:-------------:|:-------------:|:------|
+| chromosome                | string        | all           | exactly as displayed in the vcf |
+| postion                   | integer       | all           | exactly as displayed in the vcf (1-based notation). Range: 1 - 250 million |
+| repeatUnit                | string        | STR           | provided by ExpansionHunter |
+| refRepeatCount            | integer       | STR           | provided by ExpansionHunter |
+| svEnd                     | integer       | SV            | |
+| refAllele                 | string        | all           | exactly as displayed in the vcf|
+| altAllele                 | string array  | all           | exactly as displayed in the vcf|
+| quality                   | float         | all           | exactly as displayed in the vcf (Normally an integer, but some variant callers using floating point. Has been observed as high as 500k)|
+| filters                   | string array  | all           | exactly as displayed in the vcf |
+| ciPos                     | integer array | SV            | |
+| ciEnd                     | integer array | SV            | |
+| svLength                  | integer       | SV            | |
+| strandBias                | float         | small variant | provided by GATK (from SB) |
+| jointSomaticNormalQuality | integer       | SV            | provided by the Manta variant caller (SOMATICSCORE) |
+| cytogeneticBand           | string        | all           | e.g. 17p13.1 |
 
 ## Samples
 ```json
@@ -186,23 +186,23 @@ For each gene that was referenced in the transcripts found in the positions sect
 ]
 ```
 
-| Field                        | Type          | Required | Notes |
-|:-----------------------------|:-------------:|:--------:|:------|
-| genotype                     | string        | Yes      | |
-| variantFrequencies           | float array   | Yes      | Range: 0 - 1.0. One value per alternate allele |
-| totalDepth                   | integer       | Yes      | non-negative integer values |
-| genotypeQuality              | integer       | Yes      | non-negative integer values. Typically maxes out at 99 |
-| copyNumber                   | integer       | Yes      | non-negative integer values |
-| repeatUnitCounts             | integer array | Yes      | ExpansionHunter-specific |
-| alleleDepths                 | integer array | Yes      | non-negative integer values |
-| failedFilter                 | bool          | Yes      | |
-| splitReadCounts              | integer array | No       | Manta-specific |
-| pairedEndReadCounts          | integer array | No       | Manta-specific |
-| isDeNovo                     | bool          | No       | |
-| diseaseAffectedStatuses      | string array  | No       | ExpansionHunter-specific |
-| artifactAdjustedQualityScore | float         | No       | PEPE-specific. Range: 0 - 100.0 |
-| likelihoodRatioQualityScore  | float         | No       | PEPE-specific. Range: 0 - 100.0 |
-| heteroplasmyPercentile       | float         | No       | Range: 0 - 100. 2 decimal places. One value per alternate allele |
+| Field                        | Type          | Notes |
+|:-----------------------------|:-------------:|:------|
+| genotype                     | string        | |
+| variantFrequencies           | float array   | Range: 0 - 1.0. One value per alternate allele |
+| totalDepth                   | integer       | non-negative integer values |
+| genotypeQuality              | integer       | non-negative integer values. Typically maxes out at 99 |
+| copyNumber                   | integer       | non-negative integer values |
+| repeatUnitCounts             | integer array | ExpansionHunter-specific |
+| alleleDepths                 | integer array | non-negative integer values |
+| failedFilter                 | bool          | |
+| splitReadCounts              | integer array | Manta-specific |
+| pairedEndReadCounts          | integer array | Manta-specific |
+| isDeNovo                     | bool          | |
+| diseaseAffectedStatuses      | string array  | ExpansionHunter-specific |
+| artifactAdjustedQualityScore | float         | PEPE-specific. Range: 0 - 100.0 |
+| likelihoodRatioQualityScore  | float         | PEPE-specific. Range: 0 - 100.0 |
+| heteroplasmyPercentile       | float         | Range: 0 - 100. 2 decimal places. One value per alternate allele |
 
 **Empty samples**
 
