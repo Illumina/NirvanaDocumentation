@@ -14,7 +14,8 @@ module.exports = {
       label: 'Data Sources',
       items: [
         'data-sources/clinvar',
-		'data-sources/dbsnp',
+        'data-sources/dbsnp',
+        'data-sources/primate-ai'
       ],
     },
     {
