@@ -1,0 +1,77 @@
+---
+title: Splice AI
+---
+
+import JSON from './splice-ai-json.md'
+
+## Overview
+
+SpliceAI, a 32-layer deep neural network, predicts splicing from a pre-mRNA sequence.
+
+:::info Publication
+K. Jaganathan, et al. Predicting splicing from primary sequence with deep learning. *Cell*, **176** (3) (2019), pp. 535-548 e24
+:::
+
+## VCF File
+
+### Example
+
+```
+##fileformat=VCFv4.0
+##assembly=GRCh37/hg19
+##INFO=<ID=SYMBOL,Number=1,Type=String,Description="HGNC gene symbol">
+##INFO=<ID=STRAND,Number=1,Type=String,Description="+ or - depending on whether the gene lies in the positive or negative strand">
+##INFO=<ID=TYPE,Number=1,Type=String,Description="E or I depending on whether the variant position is exonic or intronic (GENCODE V24lift37 canonical annotation)">
+##INFO=<ID=DIST,Number=1,Type=Integer,Description="Distance between the variant position and the closest splice site (GENCODE V24lift37 canonical annotation)">
+##INFO=<ID=DS_AG,Number=1,Type=Float,Description="Delta score (acceptor gain)">
+##INFO=<ID=DS_AL,Number=1,Type=Float,Description="Delta score (acceptor loss)">
+##INFO=<ID=DS_DG,Number=1,Type=Float,Description="Delta score (donor gain)">
+##INFO=<ID=DS_DL,Number=1,Type=Float,Description="Delta score (donor loss)">
+##INFO=<ID=DP_AG,Number=1,Type=Integer,Description="Delta position (acceptor gain) relative to the variant position">
+##INFO=<ID=DP_AL,Number=1,Type=Integer,Description="Delta position (acceptor loss) relative to the variant position">
+##INFO=<ID=DP_DG,Number=1,Type=Integer,Description="Delta position (donor gain) relative to the variant position">
+##INFO=<ID=DP_DL,Number=1,Type=Integer,Description="Delta position (donor loss) relative to the variant position">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+10	92946	.	C	T	.	.	SYMBOL=TUBB8;STRAND=-;TYPE=E;DIST=-53;DS_AG=0.0000;DS_AL=0.0000;DS_DG=0.0000;DS_DL=0.0000;DP_AG=-26;DP_AL=-10;DP_DG=3;DP_DL=35
+10	92946	.	C	G	.	.	SYMBOL=TUBB8;STRAND=-;TYPE=E;DIST=-53;DS_AG=0.0008;DS_AL=0.0000;DS_DG=0.0003;DS_DL=0.0000;DP_AG=34;DP_AL=-27;DP_DG=35;DP_DL=1
+10	92946	.	C	A	.	.	SYMBOL=TUBB8;STRAND=-;TYPE=E;DIST=-53;DS_AG=0.0004;DS_AL=0.0000;DS_DG=0.0001;DS_DL=0.0000;DP_AG=-10;DP_AL=-48;DP_DG=35;DP_DL=-21
+10	92947	.	A	C	.	.	SYMBOL=TUBB8;STRAND=-;TYPE=E;DIST=-54;DS_AG=0.0002;DS_AL=0.0000;DS_DG=0.0000;DS_DL=0.0000;DP_AG=-49;DP_AL=-11;DP_DG=0;DP_DL=34
+10	92947	.	A	T	.	.	SYMBOL=TUBB8;STRAND=-;TYPE=E;DIST=-54;DS_AG=0.0002;DS_AL=0.0000;DS_DG=0.0000;DS_DL=0.0000;DP_AG=33;DP_AL=-11;DP_DG=-22;DP_DL=34
+10	92947	.	A	G	.	.	SYMBOL=TUBB8;STRAND=-;TYPE=E;DIST=-54;DS_AG=0.0006;DS_AL=0.0000;DS_DG=0.0001;DS_DL=0.0000;DP_AG=33;DP_AL=-11;DP_DG=34;DP_DL=32
+```
+
+### Parsing
+
+From the VCF file, we're mainly interested in the following columns:
+* `DS_AG` - Δ score (acceptor gain)
+* `DS_AL` - Δ score (acceptor loss)
+* `DS_DG` - Δ score (donor gain)
+* `DS_DL` - Δ score (donor loss)
+* `DP_AG` - Δ position (acceptor gain) relative to the variant position
+* `DP_AL` - Δ position (acceptor loss) relative to the variant position
+* `DP_DG` - Δ position (donor gain) relative to the variant position
+* `DP_DL` - Δ position (donor loss) relative to the variant position
+
+The Splice AI team suggests the following interpretation for the scores:
+
+| Range         | Confidence | Pathogenicity     |
+|:-------------:|:-----------|:------------------|
+| 0 ≤ x < 0.1   | low        | likely benign     |
+| 0.1 ≤ x ≤ 0.5 | medium     | likely pathogenic |
+| x > 0.5       | high       | pathogenic        |
+
+## Pre-processing
+
+### Filtering
+
+Splice AI provides a comprehensive list of entries throughout the genome. However, many of the entries have little value. I.e. observing low splice scores in intergenic regions. Not only do these extra entries require more storage, but the unused content has a negative impact on annotation speed.
+
+As a result, Nirvana filters out all the values in the low confidence tier except for regions within 15 bp of nascent splice sites. For those regions, we found it useful to see if Splice AI predicted an interruption of the splicing mechanism.
+
+## Download URL
+
+[https://basespace.illumina.com/s/5u6ThOblecrh](https://basespace.illumina.com/s/5u6ThOblecrh)
+
+## JSON Output
+
+<JSON />
