@@ -17,19 +17,13 @@ In the Nirvana JSON representation, we try to maximize the amount of useful info
 
 ### JSON Layout
 
-The JSON file produced by Nirvana divided into three main sections:
-
 ![](JSON-Layout.svg)
 
-| Section    | Contents                                              |
-|:-----------|:------------------------------------------------------|
-| header     | configuration, data source versions, and sample names | 
-| positions  | variant-level annotation                              | 
-| genes      | gene-level annotation                                 | 
-
+:::info
 In general, each position corresponds to a row in the original VCF file.
 
 For each gene that was referenced in the transcripts found in the positions section, there will be additional gene-level annotation in the gene section.
+:::
 
 ## Header
 ```json
