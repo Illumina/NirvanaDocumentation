@@ -25,5 +25,12 @@ module.exports = {
         'file-formats/custom-annotations'
       ],
     },
+    {
+      type: 'category',
+      label: 'Core Functionality',
+      items: [
+        'core-functionality/variant-ids'
+      ],
+    },
   ],
 };
