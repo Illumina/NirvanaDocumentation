@@ -52,7 +52,7 @@ Imagine that you want to create a basic allele frequency custom annotation for s
 | chr16                   | 68801894 | G     | A     | 0.000006569     | 
 | chr19                   | 11107436 | G     | A     | 0.00003291      |
 
-Here's [the full TSV file](CA/MyDataSource.tsv).
+Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource.tsv).
 
 Let's go over the header and discuss the contents:
 * `title` indicates the name of the JSON key
@@ -101,7 +101,7 @@ Let's annotate the following VCF (notice that it's one of the variants that we h
 16	68801894	.	G	A	.	.	.
 ```
 
-Here's [the full VCF file](CA/TestCA.vcf).
+Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files/TestCA.vcf).
 
 Since Nirvana can handle multiple directories with external annotations, all we need to do is specify our new CA directory in addition to
 the normal Nirvana command-line.
@@ -157,7 +157,7 @@ We would expect the following data to show up in our JSON output file:
           "clinvar": [
 ```
 
-Here's [the full JSON file](CA/TestCA.json.gz).
+Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/TestCA.json.gz).
 
 Nirvana preserves up to 6 decimal places for allele frequency data.
 
@@ -180,7 +180,7 @@ Building on the previous example, we can add other types of annotations like pre
 | chr16                   | 68801894 | G     | A     | 0.000006569     | LP            | Seen in case 123 |
 | chr19                   | 11107436 | G     | A     | 0.00003291      | .             | . |
 
-Here's [the full TSV file](CA/MyDataSource2.tsv).
+Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource2.tsv).
 
 :::tip Placeholders
 You can use a period to denote an empty value (much in the same way as periods are used in VCF files to signify missing values). While 
@@ -207,7 +207,7 @@ alternate allele (allele-specific match):
 19	11107436	.	G	C	.	.	.
 ```
 
-Here's [the full VCF file](CA/TestCA2.vcf).
+Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files/TestCA2.vcf).
 
 #### Investigate the Results
 
@@ -235,7 +235,7 @@ Because we specified `#matchVariantsBy=allele` in our custom annotation file, on
           "clinvar": [
 ```
 
-Here's [the full JSON file](CA/TestCA2.json.gz).
+Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/TestCA2.json.gz).
 
 #### Using Positional Matches
 
@@ -307,7 +307,7 @@ In the previous example, we added a note for the middle variant, but sometimes i
 | #type                   | .        | .     | .     | string |
 | chr16                   | 20000000 | T     | 70000000 | Lots of false positives in this region |
 
-Here's [the full TSV file](CA/MyDataSource3.tsv).
+Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource3.tsv).
 
 Let's go over what's new in this example:
 * **Column 5** now has a field called `notes`. In essence, it looks exactly like column 7 from our previous example.
@@ -343,7 +343,7 @@ Let's use the same VCF file as our previous example.
       "variants": [
 ```
 
-Here's [the full JSON file](CA/TestCA3.json.gz).
+Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/TestCA3.json.gz).
 
 :::tip Reciprocal & Annotation Overlap
 For all intervals, Nirvana internally calculates two overlaps: a **variant overlap** and an **annotation overlap**. Variant overlap is the percentage of the variant's length that is 
@@ -402,7 +402,7 @@ Previously we looked at examples that either had small variants or genomic regio
 | chr21                   | 10510818 | C     | &lt;DEL&gt;       | 10699435 | Interval #2          |
 | chr22                   | 12370388 | T     | T[chr22:12370729[ | .        | Known false-positive |
 
-Here's [the full TSV file](CA/MyDataSource4.tsv).
+Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource4.tsv).
 
 Let's go over what's new in this example:
 * **Column 4** now has the `REF` field. Exception for the case listed below, this is only used by small variants or translocation breakends.
@@ -420,7 +420,7 @@ Let's use a new VCF file to study how matching works for intervals #1 and #2:
 22	12370388	.	T	T[chr22:12370729[	.	.	SVTYPE=BND
 ```
 
-Here's [the full VCF file](CA/TestCA3.vcf).
+Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files/TestCA3.vcf).
 
 The first variant is similar to the custom annotation labelled "interval #2". Position 10510818 is the padding base, so it effectively starts at position 10510819.
 
@@ -455,7 +455,7 @@ The first variant is similar to the custom annotation labelled "interval #2". Po
       ],
 ```
 
-Here's [the full JSON file](CA/TestCA4.json.gz).
+Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/TestCA4.json.gz).
 
 As expected, the variant and interval #2 have matching endpoints, therefore there is 100% overlap. Interval #1 technically starts 1 bp earlier, so its overlap 99.9%.
 
@@ -499,7 +499,7 @@ looks slightly different:
 | TP53                    | 7157            | Colorectal cancer, hereditary nonpolyposis, type 5 | .        |        
 | KRAS                    | ENSG00000133703 | Mismatch repair cancer syndrome                    | Seen in cohort 123 |
 
-Here's [the full TSV file](CA/MyDataSource5.tsv).
+Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource5.tsv).
 
 Let's go over what's in this example:
 * **Column 2** has the `geneId` field. This can be either an **Entrez Gene ID** or an **Ensembl ID**.
@@ -525,7 +525,7 @@ Let's use a VCF file that contain variants in TP53 and KRAS:
 17	7675074	.	C	A	.	.	.
 ```
 
-Here's [the full VCF file](CA/TestCA4.vcf).
+Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files/TestCA4.vcf).
 
 #### Investigate the Results
 
@@ -560,7 +560,7 @@ Here's [the full VCF file](CA/TestCA4.vcf).
     },
 ```
 
-This is the abbreviated output for KRAS. Here's [the full JSON file](CA/TestCA5.json.gz) if you want to see the complete KRAS entry.
+This is the abbreviated output for KRAS. Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/TestCA5.json.gz) if you want to see the complete KRAS entry.
 
 ## Customizing the Header
 
