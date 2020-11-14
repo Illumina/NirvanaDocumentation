@@ -13,7 +13,8 @@ NIRVANA_ROOT=$TOP_DIR/Nirvana
 NIRVANA_BIN=$NIRVANA_ROOT/bin/Release/netcoreapp2.1/Nirvana.dll
 DOWNLOADER_BIN=$NIRVANA_ROOT/bin/Release/netcoreapp2.1/Downloader.dll
 DATA_DIR=$NIRVANA_ROOT/Data
-NIRVANA_TAG=v3.5.0
+
+VCF_PATH=HiSeq.10000.vcf.gz
 
 # just change this to GRCh38 if you want to set everything up for hg38
 GENOME_ASSEMBLY=GRCh37
@@ -78,7 +79,6 @@ pushd $TOP_DIR
 if [ ! -d $NIRVANA_ROOT ]
 then
     git clone https://github.com/Illumina/Nirvana.git
-    git checkout $NIRVANA_TAG
 fi
 
 # =============
@@ -89,6 +89,11 @@ pushd $NIRVANA_ROOT
 
 if [ ! -f $NIRVANA_BIN ]
 then
+    # grab the latest release
+    LATEST_TAG=latesttag=$(git describe --tags)
+    git checkout $LATEST_TAG
+
+    # build Nirvana
     dotnet build -c Release
 fi
 
@@ -108,13 +113,13 @@ fi
 # ==============================
 
 # download a test vcf file
-if [ ! -f HiSeq.10000.vcf ]
+if [ ! -f $VCF_PATH ]
 then
-    curl -O https://raw.githubusercontent.com/samtools/htsjdk/master/src/test/resources/htsjdk/variant/HiSeq.10000.vcf
+    curl -O https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz
 fi
 
 # analyze it with Nirvana
-dotnet $NIRVANA_BIN -c $CACHE_DIR/Both --sd $SA_DIR -r $REF_TEST -i HiSeq.10000.vcf -o HiSeq.10000.annotated
+dotnet $NIRVANA_BIN -c $CACHE_DIR/Both --sd $SA_DIR -r $REF_TEST -i $VCF_PATH -o HiSeq.10000
 
 popd
 popd
