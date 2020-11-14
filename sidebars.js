@@ -7,6 +7,7 @@ module.exports = {
         'introduction/introduction',
         'introduction/dependencies',
         'introduction/getting-started',
+        'introduction/covid19'
       ],
     },
     {
