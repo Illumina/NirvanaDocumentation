@@ -70,17 +70,22 @@ For each gene that was referenced in the transcripts found in the positions sect
 |:---------------|:------------:|:------|
 | annotator      | string       | the name of the annotator and the current version                |
 | creationTime   | string       | yyyy-MM-dd hh:mm:ss |
-| genomeAssembly | string       | see possible values below |
+| genomeAssembly | string       | see [possible values below](#genome-assemblies) |
 | schemaVersion  | integer      | incremented whenever the core structure of the JSON file introduces breaking changes |
 | dataVersion    | string       | |
-| dataSources    | object array | |
-| - name         | string       | |
-| - version      | string       | |
-| - description  | string       | Optional description of the data source. e.g. Ensembl/RefSeq when describing the transcript source |
-| - releaseDate  | string       | yyyy-MM-dd |
+| dataSources    | object array | see [Data Source entry below](#data-source) |
 | samples        | string array | the order of these sample names will be used throughout the JSON file when enumerating samples |
 
-**genomeAssembly:**
+#### Data Source
+
+| Field        | Type         | Notes |
+|:-------------|:------------:|:------|
+| name         | string       | |
+| version      | string       | |
+| description  | string       | optional description of the data source |
+| releaseDate  | string       | yyyy-MM-dd |
+
+#### Genome Assemblies
 - GRCh37
 - GRCh38
 - hg19
@@ -183,7 +188,7 @@ For each gene that was referenced in the transcripts found in the positions sect
 | Field                        | Type          | Notes |
 |:-----------------------------|:-------------:|:------|
 | genotype                     | string        | |
-| variantFrequencies           | float array   | Range: 0 - 1.0. One value per alternate allele |
+| variantFrequencies           | float array   | range: 0 - 1.0. One value per alternate allele |
 | totalDepth                   | integer       | non-negative integer values |
 | genotypeQuality              | integer       | non-negative integer values. Typically maxes out at 99 |
 | copyNumber                   | integer       | non-negative integer values |
@@ -196,9 +201,9 @@ For each gene that was referenced in the transcripts found in the positions sect
 | diseaseAffectedStatuses      | string array  | ExpansionHunter-specific |
 | artifactAdjustedQualityScore | float         | PEPE-specific. Range: 0 - 100.0 |
 | likelihoodRatioQualityScore  | float         | PEPE-specific. Range: 0 - 100.0 |
-| heteroplasmyPercentile       | float         | Range: 0 - 100. 2 decimal places. One value per alternate allele |
+| heteroplasmyPercentile       | float         | range: 0 - 100. 2 decimal places. One value per alternate allele |
 
-**Empty samples**
+:::info Empty Samples
 
 If a sample does not contain any entries, we will create a sample object that contains the `isEmpty` key. This ensures that sample ordering is preserved while indicating that a sample is intentionally empty.
 
@@ -209,6 +214,8 @@ If a sample does not contain any entries, we will create a sample object that co
    }
 ],
 ```
+
+:::
 
 ## Variants
 ```json
@@ -229,6 +236,35 @@ If a sample does not contain any entries, we will create a sample object that co
       "hgvsg":"NC_000002.11:g.48010488G>A",
       "phylopScore":0.459
 ```
+
+| Field                  | Type         | Notes                                                                                                                | 
+|:-----------------------|:------------:|:---------------------------------------------------------------------------------------------------------------------| 
+| vid                    | string       | see [Variant Identifiers](../core-functionality/variant-ids)                                                         | 
+| chromosome             | string       |                                                                                                                      | 
+| begin                  | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          | 
+| end                    | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          | 
+| isReferenceMinorAllele | bool         | true when this is a reference minor allele                                                                           | 
+| isStructuralVariant    | bool         | true when the variant is a structural variant                                                                        | 
+| inLowComplexityRegion  | bool         | true when the variant lies in a low complexity region (gnomAD low complexity regions)                                | 
+| refAllele              | string       | parsimonious representation of the reference allele                                                                  | 
+| altAllele              | string       | parsimonious representation of the alternate allele.                                                                 | 
+| variantType            | string       | uses [Sequence Ontology sequence alterations](http://www.sequenceontology.org/browser/current_svn/term/SO:0001059)   | 
+| isDecomposedVariant    | bool         | true when the decomposed variant has been used to create another recomposed variant                                  | 
+| isRecomposedVariant    | bool         | true when the variant is recomposed from two or more decomposed variants                                             | 
+| linkedVids             | string array | list of [VIDs](../core-functionality/variant-ids) for variants connecting decomposed and recomposed variants         | 
+| hgvsg                  | string       | HGVS g. notation                                                                                                     | 
+| phylopScore            | float        | phyloP conservation score. Range: -14.08 to 6.424                                                                    | 
+
+:::info Reference Minor Alleles
+Nirvana supports annotating reference minor alleles. In such a case, `refAllele` will be replaced by the global major allele and `altAllele` will be replaced with the original reference allele.
+:::
+
+:::info Flagging Decomposed & Recomposed Variants
+When two or more decomposed variants are recomposed into an MNV, the decomposed variants will be marked with `"isDecomposedVariant":true`.
+
+Similarly, the recomposed variant will be shown as a new VCF position. This recomposed variant will be flagged with `"isRecomposedVariant":true`.
+:::
+
 ### Regulatory Regions
 ```json
 "regulatoryRegions":[ 
@@ -241,6 +277,28 @@ If a sample does not contain any entries, we will create a sample object that co
    }
 ]
 ```
+
+| Field             | Type         | Notes | 
+|:------------------|:------------:|-------| 
+| id                | string       |       | 
+| type              | string       | see [possible values below](#regulatory-types) | 
+| consequence       | string array | see [possible values below](#regulatory-consequences) | 
+
+#### Regulatory Types
+
+* CTCF_binding_site
+* enhancer
+* open_chromatin_region
+* promoter
+* promoter_flanking_region
+* TF_binding_site
+
+#### Regulatory Consequences
+
+* regulatory_region_variant
+* regulatory_region_ablation
+* regulatory_region_amplification
+* regulatory_region_truncation
 
 ### ClinVar
 <ClinVar />
@@ -303,6 +361,62 @@ If a sample does not contain any entries, we will create a sample object that co
 ]
 ```
 
+| Field              | Type         | Notes                                                                                                       | 
+|:-------------------|:------------:|:------------------------------------------------------------------------------------------------------------| 
+| transcript         | string       | transcript ID. e.g. ENST00000445503.1                                                                       | 
+| source             | string       | RefSeq / Ensembl                                                                                            | 
+| bioType            | string       | descriptions of the [biotypes from Ensembl](https://uswest.ensembl.org/info/genome/genebuild/biotypes.html) | 
+| codons             | string       |                                                                                                             | 
+| aminoAcids         | string       |                                                                                                             | 
+| cdnaPos            | string       |                                                                                                             | 
+| cdsPos             | string       |                                                                                                             | 
+| exons              | string       | exons affected by the variant                                                                               | 
+| introns            | string       | introns affected by the variant                                                                             | 
+| proteinPos         | string       |                                                                                                             | 
+| geneId             | string       | gene ID. e.g. ENSG00000116062                                                                               | 
+| hgnc               | string       | gene symbol. e.g. MSH6                                                                                      | 
+| consequence        | string array | [Sequence Ontology Consequences](http://www.sequenceontology.org/index.html)                                | 
+| hgvsc              | string       | HGVS coding nomenclature                                                                                    | 
+| hgvsp              | string       | HGVS protein nomenclature                                                                                   | 
+| geneFusion         | object       | see [Gene Fusions entry below](#gene-fusions)                                                                  | 
+| isCanonical        | bool         | true when this is a canonical transcript                                                                    | 
+| polyPhenScore      | float        | range: 0 - 1.0                                                                                              | 
+| polyPhenPrediction | string       | see [possible values below](#polyphen)                                                                      | 
+| proteinId          | string       | protein ID. E.g. ENSP00000405294.1                                                                          | 
+| siftScore          | float        | range: 0 - 1.0                                                                                              | 
+| siftPrediction     | string       | see [possible values below](#sift)                                                                          | 
+| completeOverlap    | bool         | true when this transcript is completely overlapped by the variant                                           | 
+
+#### PolyPhen
+
+* probably damaging
+* possibly damaging
+* benign
+* unknown
+
+#### SIFT
+
+* tolerated
+* deleterious
+* tolerated - low confidence
+* deleterious - low confidence
+
+#### Gene Fusions
+
+| Field              | Type         | Notes                                          |
+|:-------------------|:------------:|:-----------------------------------------------|
+| exon               | int          | actual exon where the breakpoint was located   |
+| intron             | int          | actual intron where the breakpoint was located |
+| fusions            | object array | see [Fusion entry below](#fusion)              |
+
+#### Fusion
+
+| Field              | Type         | Notes                                                |
+|:-------------------|:------------:|:-----------------------------------------------------|
+| exon               | int          | actual exon where the other breakpoint was located   |
+| intron             | int          | actual intron where the other breakpoint was located |
+| hgvsc              | string       | HGVS coding nomenclature describing the two genes and the transcripts that are fused along with |
+
 ## Genes
 ```json
 "genes":[ 
@@ -310,9 +424,13 @@ If a sample does not contain any entries, we will create a sample object that co
       "name":"MSH6",
       "hgncId":7329,
       "summary":"This gene encodes a member of the DNA mismatch repair MutS family. In E. coli, the MutS protein helps in the recognition of mismatched nucleotides prior to their repair. A highly conserved region of approximately 150 aa, called the Walker-A adenine nucleotide binding motif, exists in MutS homologs. The encoded protein heterodimerizes with MSH2 to form a mismatch recognition complex that functions as a bidirectional molecular switch that exchanges ADP and ATP as DNA mismatches are bound and dissociated. Mutations in this gene may be associated with hereditary nonpolyposis colon cancer, colorectal cancer, and endometrial cancer. Transcripts variants encoding different isoforms have been described. [provided by RefSeq, Jul 2013]",
-      "acmgActionableGene":true,
-      /* this is where gene-level data sources can be found */
-      /* e.g. OMIM and ExAC                                 */
+      /* this is where gene-level data sources can be found e.g. OMIM */
    }
 ]
 ```
+
+| Field   | Type   | Notes                                                            |
+|:--------|:------:|:-----------------------------------------------------------------|
+| name    | string | HGNC gene symbol                                                 |
+| hgncId  | int    | HGNC ID                                                          |
+| summary | string | short description of the gene from [OMIM](https://www.omim.org/) |
