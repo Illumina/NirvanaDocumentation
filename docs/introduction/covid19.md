@@ -2,7 +2,7 @@
 title: Annotating COVID-19
 ---
 
-The Nirvana development team is mainly focused on providing annotations for the human genome. This focus allows us maximizing our resources towards understanding human health.
+The Nirvana development team is mainly focused on providing annotations for the human genome. This focus allows us to maximize our resources towards understanding human health.
 
 However, nothing in our architecture prevents us from supporting other genomes. Earlier this year, we had an opportunity to put that statement to the test - we added support for annotating the **SARS-CoV-2** genome, the virus that causes the **COVID-19** disease.
 
