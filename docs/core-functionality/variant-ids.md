@@ -19,7 +19,7 @@ The Broad VID scheme is not only simple, but it has the advantage that a user co
 
 ### VCF Examples
 
-```
+```scss
 chr1	66507	.	T	A	184.45	PASS	.
 chr1	66521	.	T	TATATA	144.53	PASS	.
 chr1	66572	.	GTA	G,GTACTATATATTATA	45.45	PASS	.
@@ -40,7 +40,7 @@ chr1	66572	.	GTA	G,GTACTATATATTATA	45.45	PASS	.
 
 ### VCF Example
 
-```
+```scss
 chr1	2617277	.	A	AAAAAAAAAAAAAAAAAATTAGTCAGGCAC[chr3:153444911[	.	PASS	SVTYPE=BND
 ```
 
@@ -56,7 +56,7 @@ chr1	2617277	.	A	AAAAAAAAAAAAAAAAAATTAGTCAGGCAC[chr3:153444911[	.	PASS	SVTYPE=BN
 
 ### VCF Examples
 
-```
+```scss
 chr1	1000	.	G	<ROH>	.	PASS	END=3001000;SVTYPE=ROH
 chr1	1350082	.	G	<DEL>	.	PASS	END=1351320;SVTYPE=DEL
 chr1	1477854	.	C	<DUP:TANDEM>	.	PASS	END=1477984;SVTYPE=DUP

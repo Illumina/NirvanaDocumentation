@@ -76,7 +76,7 @@ The variants within each chromosome must be sorted by genomic position.
 
 First we need to convert the TSV file to Nirvana's native file format and let's put that file in a new directory called CA:
 
-```Bash
+```bash
 $ mkdir CA
 $ dotnet bin/Release/netcoreapp2.1/SAUtils.dll customvar \
   -r Data/References/Homo_sapiens.GRCh38.Nirvana.dat -i MyDataSource.tsv -o CA
@@ -95,7 +95,7 @@ Time: 00:00:00.2
 
 Let's annotate the following VCF (notice that it's one of the variants that we have in our custom annotation):
 
-```
+```scss
 ##fileformat=VCFv4.1
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 16	68801894	.	G	A	.	.	.
@@ -106,7 +106,7 @@ Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files
 Since Nirvana can handle multiple directories with external annotations, all we need to do is specify our new CA directory in addition to
 the normal Nirvana command-line.
 
-```Bash {3}
+```bash {3}
 $ dotnet bin/Release/netcoreapp2.1/Nirvana.dll -c Data/Cache/GRCh38/Both \
   -r Data/References/Homo_sapiens.GRCh38.Nirvana.dat \
   --sd Data/SupplementaryAnnotation/GRCh38 --sd CA -i TestCA.vcf -o TestCA
@@ -199,7 +199,7 @@ notes.
 Let's use a new VCF file. It includes all the same positions as our custom annotation file, but only the middle variant also matches the 
 alternate allele (allele-specific match):
 
-```
+```scss
 ##fileformat=VCFv4.1
 #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
 16	23603511	.	TG	T	.	.	.
@@ -413,7 +413,7 @@ Let's go over what's new in this example:
 
 Let's use a new VCF file to study how matching works for intervals #1 and #2:
 
-```
+```scss
 ##fileformat=VCFv4.1
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 21	10510818	.	C	<DUP>	.	.	END=10699435;SVTYPE=DUP
@@ -518,7 +518,7 @@ unrecognized gene IDs.
 
 Let's use a VCF file that contain variants in TP53 and KRAS:
 
-```
+```scss
 ##fileformat=VCFv4.1
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 12	25227255	.	A	T	.	.	.
@@ -682,7 +682,7 @@ Nirvana includes a tool called `SAUtils` that converts various data sources into
 
 ### Convert Variant File
 
-```Bash
+```bash
 dotnet bin/Release/netcoreapp2.1/SAUtils.dll customvar \
      -r Data/References/Homo_sapiens.GRCh37.Nirvana.dat \
      -i MyDataSource.tsv \
@@ -695,7 +695,7 @@ dotnet bin/Release/netcoreapp2.1/SAUtils.dll customvar \
 
 ### Convert Gene File
 
-```Bash
+```bash
 dotnet bin/Release/netcoreapp2.1/SAUtils.dll customgene \
      --uga Nirvana_UGA.tsv \
      -i MyDataSource.tsv \

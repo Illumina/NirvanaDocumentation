@@ -16,7 +16,7 @@ Sherry, S.T., Ward, M. and Sirotkin, K. (1999) dbSNP—Database for Single Nucle
 
 ### Example
 
-```bash
+```scss
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 1	10177	rs367896724	A	AC	.	.	RS=367896724;RSPOS=10177;dbSNPBuildID=138; \ 
       SSR=0;SAO=0;VP=0x050000020005130026000200;GENEINFO=DDX11L1:100287102;WGT=1; \
@@ -44,7 +44,7 @@ If there are two candidates for global minor and the reference allele is one of 
 
 #### Equal Allele Frequency Example (2 alleles)
 
-```bash
+```scss
 chr1	100	A	C	CAF=0.5,0.5
 ```
 
@@ -52,7 +52,7 @@ We will select A to be the global major allele and C to be the global minor alle
 
 #### Equal Allele Frequency Example (3 alleles)
 
-```bash
+```scss
 chr1	100	A	C,T	CAF=0.33,0.33,0.33
 ```
 
@@ -60,7 +60,7 @@ We will select A to be the global major allele and either C or T is chosen (arbi
 
 #### Equal Allele Frequency in Alternate Alleles
 
-```bash
+```scss
 chr1	100	A	C,T	CAF=0.2,0.4,0.4
 ```
 
@@ -68,7 +68,7 @@ We will select C or T to be arbitrarily assigned to be the global major or globa
 
 #### Equal Allele Frequency Between Reference & Alternate Allele
 
-```bash
+```scss
 chr1	100	A	C,T	CAF=0.2,0.2,0.6
 ```
 

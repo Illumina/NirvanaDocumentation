@@ -69,7 +69,7 @@ With the binned data, we end up having 775 distinct `vrf` values in the entire J
 
 The JSON file is converted into a small TSV file that is [embedded in Nirvana](https://github.com/Illumina/Nirvana/blob/main/MitoHeteroplasmy/Resources/MitoHeteroplasmy.tsv.gz). Here is an example of the TSV file:
 
-```
+```scss
 #CHROM	POS	REF	ALT	VRF_BINS	VRF_COUNTS
 chrM	1	G	.	0.981,0.987,0.988,0.989,0.99,0.991,0.992,0.993,0.994,0.995,0.996,0.997,0.998,0.999	1,2,2,4,7,8,11,19,43,60,48,64,499,1736
 chrM	2	A	.	0.981,0.987,0.988,0.989,0.99,0.991,0.992,0.993,0.994,0.995,0.996,0.997,0.998,0.999	1,2,2,4,7,8,11,19,43,60,48,64,499,1736
