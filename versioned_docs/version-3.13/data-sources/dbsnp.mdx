@@ -1,0 +1,89 @@
+---
+title: dbSNP
+---
+
+import JSON from './dbsnp-json.md'
+
+## Overview
+
+dbSNP contains human single nucleotide variations, microsatellites, and small-scale insertions and deletions along with publication, population frequency, molecular consequence, and genomic and RefSeq mapping information for both common variations and clinical mutations.
+
+:::info Publication
+Sherry, S.T., Ward, M. and Sirotkin, K. (1999) dbSNP—Database for Single Nucleotide Polymorphisms and Other Classes of Minor Genetic Variation. *Genome Res.*, **9**, 677–679.
+:::
+
+## VCF File
+
+### Example
+
+```scss
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1	10177	rs367896724	A	AC	.	.	RS=367896724;RSPOS=10177;dbSNPBuildID=138; \ 
+      SSR=0;SAO=0;VP=0x050000020005130026000200;GENEINFO=DDX11L1:100287102;WGT=1; \
+      VC=DIV;R5;ASP;G5A;G5;KGPhase3;CAF=0.5747,0.4253;COMMON=1; \
+      TOPMED=0.76728147298674821,0.23271852701325178
+```
+
+### Parsing
+
+From the VCF file, we're mainly interested in the following:
+* `rsID` from the `ID` field
+* `CAF` from the `INFO` field
+
+#### Global allele extraction
+
+The global major and minor alleles are extracted based on the frequency of the alleles provided in the CAF field. The global minor allele frequency is the second highest value of the CAF comma delimited field (ignoring '.' values). 
+
+:::tip Tie Breaking: Global Major Allele
+If there are two candidates for global major and the reference allele is one of them, we prefer the reference allele.
+:::
+
+:::tip Tie Breaking: Global Minor Allele
+If there are two candidates for global minor and the reference allele is one of them, we prefer the other allele. If the reference allele is not involved, they are chosen arbitrarily.
+:::
+
+#### Equal Allele Frequency Example (2 alleles)
+
+```scss
+chr1	100	A	C	CAF=0.5,0.5
+```
+
+We will select A to be the global major allele and C to be the global minor allele.
+
+#### Equal Allele Frequency Example (3 alleles)
+
+```scss
+chr1	100	A	C,T	CAF=0.33,0.33,0.33
+```
+
+We will select A to be the global major allele and either C or T is chosen (arbitrarily) to be the global minor allele.
+
+#### Equal Allele Frequency in Alternate Alleles
+
+```scss
+chr1	100	A	C,T	CAF=0.2,0.4,0.4
+```
+
+We will select C or T to be arbitrarily assigned to be the global major or global minor allele.
+
+#### Equal Allele Frequency Between Reference & Alternate Allele
+
+```scss
+chr1	100	A	C,T	CAF=0.2,0.2,0.6
+```
+
+We will select T to be the global major allele and C to be the global minor allele.
+
+## Known Issues
+
+:::caution Known Issues
+If there are multiple entries with different CAF values for the same allele, we use the first CAF value.
+:::
+
+## Download URL
+
+[https://ftp.ncbi.nih.gov/snp/organisms/](https://ftp.ncbi.nih.gov/snp/organisms/)
+
+## JSON Output
+
+<JSON />

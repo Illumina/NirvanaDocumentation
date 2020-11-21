@@ -23,7 +23,7 @@
   --ifm-table-stripe-background: #F8F8F8;
 }
 
-thead {
+table th {
   color: white;
   font-family: var(--ifm-heading-font-family);
 }
