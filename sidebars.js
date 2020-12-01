@@ -17,6 +17,7 @@ module.exports = {
         'data-sources/clinvar',
         'data-sources/dbsnp',
         'data-sources/mito-heteroplasmy',
+        'data-sources/revel',
         'data-sources/splice-ai',
         'data-sources/primate-ai'
       ],
