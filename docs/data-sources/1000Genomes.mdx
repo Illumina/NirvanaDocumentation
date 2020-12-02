@@ -1,0 +1,115 @@
+---
+title: 1000Genomes
+---
+
+import JSON from './1000Genomes-json.md'
+
+## Overview
+
+The goal of the 1000 Genomes Project was to find most genetic variants with frequencies of at least 1% in the populations studied. It was the first project to sequence the genomes of a large number of people, to provide a comprehensive resource on human genetic variation. Data from the 1000 Genomes Project was quickly made available to the worldwide scientific community through freely accessible public databases.
+
+:::info Publication
+Sudmant, P., Rausch, T., Gardner, E. et al. An integrated map of structural variation in 2,504 human genomes. *Nature 526*, 75–81 (2015). https://doi.org/10.1038/nature15394
+:::
+
+## Populations
+* The super population membership can be found here: (http://www.1000genomes.org/category/population/)
+* We want to capture the allele frequencies for all 26 populations as well as the 5 super populations and the total population.
+
+## Small Variants
+### VCF File Parsing
+Parse the 1000 Genomes vcf file and extract the following fields:
+* AA
+* AF
+* EAS_AF
+* AMR_AF
+* AFR_AF
+* EUR_AF
+
+The fields relevant to parsing the desired information are described in the VCF header as follows:
+```scss
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Total number of alternate alleles in called genotypes">
+##INFO=<ID=AF,Number=A,Type=Float,Description="Estimated allele frequency in the range (0,1)">
+##INFO=<ID=EAS_AF,Number=A,Type=Float,Description="Allele frequency in the EAS populations \
+calculated from AC and AN, in the range (0,1)">
+##INFO=<ID=EUR_AF,Number=A,Type=Float,Description="Allele frequency in the EUR populations \
+calculated from AC and AN, in the range (0,1)">
+##INFO=<ID=AFR_AF,Number=A,Type=Float,Description="Allele frequency in the AFR populations \
+calculated from AC and AN, in the range (0,1)">
+##INFO=<ID=AMR_AF,Number=A,Type=Float,Description="Allele frequency in the AMR populations \
+calculated from AC and AN, in the range (0,1)">
+##INFO=<ID=SAS_AF,Number=A,Type=Float,Description="Allele frequency in the SAS populations \
+calculated from AC and AN, in the range (0,1)">
+##INFO=<ID=AA,Number=1,Type=String,Description="Ancestral Allele. Format: AA|REF|ALT|IndelType. \
+AA: Ancestral allele, REF:Reference Allele, ALT:Alternate Allele, IndelType:Type of Indel (REF, ALT and IndelType are only defined for indels)">
+```
+All frequency related information comes in comma separated allele specific fields and are parsed into allele specific annotations. The ancestral allele, if it exists, is the first value in the pipe separated AA fields (the Indel specific REF, ALT, IndelType fields are ignored).
+
+**NOTE**: The actual allele counts and allele numbers are not expressed in the INFO field. Instead the genotypes need to be parsed to directly compute that information.
+#### Example
+
+```scss
+
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1       15274   rs62636497      A       G,T     100     PASS    AC=1739,3210;AF=0.347244,0.640974; \
+EAS_AF=0.4812,0.5188; AMR_AF=0.2752,0.7205;AFR_AF=0.323,0.6369;EUR_AF=0.2922,0.7078;SAS_AF=0.3497,0.6472;AA=g|||;
+```
+
+#### Conflict Resolution
+
+The global major and minor alleles are extracted based on the frequency of the alleles provided in the CAF field. The global minor allele frequency is the second highest value of the CAF comma delimited field (ignoring '.' values).
+
+:::tip Tie Breaking: Global Major Allele
+If there are two candidates for global major and the reference allele is one of them, we prefer the reference allele.
+:::
+
+:::tip Tie Breaking: Global Minor Allele
+If there are two candidates for global minor and the reference allele is one of them, we prefer the other allele. If the reference allele is not involved, they are chosen arbitrarily.
+:::
+
+#### Equal Allele Frequency Example (2 alleles)
+
+```scss
+chr1	100	A	C	CAF=0.5,0.5
+```
+
+We will select A to be the global major allele and C to be the global minor allele.
+
+#### Equal Allele Frequency Example (3 alleles)
+
+```scss
+chr1	100	A	C,T	CAF=0.33,0.33,0.33
+```
+
+We will select A to be the global major allele and either C or T is chosen (arbitrarily) to be the global minor allele.
+
+#### Equal Allele Frequency in Alternate Alleles
+
+```scss
+chr1	100	A	C,T	CAF=0.2,0.4,0.4
+```
+
+We will select C or T to be arbitrarily assigned to be the global major or global minor allele.
+
+#### Equal Allele Frequency Between Reference & Alternate Allele
+
+```scss
+chr1	100	A	C,T	CAF=0.2,0.2,0.6
+```
+
+We will select T to be the global major allele and C to be the global minor allele.
+
+## Known Issues
+
+:::caution Known Issues
+If there are multiple entries with different CAF values for the same allele, we use the first CAF value.
+:::
+
+## Download URL
+
+[GRCh37](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/)
+[GRCh38](http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data_collections/1000_genomes_project/release/20190312_biallelic_SNV_and_INDEL/)
+
+## JSON Output
+
+<JSON />
