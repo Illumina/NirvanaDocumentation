@@ -49,7 +49,6 @@ All frequency related information comes in comma separated allele specific field
 #### Example
 
 ```scss
-
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 1       15274   rs62636497      A       G,T     100     PASS    AC=1739,3210;AF=0.347244,0.640974; \
 EAS_AF=0.4812,0.5188; AMR_AF=0.2752,0.7205;AFR_AF=0.323,0.6369;EUR_AF=0.2922,0.7078;SAS_AF=0.3497,0.6472;AA=g|||;
@@ -57,48 +56,25 @@ EAS_AF=0.4812,0.5188; AMR_AF=0.2752,0.7205;AFR_AF=0.323,0.6369;EUR_AF=0.2922,0.7
 
 #### Conflict Resolution
 
-The global major and minor alleles are extracted based on the frequency of the alleles provided in the CAF field. The global minor allele frequency is the second highest value of the CAF comma delimited field (ignoring '.' values).
-
-:::tip Tie Breaking: Global Major Allele
-If there are two candidates for global major and the reference allele is one of them, we prefer the reference allele.
-:::
-
-:::tip Tie Breaking: Global Minor Allele
-If there are two candidates for global minor and the reference allele is one of them, we prefer the other allele. If the reference allele is not involved, they are chosen arbitrarily.
-:::
-
-#### Equal Allele Frequency Example (2 alleles)
-
+Take the following example:
 ```scss
-chr1	100	A	C	CAF=0.5,0.5
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1 20505705 rs35377696 C CTCTG,CTG,CTGTG 100 PASS AC=46,1513,152;AF=0.0091853,0.302117,0.0303514;
+1 20505705 rs35377696 C CTG 100 PASS AC=4;AF=0.000798722;
 ```
+That is, the variant 1-20505705-C-CTG has conflicting entries. To get an idea of how frequently we observe this, here is a table summarizing ChrX and all chromosomes. Note that almost all such entries are found in ChrX.
 
-We will select A to be the global major allele and C to be the global minor allele.
+|Chromosome | \# of alleles    | \# of conflicting alleles | percentage|
+|:---------:|:-----------------|:--------------:|:-----------------|
+| chrX      |       834800     |       2733     |           0.33%  |
+| Total     |       21413098   |       2743     |           0.013% |
 
-#### Equal Allele Frequency Example (3 alleles)
+**Currently**, we removed the allele frequency of the conflicting allele (i.e., insertion TG in the example )but keep allele frequencies of all others.
 
-```scss
-chr1	100	A	C,T	CAF=0.33,0.33,0.33
-```
-
-We will select A to be the global major allele and either C or T is chosen (arbitrarily) to be the global minor allele.
-
-#### Equal Allele Frequency in Alternate Alleles
-
-```scss
-chr1	100	A	C,T	CAF=0.2,0.4,0.4
-```
-
-We will select C or T to be arbitrarily assigned to be the global major or global minor allele.
-
-#### Equal Allele Frequency Between Reference & Alternate Allele
-
-```scss
-chr1	100	A	C,T	CAF=0.2,0.2,0.6
-```
-
-We will select T to be the global major allele and C to be the global minor allele.
-
+**Potential Alternate Solutions**
+* Remove all alleles that are contained in the vcf lines which have conflicting allele. (Recommended by 1000 genome group Holly Zheng-Bradley, 7/29/2015)
+* Recalculate the allele frequency for the conflicting allele.
+* Pick the allele frequency that has the highest data support.
 ## Known Issues
 
 :::caution Known Issues
@@ -113,3 +89,61 @@ If there are multiple entries with different CAF values for the same allele, we 
 ## JSON Output
 
 <JSON />
+
+## Structural Variants
+### VCF File Parsing
+
+1000 Genomes contains 5 types of structural variants:
+* CNV
+* DEL
+* DUP
+* INS
+* INV
+
+Since data of 1000 genomes is provided in VCF format, we assume that the coordinates follow the vcf format, i.e., there is a padding base for symbolic alleles. So all the interval can be interpreted as [BEGIN+1, END].
+Similarly, for all other variant types except insertion, END is far larger than BEGIN. The distribution of BEGIN and END for insertions is summarized below.
+
+**Insertion issues**
+* END = BEGIN for 6/165
+* END = BEGIN+2 for 93/165
+* END = BEGIN+3 for 11/165
+* END = BEGIN+4 for 11/165
+* END – BEGIN range from 5 to 1156 for others.
+
+#### Example
+
+```scss
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00097 HG00099 HG00100 HG00101 HG00102 HG00103
+22      16050654        esv3647175;esv3647176;esv3647177;esv3647178     A       <CN0>,<CN2>,<CN3>,<CN4> 100     PASS   \
+AC=9,87,599,20;AF=0.00179712,0.0173722,0.119609,0.00399361;AN=5008;CS=DUP_gs;END=16063474;NS=2504;SVTYPE=CNV;DP=22545;\
+EAS_AF=0.001,0.0169,0.2361,0.0099;AMR_AF=0,0.0101,0.219,0.0072;AFR_AF=0.0061,0.0363,0.0053,0;EUR_AF=0,0.007,0.0944,0.003;\
+SAS_AF=0,0.0082,0.1094,0.002;VT=SV       GT      3|0     0|0     0|0     0|0     0|0     0|0     0|4
+```
+CNVs are allele-specific. For example, HG00096 is effectively copy number 4, which would be a net gain on chr22.
+
+### Converting VCF svTypes to SO sequence alterations
+The svType will be captured in our JSON file under the [sequenceAlteration](http://www.sequenceontology.org/browser/current_svn/term/SO:0001059) key. Here's the translation we'll use according to svType in 1000 Genomes.
+
+| svType | Alternative Alleles contain <CN\*>| sequenceAlteration                                            |
+|--------|-----------------------------------|---------------------------------------------------------------|
+| ALU    | FALSE                             | mobile_element_insertion                                      |
+| DUP    | TRUE                              | copy_number_gain                                              |
+|        |                                   | copy_number_gain (observed_gains >0 and observed_losses =0)   |
+| CNV    | TRUE                              |                                                               |
+|        |                                   | copy_number_loss (observed_gains = 0 and observed_losses > 0) |
+|        |                                   | copy_number_variation (o.w.)                                  |
+| DEL    | TRUE                              | copy_number_loss                                              |
+| LINE1  | FALSE                             | mobile_element_insertion                                      |
+| SVA    | FALSE                             | mobile_element_insertion                                      |
+| INV    | FALSE                             | inversion                                                     |
+| INS    | FALSE                             | insertion                                                     |
+
+#### Exceptions
+**Discard structural variants without END**
+```scss
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00097 HG00099 HG00100 HG00101 HG00102 HG00103
+21      9495848 esv3646347      A       <INS:ME:LINE1>  100     PASS   \
+AC=1543;AF=0.308107;AN=5008;CS=L1_umary;MEINFO=LINE1,5669,6005,+;NS=2504;SVLEN=336;SVTYPE=LINE1;\
+TSD=null;DP=20015;EAS_AF=0.3125;AMR_AF=0.2911;AFR_AF=0.3026;EUR_AF=0.2922;SAS_AF=0.3395;VT=SV\
+   GT      0|0     1|1     1|0     0|1     1|0     1|0     0|0
+```
