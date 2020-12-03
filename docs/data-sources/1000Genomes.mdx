@@ -23,11 +23,7 @@ The original VCF files come with allele frequency fields (e.g. ALL_AF, AMR_AF) b
 
 ```scss
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
-1       15274   rs62636497      A       G,T     100     PASS    AC=1739,3210;\
-AF=0.347244,0.640974;AN=5008;NS=2504;DP=23255;EAS_AF=0.4812,0.5188;AMR_AF=0.2752,0.7205;\
-AFR_AF=0.323,0.6369;EUR_AF=0.2922,0.7078;SAS_AF=0.3497,0.6472;AA=g|||;VT=SNP;\
-MULTI_ALLELIC;EAS_AN=1008;EAS_AC=485,523;EUR_AN=1006;EUR_AC=294,712;AFR_AN=1322;\
-AFR_AC=427,842;AMR_AN=694;AMR_AC=191,500;SAS_AN=978;SAS_AC=342,633
+1       15274   rs62636497      A       G,T     100     PASS    AC=1739,3210;AF=0.347244,0.640974;AN=5008;NS=2504;DP=23255;EAS_AF=0.4812,0.5188;AMR_AF=0.2752,0.7205;AFR_AF=0.323,0.6369;EUR_AF=0.2922,0.7078;SAS_AF=0.3497,0.6472;AA=g|||;VT=SNP;MULTI_ALLELIC;EAS_AN=1008;EAS_AC=485,523;EUR_AN=1006;EUR_AC=294,712;AFR_AN=1322;AFR_AC=427,842;AMR_AN=694;AMR_AC=191,500;SAS_AN=978;SAS_AC=342,633
 ```
 
 The ancestral allele, if it exists, is the first value in the pipe separated AA fields (the Indel specific REF, ALT, IndelType fields are ignored).
@@ -101,28 +97,19 @@ Similarly, for all other variant types except insertion, END is far larger than 
 #### Example
 
 ```scss
-#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 \
-HG00097 HG00099 HG00100 HG00101 HG00102 HG00103
-22      16050654        esv3647175;esv3647176;esv3647177;esv3647178     A       \
-<CN0>,<CN2>,<CN3>,<CN4> 100     PASS  AC=9,87,599,20;\
-AF=0.00179712,0.0173722,0.119609,0.00399361;AN=5008;CS=DUP_gs;END=16063474;\
-NS=2504;SVTYPE=CNV;DP=22545;EAS_AF=0.001,0.0169,0.2361,0.0099;\
-AMR_AF=0,0.0101,0.219,0.0072;AFR_AF=0.0061,0.0363,0.0053,0;\
-EUR_AF=0,0.007,0.0944,0.003;SAS_AF=0,0.0082,0.1094,0.002;VT=SV       GT      3|0\
-     0|0     0|0     0|0     0|0     0|0     0|4
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00097 HG00099 HG00100 HG00101 HG00102 HG00103
+22      16050654        esv3647175;esv3647176;esv3647177;esv3647178     A       <CN0>,<CN2>,<CN3>,<CN4> 100     PASS  AC=9,87,599,20;AF=0.00179712,0.0173722,0.119609,0.00399361;AN=5008;CS=DUP_gs;END=16063474;NS=2504;SVTYPE=CNV;DP=22545;EAS_AF=0.001,0.0169,0.2361,0.0099;AMR_AF=0,0.0101,0.219,0.0072;AFR_AF=0.0061,0.0363,0.0053,0;EUR_AF=0,0.007,0.0944,0.003;SAS_AF=0,0.0082,0.1094,0.002;VT=SV       GT      3|0     0|0     0|0     0|0     0|0     0|0     0|4
 ```
 CNVs are allele-specific. For example, HG00096 is effectively copy number 4, which would be a net gain on chr22.
 
 ### Converting VCF svTypes to SO sequence alterations
 The svType will be captured in our JSON file under the [sequenceAlteration](http://www.sequenceontology.org/browser/current_svn/term/SO:0001059) key. Here's the translation we'll use according to svType in 1000 Genomes.
 
-| svType | Alternative Alleles contain <CN\*\>| sequenceAlteration                                            |
+| svType | Alternative Alleles contain <CN\*>| sequenceAlteration                                            |
 |--------|-----------------------------------|---------------------------------------------------------------|
 | ALU    | FALSE                             | mobile_element_insertion                                      |
 | DUP    | TRUE                              | copy_number_gain                                              |
-|        |                                   | copy_number_gain (observed_gains >0 and observed_losses =0)   |
-| CNV    | TRUE                              | copy_number_loss (observed_gains = 0 and observed_losses > 0) |
-|        |                                   | copy_number_variation (otherwise)                             |
+| CNV    | TRUE                              | copy_number_gain (observed_gains >0 and observed_losses =0) <br/>copy_number_loss (observed_gains = 0 and observed_losses > 0) <br/>copy_number_variation (otherwise) |
 | DEL    | TRUE                              | copy_number_loss                                              |
 | LINE1  | FALSE                             | mobile_element_insertion                                      |
 | SVA    | FALSE                             | mobile_element_insertion                                      |
@@ -133,11 +120,7 @@ The svType will be captured in our JSON file under the [sequenceAlteration](http
 *We discard structural variants without END*
 ```scss
 #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00097 HG00099 HG00100 HG00101 HG00102 HG00103
-21      9495848 esv3646347      A       <INS:ME:LINE1>  100     PASS   AC=1543;\
-AF=0.308107;AN=5008;CS=L1_umary;MEINFO=LINE1,5669,6005,+;NS=2504;SVLEN=336;\
-SVTYPE=LINE1;TSD=null;DP=20015;EAS_AF=0.3125;AMR_AF=0.2911;AFR_AF=0.3026;\
-EUR_AF=0.2922;SAS_AF=0.3395;VT=SV   GT      0|0     1|1     1|0     0|1     1|0 \
-    1|0     0|0
+21      9495848 esv3646347      A       <INS:ME:LINE1>  100     PASS   AC=1543;AF=0.308107;AN=5008;CS=L1_umary;MEINFO=LINE1,5669,6005,+;NS=2504;SVLEN=336;SVTYPE=LINE1;TSD=null;DP=20015;EAS_AF=0.3125;AMR_AF=0.2911;AFR_AF=0.3026;EUR_AF=0.2922;SAS_AF=0.3395;VT=SV   GT      0|0     1|1     1|0     0|1     1|0     1|0     0|0
 ```
 
 **CNVs in chrY**
@@ -146,13 +129,8 @@ EUR_AF=0.2922;SAS_AF=0.3395;VT=SV   GT      0|0     1|1     1|0     0|1     1|0 
 * For most CNVs in chrY, the reference copy number is 1, but the refence number for CNVs in segmental duplication sites is 2 (<CN2\> in the 2nd example). All segmental duplication calls have identifiers starting with GS_SD_M2.
 ```scss
 #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00101 HG00103 HG00105 HG00107 HG00108
-Y       2888555 CNV_Y_2888555_3014661   T       <CN2>   100     PASS    AC=1;AF=0.000817661;AN=1223;END=3014661;NS=1233;SVTYPE=CNV;AMR_AF=0.0000;AFR_AF=0.0000;EUR_AF=0.0000;SAS_AF=0.0019;EAS_AF=0.0000;VT=SV  \
-GT:CN:CNL:CNP:CNQ:GP:GQ:PL      0:1:-1000,0,-58.45:-1000,0,-61.55:99:0,-61.55:99:0,585  0:1:-296.36,0,-16.6:-300.46,0,-19.7:99:0,-19.7:99:0,166 0:1:-1000,0,-39.44:-1000,0,-42.54:99:0,-42.54:99:0,394
-Y       6128381 GS_SD_M2_Y_6128381_6230094_Y_9650284_9752225    C       <CN1>,<CN3>     100     PASS    AC=4,2;AF=0.00327065,0.00163532;AN=1223;END=6230094;NS=1233;SVTYPE=CNV;AMR_AF=0.0029,0.0029;AFR_AF=0.0016,0.0016;\
-EUR_AF=0.0000,0.0000;SAS_AF=0.0038,0.0000;EAS_AF=0.0000,0.0000;VT=SV;EX_TARGET \
-GT:CN:CNL:CNP:CNQ:GP:GQ 0:2:-1000,-138.78,0,-38.53:-1000,-141.27,0,-41.33:99:0,-141.27,-41.33:99        \
-0:2:-1000,-53.32,0,-17.85:-1000,-55.81,0,-20.64:99:0,-55.81,-20.64:99   0:2:-1000,-71.83,0,-32.5:-1000,-74.32,0,-35.29:99:0,-74.32,-35.29:99    \
-0:2:-1000,-60.96,0,-20.29:-1000,-63.45,0,-23.08:99:0,-63.45,-23.08:99   0:2:-1000,-77.6,0,-31.45:-1000,-80.09,0,-34.24:99:0,-80.09,-34.24:99
+Y       2888555 CNV_Y_2888555_3014661   T       <CN2>   100     PASS    AC=1;AF=0.000817661;AN=1223;END=3014661;NS=1233;SVTYPE=CNV;AMR_AF=0.0000;AFR_AF=0.0000;EUR_AF=0.0000;SAS_AF=0.0019;EAS_AF=0.0000;VT=SV  GT:CN:CNL:CNP:CNQ:GP:GQ:PL      0:1:-1000,0,-58.45:-1000,0,-61.55:99:0,-61.55:99:0,585  0:1:-296.36,0,-16.6:-300.46,0,-19.7:99:0,-19.7:99:0,166 0:1:-1000,0,-39.44:-1000,0,-42.54:99:0,-42.54:99:0,394
+Y       6128381 GS_SD_M2_Y_6128381_6230094_Y_9650284_9752225    C       <CN1>,<CN3>     100     PASS    AC=4,2;AF=0.00327065,0.00163532;AN=1223;END=6230094;NS=1233;SVTYPE=CNV;AMR_AF=0.0029,0.0029;AFR_AF=0.0016,0.0016;EUR_AF=0.0000,0.0000;SAS_AF=0.0038,0.0000;EAS_AF=0.0000,0.0000;VT=SV;EX_TARGET GT:CN:CNL:CNP:CNQ:GP:GQ 0:2:-1000,-138.78,0,-38.53:-1000,-141.27,0,-41.33:99:0,-141.27,-41.33:99        0:2:-1000,-53.32,0,-17.85:-1000,-55.81,0,-20.64:99:0,-55.81,-20.64:99   0:2:-1000,-71.83,0,-32.5:-1000,-74.32,0,-35.29:99:0,-74.32,-35.29:99    0:2:-1000,-60.96,0,-20.29:-1000,-63.45,0,-23.08:99:0,-63.45,-23.08:99   0:2:-1000,-77.6,0,-31.45:-1000,-80.09,0,-34.24:99:0,-80.09,-34.24:99
 ```
 ## JSON Output
 
