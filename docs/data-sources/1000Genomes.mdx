@@ -20,6 +20,7 @@ Sudmant, P., Rausch, T., Gardner, E. et al. An integrated map of structural vari
 ## Small Variants
 ### VCF File Parsing
 We parse the 1000 Genomes vcf file and extract the following fields:
+* AA
 * AC
 * AN
 * EAS_AN
@@ -33,18 +34,16 @@ We parse the 1000 Genomes vcf file and extract the following fields:
 * EUR_AC
 * SAS_AC
 
-All frequency related information comes in comma separated allele specific fields and are parsed into allele specific annotations. The ancestral allele, if it exists, is the first value in the pipe separated AA fields (the Indel specific REF, ALT, IndelType fields are ignored).
-
-**NOTE**: The actual allele counts and allele numbers are not expressed in the INFO field. Instead the genotypes need to be parsed to directly compute that information. Our team converted the original data to VCF entries like the following:
+All frequency related information comes in comma separated allele specific fields and are parsed into allele specific annotations. The ancestral allele, if it exists, is the first value in the pipe separated AA fields (the Indel specific REF, ALT, IndelType fields are ignored). However, the actual allele counts and allele numbers (e.g. AMR_AC, AMR_AN) are not expressed in the INFO field. Instead the genotypes need to be parsed to directly compute that information. Our team converted the original data to VCF entries like the following:
 
 ```scss
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 1       15274   rs62636497      A       G,T     100     PASS    AC=1739,3210;AF=0.347244,0.640974;AN=5008;NS=2504;DP=23255;EAS_AF=0.4812,0.5188;AMR_AF=0.2752,0.7205;AFR_AF=0.323,0.6369;EUR_AF=0.2922,0.7078;SAS_AF=0.3497,0.6472;AA=g|||;VT=SNP;MULTI_ALLELIC;EAS_AN=1008;EAS_AC=485,523;EUR_AN=1006;EUR_AC=294,712;AFR_AN=1322;AFR_AC=427,842;AMR_AN=694;AMR_AC=191,500;SAS_AN=978;SAS_AC=342,633
 ```
-Allele frequencies are computed from allele counts and allele numbers in order to get 6 digit precision.
-#### Conflict Resolution
+In order to get 6 digit precision, allele frequencies are computed from allele counts and allele numbers
 
-Take the following example:
+#### Conflict Resolution
+We have observed conflicting allele frequency information in the source. Take the following example:
 ```scss
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 1 20505705 rs35377696 C CTCTG,CTG,CTGTG 100 PASS AC=46,1513,152;AF=0.0091853,0.302117,0.0303514;
@@ -57,17 +56,12 @@ That is, the variant 1-20505705-C-CTG has conflicting entries. To get an idea of
 | chrX      |       834800     |       2733     |           0.33%  |
 | Total     |       21413098   |       2743     |           0.013% |
 
-**Currently**, we removed the allele frequency of the conflicting allele (i.e., insertion TG in the example )but keep allele frequencies of all others.
+**Currently**, we removed the allele frequency of the conflicting allele (i.e., insertion TG in the example) but keep allele frequencies of all other alleles in the VCF line.
 
 **Potential Alternate Solutions**
 * Remove all alleles that are contained in the vcf lines which have conflicting allele. (Recommended by 1000 genome group Holly Zheng-Bradley, 7/29/2015)
 * Recalculate the allele frequency for the conflicting allele.
 * Pick the allele frequency that has the highest data support.
-## Known Issues
-
-:::caution Known Issues
-If there are multiple entries with different CAF values for the same allele, we use the first CAF value.
-:::
 
 ## Download URL
 
@@ -117,9 +111,8 @@ The svType will be captured in our JSON file under the [sequenceAlteration](http
 | ALU    | FALSE                             | mobile_element_insertion                                      |
 | DUP    | TRUE                              | copy_number_gain                                              |
 |        |                                   | copy_number_gain (observed_gains >0 and observed_losses =0)   |
-| CNV    | TRUE                              |                                                               |
-|        |                                   | copy_number_loss (observed_gains = 0 and observed_losses > 0) |
-|        |                                   | copy_number_variation (o.w.)                                  |
+| CNV    | TRUE                              | copy_number_loss (observed_gains = 0 and observed_losses > 0) |
+|        |                                   | copy_number_variation (otherwise)                             |
 | DEL    | TRUE                              | copy_number_loss                                              |
 | LINE1  | FALSE                             | mobile_element_insertion                                      |
 | SVA    | FALSE                             | mobile_element_insertion                                      |
@@ -127,7 +120,7 @@ The svType will be captured in our JSON file under the [sequenceAlteration](http
 | INS    | FALSE                             | insertion                                                     |
 
 #### Exceptions
-**Discard structural variants without END**
+*We discard structural variants without END*
 ```scss
 #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00097 HG00099 HG00100 HG00101 HG00102 HG00103
 21      9495848 esv3646347      A       <INS:ME:LINE1>  100     PASS   \
