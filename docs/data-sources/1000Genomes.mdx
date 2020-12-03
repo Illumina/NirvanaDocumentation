@@ -1,8 +1,9 @@
 ---
-title: 1000Genomes
+title: 1000 Genomes
 ---
 
-import JSON from './1000Genomes-json.md'
+import JSONSNV from './1000Genomes-snv-json.md'
+import JSONSV from './1000Genomes-sv-json.md'
 
 ## Overview
 
@@ -88,7 +89,7 @@ If there are multiple entries with different CAF values for the same allele, we 
 
 ## JSON Output
 
-<JSON />
+<JSONSNV />
 
 ## Structural Variants
 ### VCF File Parsing
@@ -124,7 +125,7 @@ CNVs are allele-specific. For example, HG00096 is effectively copy number 4, whi
 ### Converting VCF svTypes to SO sequence alterations
 The svType will be captured in our JSON file under the [sequenceAlteration](http://www.sequenceontology.org/browser/current_svn/term/SO:0001059) key. Here's the translation we'll use according to svType in 1000 Genomes.
 
-| svType | Alternative Alleles contain <CN\*>| sequenceAlteration                                            |
+| svType | Alternative Alleles contain <CN\*\>| sequenceAlteration                                            |
 |--------|-----------------------------------|---------------------------------------------------------------|
 | ALU    | FALSE                             | mobile_element_insertion                                      |
 | DUP    | TRUE                              | copy_number_gain                                              |
@@ -147,3 +148,21 @@ AC=1543;AF=0.308107;AN=5008;CS=L1_umary;MEINFO=LINE1,5669,6005,+;NS=2504;SVLEN=3
 TSD=null;DP=20015;EAS_AF=0.3125;AMR_AF=0.2911;AFR_AF=0.3026;EUR_AF=0.2922;SAS_AF=0.3395;VT=SV\
    GT      0|0     1|1     1|0     0|1     1|0     1|0     0|0
 ```
+
+**CNVs in chrY**
+* No other types of structural variants exists in chrY
+* Since copy number is provided in genotype field, we directly parse the copy number from "CN" field.
+* For most CNVs in chrY, the reference copy number is 1, but the refence number for CNVs in segmental duplication sites is 2 (<CN2\> in the 2nd example). All segmental duplication calls have identifiers starting with GS_SD_M2.
+```scss
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00101 HG00103 HG00105 HG00107 HG00108
+Y       2888555 CNV_Y_2888555_3014661   T       <CN2>   100     PASS    AC=1;AF=0.000817661;AN=1223;END=3014661;NS=1233;SVTYPE=CNV;AMR_AF=0.0000;AFR_AF=0.0000;EUR_AF=0.0000;SAS_AF=0.0019;EAS_AF=0.0000;VT=SV  \
+GT:CN:CNL:CNP:CNQ:GP:GQ:PL      0:1:-1000,0,-58.45:-1000,0,-61.55:99:0,-61.55:99:0,585  0:1:-296.36,0,-16.6:-300.46,0,-19.7:99:0,-19.7:99:0,166 0:1:-1000,0,-39.44:-1000,0,-42.54:99:0,-42.54:99:0,394
+Y       6128381 GS_SD_M2_Y_6128381_6230094_Y_9650284_9752225    C       <CN1>,<CN3>     100     PASS    AC=4,2;AF=0.00327065,0.00163532;AN=1223;END=6230094;NS=1233;SVTYPE=CNV;AMR_AF=0.0029,0.0029;AFR_AF=0.0016,0.0016;\
+EUR_AF=0.0000,0.0000;SAS_AF=0.0038,0.0000;EAS_AF=0.0000,0.0000;VT=SV;EX_TARGET \
+GT:CN:CNL:CNP:CNQ:GP:GQ 0:2:-1000,-138.78,0,-38.53:-1000,-141.27,0,-41.33:99:0,-141.27,-41.33:99        \
+0:2:-1000,-53.32,0,-17.85:-1000,-55.81,0,-20.64:99:0,-55.81,-20.64:99   0:2:-1000,-71.83,0,-32.5:-1000,-74.32,0,-35.29:99:0,-74.32,-35.29:99    \
+0:2:-1000,-60.96,0,-20.29:-1000,-63.45,0,-23.08:99:0,-63.45,-23.08:99   0:2:-1000,-77.6,0,-31.45:-1000,-80.09,0,-34.24:99:0,-80.09,-34.24:99
+```
+## JSON Output
+
+<JSONSV />
