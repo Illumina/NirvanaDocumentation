@@ -19,7 +19,20 @@ Sudmant, P., Rausch, T., Gardner, E. et al. An integrated map of structural vari
 
 ## Small Variants
 ### VCF File Parsing
-We parse the 1000 Genomes vcf file and extract the following fields:
+The original VCF files come with allele frequency fields (e.g. ALL_AF, AMR_AF) but we recompute them using allele counts and allele numbers in order to get 6 digit precision. The allele counts and allele numbers (e.g. AMR_AC, AMR_AN) are not expressed in the INFO field. Instead the genotypes need to be parsed to compute that information. Our team converted the original data to VCF entries with allele counts and allele numbers like the following.
+
+```scss
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1       15274   rs62636497      A       G,T     100     PASS    AC=1739,3210;\
+AF=0.347244,0.640974;AN=5008;NS=2504;DP=23255;EAS_AF=0.4812,0.5188;AMR_AF=0.2752,0.7205;\
+AFR_AF=0.323,0.6369;EUR_AF=0.2922,0.7078;SAS_AF=0.3497,0.6472;AA=g|||;VT=SNP;\
+MULTI_ALLELIC;EAS_AN=1008;EAS_AC=485,523;EUR_AN=1006;EUR_AC=294,712;AFR_AN=1322;\
+AFR_AC=427,842;AMR_AN=694;AMR_AC=191,500;SAS_AN=978;SAS_AC=342,633
+```
+
+The ancestral allele, if it exists, is the first value in the pipe separated AA fields (the Indel specific REF, ALT, IndelType fields are ignored).
+
+We parse the VCF file and extract the following fields from INFO:
 * AA
 * AC
 * AN
@@ -34,13 +47,6 @@ We parse the 1000 Genomes vcf file and extract the following fields:
 * EUR_AC
 * SAS_AC
 
-All frequency related information comes in comma separated allele specific fields and are parsed into allele specific annotations. The ancestral allele, if it exists, is the first value in the pipe separated AA fields (the Indel specific REF, ALT, IndelType fields are ignored). However, the actual allele counts and allele numbers (e.g. AMR_AC, AMR_AN) are not expressed in the INFO field. Instead the genotypes need to be parsed to directly compute that information. Our team converted the original data to VCF entries like the following:
-
-```scss
-#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
-1       15274   rs62636497      A       G,T     100     PASS    AC=1739,3210;AF=0.347244,0.640974;AN=5008;NS=2504;DP=23255;EAS_AF=0.4812,0.5188;AMR_AF=0.2752,0.7205;AFR_AF=0.323,0.6369;EUR_AF=0.2922,0.7078;SAS_AF=0.3497,0.6472;AA=g|||;VT=SNP;MULTI_ALLELIC;EAS_AN=1008;EAS_AC=485,523;EUR_AN=1006;EUR_AC=294,712;AFR_AN=1322;AFR_AC=427,842;AMR_AN=694;AMR_AC=191,500;SAS_AN=978;SAS_AC=342,633
-```
-In order to get 6 digit precision, allele frequencies are computed from allele counts and allele numbers
 
 #### Conflict Resolution
 We have observed conflicting allele frequency information in the source. Take the following example:
@@ -95,11 +101,15 @@ Similarly, for all other variant types except insertion, END is far larger than 
 #### Example
 
 ```scss
-#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00097 HG00099 HG00100 HG00101 HG00102 HG00103
-22      16050654        esv3647175;esv3647176;esv3647177;esv3647178     A       <CN0>,<CN2>,<CN3>,<CN4> 100     PASS   \
-AC=9,87,599,20;AF=0.00179712,0.0173722,0.119609,0.00399361;AN=5008;CS=DUP_gs;END=16063474;NS=2504;SVTYPE=CNV;DP=22545;\
-EAS_AF=0.001,0.0169,0.2361,0.0099;AMR_AF=0,0.0101,0.219,0.0072;AFR_AF=0.0061,0.0363,0.0053,0;EUR_AF=0,0.007,0.0944,0.003;\
-SAS_AF=0,0.0082,0.1094,0.002;VT=SV       GT      3|0     0|0     0|0     0|0     0|0     0|0     0|4
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 \
+HG00097 HG00099 HG00100 HG00101 HG00102 HG00103
+22      16050654        esv3647175;esv3647176;esv3647177;esv3647178     A       \
+<CN0>,<CN2>,<CN3>,<CN4> 100     PASS  AC=9,87,599,20;\
+AF=0.00179712,0.0173722,0.119609,0.00399361;AN=5008;CS=DUP_gs;END=16063474;\
+NS=2504;SVTYPE=CNV;DP=22545;EAS_AF=0.001,0.0169,0.2361,0.0099;\
+AMR_AF=0,0.0101,0.219,0.0072;AFR_AF=0.0061,0.0363,0.0053,0;\
+EUR_AF=0,0.007,0.0944,0.003;SAS_AF=0,0.0082,0.1094,0.002;VT=SV       GT      3|0\
+     0|0     0|0     0|0     0|0     0|0     0|4
 ```
 CNVs are allele-specific. For example, HG00096 is effectively copy number 4, which would be a net gain on chr22.
 
@@ -123,10 +133,11 @@ The svType will be captured in our JSON file under the [sequenceAlteration](http
 *We discard structural variants without END*
 ```scss
 #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00097 HG00099 HG00100 HG00101 HG00102 HG00103
-21      9495848 esv3646347      A       <INS:ME:LINE1>  100     PASS   \
-AC=1543;AF=0.308107;AN=5008;CS=L1_umary;MEINFO=LINE1,5669,6005,+;NS=2504;SVLEN=336;SVTYPE=LINE1;\
-TSD=null;DP=20015;EAS_AF=0.3125;AMR_AF=0.2911;AFR_AF=0.3026;EUR_AF=0.2922;SAS_AF=0.3395;VT=SV\
-   GT      0|0     1|1     1|0     0|1     1|0     1|0     0|0
+21      9495848 esv3646347      A       <INS:ME:LINE1>  100     PASS   AC=1543;\
+AF=0.308107;AN=5008;CS=L1_umary;MEINFO=LINE1,5669,6005,+;NS=2504;SVLEN=336;\
+SVTYPE=LINE1;TSD=null;DP=20015;EAS_AF=0.3125;AMR_AF=0.2911;AFR_AF=0.3026;\
+EUR_AF=0.2922;SAS_AF=0.3395;VT=SV   GT      0|0     1|1     1|0     0|1     1|0 \
+    1|0     0|0
 ```
 
 **CNVs in chrY**
