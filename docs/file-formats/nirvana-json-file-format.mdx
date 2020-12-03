@@ -9,6 +9,8 @@ import REVEL from '../data-sources/revel-json.md'
 import SpliceAI from '../data-sources/splice-ai-json.md'
 import MitoMapSmall from '../data-sources/mitomap-small-variants-json.md'
 import MitoMapSV from '../data-sources/mitomap-structural-variants-json.md'
+import ThousanGenSmall from '../data-sources/1000Genomes-snv-json.md'
+import ThousanGenSV from '../data-sources/1000Genomes-sv-json.md'
 
 ## Overview
 
@@ -30,38 +32,38 @@ For each gene that was referenced in the transcripts found in the positions sect
 
 ## Header
 ```json
-{ 
-   "header":{ 
+{
+   "header":{
       "annotator":"Nirvana 3.0.0-alpha.5+g6c52e247",
       "creationTime":"2017-06-14 15:53:13",
       "genomeAssembly":"GRCh37",
-      "dataSources":[ 
-         { 
+      "dataSources":[
+         {
             "name":"OMIM",
             "version":"unknown",
             "description":"An Online Catalog of Human Genes and Genetic Disorders",
             "releaseDate":"2017-05-03"
          },
-         { 
+         {
             "name":"VEP",
             "version":"84",
             "description":"BothRefSeqAndEnsembl",
             "releaseDate":"2017-01-16"
          },
-         { 
+         {
             "name":"ClinVar",
             "version":"20170503",
             "description":"A freely accessible, public archive of reports of the relationships among human variations and phenotypes, with supporting evidence",
             "releaseDate":"2017-05-03"
          },
-         { 
+         {
             "name":"phyloP",
             "version":"hg19",
             "description":"46 way conservation score between humans and 45 other vertebrates",
             "releaseDate":"2009-11-10"
          }
       ],
-      "samples":[ 
+      "samples":[
          "NA12878",
          "NA12891",
          "NA12892"
@@ -96,27 +98,27 @@ For each gene that was referenced in the transcripts found in the positions sect
 
 ## Positions
 ```json
-"positions":[ 
-   { 
+"positions":[
+   {
       "chromosome":"chr2",
       "position":48010488,
       "repeatUnit":"GGCCCC",
       "refRepeatCount":3,
       "svEnd":48020488,
       "refAllele":"G",
-      "altAlleles":[ 
+      "altAlleles":[
          "A",
          "GT"
       ],
       "quality":461,
-      "filters":[ 
+      "filters":[
          "PASS"
       ],
-      "ciPos":[ 
+      "ciPos":[
          -170,
          170
       ],
-      "ciEnd":[ 
+      "ciEnd":[
          -175,
          175
       ],
@@ -125,7 +127,6 @@ For each gene that was referenced in the transcripts found in the positions sect
       "jointSomaticNormalQuality":29,
       "cytogeneticBand":"2p16.3",
 ```
-
 | Field                     | Type          | Variant Type  | Notes |
 |:--------------------------|:-------------:|:-------------:|:------|
 | chromosome                | string        | all           | exactly as displayed in the vcf |
@@ -143,6 +144,9 @@ For each gene that was referenced in the transcripts found in the positions sect
 | strandBias                | float         | small variant | provided by GATK (from SB) |
 | jointSomaticNormalQuality | integer       | SV            | provided by the Manta variant caller (SOMATICSCORE) |
 | cytogeneticBand           | string        | all           | e.g. 17p13.1 |
+
+### 1000 Genomes
+<ThousanGenSV />
 
 ## Samples
 ```json
@@ -211,8 +215,8 @@ For each gene that was referenced in the transcripts found in the positions sect
 If a sample does not contain any entries, we will create a sample object that contains the `isEmpty` key. This ensures that sample ordering is preserved while indicating that a sample is intentionally empty.
 
 ```json
-"samples":[ 
-   { 
+"samples":[
+   {
       "isEmpty":true
    }
 ],
@@ -225,8 +229,8 @@ If a sample does not contain any entries, we will create a sample object that co
 
 ## Variants
 ```json
-"variants":[ 
-   { 
+"variants":[
+   {
       "vid":"2:48010488:A",
       "chromosome":"chr2",
       "begin":48010488,
@@ -243,23 +247,23 @@ If a sample does not contain any entries, we will create a sample object that co
       "phylopScore":0.459
 ```
 
-| Field                  | Type         | Notes                                                                                                                | 
-|:-----------------------|:------------:|:---------------------------------------------------------------------------------------------------------------------| 
-| vid                    | string       | see [Variant Identifiers](../core-functionality/variant-ids)                                                         | 
-| chromosome             | string       |                                                                                                                      | 
-| begin                  | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          | 
-| end                    | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          | 
-| isReferenceMinorAllele | bool         | true when this is a reference minor allele                                                                           | 
-| isStructuralVariant    | bool         | true when the variant is a structural variant                                                                        | 
-| inLowComplexityRegion  | bool         | true when the variant lies in a low complexity region (gnomAD low complexity regions)                                | 
-| refAllele              | string       | parsimonious representation of the reference allele                                                                  | 
-| altAllele              | string       | parsimonious representation of the alternate allele.                                                                 | 
-| variantType            | string       | uses [Sequence Ontology sequence alterations](http://www.sequenceontology.org/browser/current_svn/term/SO:0001059)   | 
-| isDecomposedVariant    | bool         | true when the decomposed variant has been used to create another recomposed variant                                  | 
-| isRecomposedVariant    | bool         | true when the variant is recomposed from two or more decomposed variants                                             | 
-| linkedVids             | string array | list of [VIDs](../core-functionality/variant-ids) for variants connecting decomposed and recomposed variants         | 
-| hgvsg                  | string       | HGVS g. notation                                                                                                     | 
-| phylopScore            | float        | phyloP conservation score. Range: -14.08 to 6.424                                                                    | 
+| Field                  | Type         | Notes                                                                                                                |
+|:-----------------------|:------------:|:---------------------------------------------------------------------------------------------------------------------|
+| vid                    | string       | see [Variant Identifiers](../core-functionality/variant-ids)                                                         |
+| chromosome             | string       |                                                                                                                      |
+| begin                  | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          |
+| end                    | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          |
+| isReferenceMinorAllele | bool         | true when this is a reference minor allele                                                                           |
+| isStructuralVariant    | bool         | true when the variant is a structural variant                                                                        |
+| inLowComplexityRegion  | bool         | true when the variant lies in a low complexity region (gnomAD low complexity regions)                                |
+| refAllele              | string       | parsimonious representation of the reference allele                                                                  |
+| altAllele              | string       | parsimonious representation of the alternate allele.                                                                 |
+| variantType            | string       | uses [Sequence Ontology sequence alterations](http://www.sequenceontology.org/browser/current_svn/term/SO:0001059)   |
+| isDecomposedVariant    | bool         | true when the decomposed variant has been used to create another recomposed variant                                  |
+| isRecomposedVariant    | bool         | true when the variant is recomposed from two or more decomposed variants                                             |
+| linkedVids             | string array | list of [VIDs](../core-functionality/variant-ids) for variants connecting decomposed and recomposed variants         |
+| hgvsg                  | string       | HGVS g. notation                                                                                                     |
+| phylopScore            | float        | phyloP conservation score. Range: -14.08 to 6.424                                                                    |
 
 :::info Reference Minor Alleles
 Nirvana supports annotating reference minor alleles. In such a case, `refAllele` will be replaced by the global major allele and `altAllele` will be replaced with the original reference allele.
@@ -273,22 +277,22 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 
 ### Regulatory Regions
 ```json
-"regulatoryRegions":[ 
-   { 
+"regulatoryRegions":[
+   {
       "id":"ENSR00001542175",
       "type":"promoter",
-      "consequence":[ 
+      "consequence":[
          "regulatory_region_variant"
       ]
    }
 ]
 ```
 
-| Field             | Type         | Notes | 
-|:------------------|:------------:|-------| 
-| id                | string       |       | 
-| type              | string       | see [possible values below](#regulatory-types) | 
-| consequence       | string array | see [possible values below](#regulatory-consequences) | 
+| Field             | Type         | Notes |
+|:------------------|:------------:|-------|
+| id                | string       |       |
+| type              | string       | see [possible values below](#regulatory-types) |
+| consequence       | string array | see [possible values below](#regulatory-consequences) |
 
 #### Regulatory Types
 
@@ -309,6 +313,9 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 ### ClinVar
 <ClinVar />
 
+### 1000 Genomes
+<ThousanGenSmall />
+
 ### dbSNP
 <DbSNP />
 
@@ -326,8 +333,8 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 
 ### Transcripts
 ```json
-"transcripts":[ 
-   { 
+"transcripts":[
+   {
       "transcript":"ENST00000445503.1",
       "source":"Ensembl",
       "bioType":"nonsense_mediated_decay",
@@ -340,22 +347,22 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
       "proteinPos":"39",
       "geneId":"ENSG00000116062",
       "hgnc":"MSH6",
-      "consequence":[ 
+      "consequence":[
          "missense_variant",
          "NMD_transcript_variant"
       ],
       "hgvsc":"ENST00000445503.1:c.116G>A",
       "hgvsp":"ENSP00000405294.1:p.(Gly39Glu)",
-      "geneFusion":{ 
+      "geneFusion":{
          "exon":6,
          "intron":5,
-         "fusions":[ 
-            { 
+         "fusions":[
+            {
                "hgvsc":"ETV6{ENST00000396373.4}:c.1_1009+3402_RUNX1{ENST00000437180.1}:c.58+568_1443",
                "exon":3,
                "intron":2
             },
-            { 
+            {
                "hgvsc":"ETV6{ENST00000396373.4}:c.1_1009+3402_RUNX1{ENST00000300305.3}:c.58+568_1443",
                "exon":2,
                "intron":1
@@ -373,31 +380,31 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 ]
 ```
 
-| Field              | Type         | Notes                                                                                                       | 
-|:-------------------|:------------:|:------------------------------------------------------------------------------------------------------------| 
-| transcript         | string       | transcript ID. e.g. ENST00000445503.1                                                                       | 
-| source             | string       | RefSeq / Ensembl                                                                                            | 
-| bioType            | string       | descriptions of the [biotypes from Ensembl](https://uswest.ensembl.org/info/genome/genebuild/biotypes.html) | 
-| codons             | string       |                                                                                                             | 
-| aminoAcids         | string       |                                                                                                             | 
-| cdnaPos            | string       |                                                                                                             | 
-| cdsPos             | string       |                                                                                                             | 
-| exons              | string       | exons affected by the variant                                                                               | 
-| introns            | string       | introns affected by the variant                                                                             | 
-| proteinPos         | string       |                                                                                                             | 
-| geneId             | string       | gene ID. e.g. ENSG00000116062                                                                               | 
-| hgnc               | string       | gene symbol. e.g. MSH6                                                                                      | 
-| consequence        | string array | [Sequence Ontology Consequences](http://www.sequenceontology.org/index.html)                                | 
-| hgvsc              | string       | HGVS coding nomenclature                                                                                    | 
-| hgvsp              | string       | HGVS protein nomenclature                                                                                   | 
-| geneFusion         | object       | see [Gene Fusions entry below](#gene-fusions)                                                                  | 
-| isCanonical        | bool         | true when this is a canonical transcript                                                                    | 
-| polyPhenScore      | float        | range: 0 - 1.0                                                                                              | 
-| polyPhenPrediction | string       | see [possible values below](#polyphen)                                                                      | 
-| proteinId          | string       | protein ID. E.g. ENSP00000405294.1                                                                          | 
-| siftScore          | float        | range: 0 - 1.0                                                                                              | 
-| siftPrediction     | string       | see [possible values below](#sift)                                                                          | 
-| completeOverlap    | bool         | true when this transcript is completely overlapped by the variant                                           | 
+| Field              | Type         | Notes                                                                                                       |
+|:-------------------|:------------:|:------------------------------------------------------------------------------------------------------------|
+| transcript         | string       | transcript ID. e.g. ENST00000445503.1                                                                       |
+| source             | string       | RefSeq / Ensembl                                                                                            |
+| bioType            | string       | descriptions of the [biotypes from Ensembl](https://uswest.ensembl.org/info/genome/genebuild/biotypes.html) |
+| codons             | string       |                                                                                                             |
+| aminoAcids         | string       |                                                                                                             |
+| cdnaPos            | string       |                                                                                                             |
+| cdsPos             | string       |                                                                                                             |
+| exons              | string       | exons affected by the variant                                                                               |
+| introns            | string       | introns affected by the variant                                                                             |
+| proteinPos         | string       |                                                                                                             |
+| geneId             | string       | gene ID. e.g. ENSG00000116062                                                                               |
+| hgnc               | string       | gene symbol. e.g. MSH6                                                                                      |
+| consequence        | string array | [Sequence Ontology Consequences](http://www.sequenceontology.org/index.html)                                |
+| hgvsc              | string       | HGVS coding nomenclature                                                                                    |
+| hgvsp              | string       | HGVS protein nomenclature                                                                                   |
+| geneFusion         | object       | see [Gene Fusions entry below](#gene-fusions)                                                                  |
+| isCanonical        | bool         | true when this is a canonical transcript                                                                    |
+| polyPhenScore      | float        | range: 0 - 1.0                                                                                              |
+| polyPhenPrediction | string       | see [possible values below](#polyphen)                                                                      |
+| proteinId          | string       | protein ID. E.g. ENSP00000405294.1                                                                          |
+| siftScore          | float        | range: 0 - 1.0                                                                                              |
+| siftPrediction     | string       | see [possible values below](#sift)                                                                          |
+| completeOverlap    | bool         | true when this transcript is completely overlapped by the variant                                           |
 
 #### PolyPhen
 
@@ -431,8 +438,8 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 
 ## Genes
 ```json
-"genes":[ 
-   { 
+"genes":[
+   {
       "name":"MSH6",
       "hgncId":7329,
       "summary":"This gene encodes a member of the DNA mismatch repair MutS family. In E. coli, the MutS protein helps in the recognition of mismatched nucleotides prior to their repair. A highly conserved region of approximately 150 aa, called the Walker-A adenine nucleotide binding motif, exists in MutS homologs. The encoded protein heterodimerizes with MSH2 to form a mismatch recognition complex that functions as a bidirectional molecular switch that exchanges ADP and ATP as DNA mismatches are bound and dissociated. Mutations in this gene may be associated with hereditary nonpolyposis colon cancer, colorectal cancer, and endometrial cancer. Transcripts variants encoding different isoforms have been described. [provided by RefSeq, Jul 2013]",
