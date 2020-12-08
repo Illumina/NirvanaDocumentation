@@ -120,14 +120,102 @@ MED13 ENST00000397786 871 1.1178e+03 7.7921e-01 5.5598e-05 14195 314 5.2975e+02 
 ```
 
 ### JSON key to TSV column mapping
-| JSON key | TSV column   |
-|----------|--------------|
-| pLi      | pLI          |
-| pNull    | pNull        |
-| pRec     | pRec         |
-| synZ     | syn_z        |
-| misZ     | mis_z        |
-| loeuf    | oe_lof_upper |
+| JSON key | TSV column   | Description                                                                                                                  |
+|----------|--------------|------------------------------------------------------------------------------------------------------------------------------|
+| pLi      | pLI          | probability of being intolerant of a single loss-of-function variant (like haploinsufficient genes, observed ~ 0.1*expected) |
+| pNull    | pNull        | probability of being completely tolerant of loss of function variation (observed = expected)                                 |
+| pRec     | pRec         | probability of being intolerant of two loss of function variants (like recessive genes, observed ~ 0.5*expected)             |
+| synZ     | syn_z        | corrected synonymous Z score                                                                                                 |
+| misZ     | mis_z        | corrected missense Z score                                                                                                   |
+| loeuf    | oe_lof_upper | loss of function observed/expected upper bound fraction (LOEUF)                                                              |
+
+### Gene symbol update
+
+The input file provides Ensembl gene ids for each entry. We observed that they were unique while gene symbols may be repeated (multiple lines may have the same gene symbol). Since Ensembl gene Ids are more stable, and Nirvana transcript cache data contains Ensembl gene ids, we use these ids to extract the gene symbols from the transcript cache. For example, if ENSG0001 has gene symbol GENE1 in the input but Nirvana cache say ENSG0001 maps to GENE2, we use GENE2 as the gene symbol for that entry.
+
+### Conflict resolution
+
+gnomAD uses Ensembl GeneID as unique identifiers in the [source file](https://storage.googleapis.com/gnomad-public/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz) but Nirvana uses HGNC gene symbols. Multiple Ensembl GeneIDs can map to the same HGNC symbol and therefore may result is conflict.
+
+```scss
+MDGA2   ENST00000426342 306 4.0043e+02  7.6419e-01  2.1096e-05  4724    78  1.6525e+02  4.7202e-01  1923    125 1.3737e+02  9.0993e-01  7.1973e-06  1413    4   2.0926e-06  453 3.8316e+01  9.9922e-01  8.6490e-12  7.8128e-04  1.0440e-01  7.8600e-01  1.0560e+00  6.9500e-01  8.4000e-01  5.0000e-02  2.3900e-01      8.2988e-01  1.6769e+00  5.1372e+00  1529    0   0   7   2.8103e-05  4.0317e-06  124784  7   0   124791  2.8047e-05  9.8167e-05  0.0000e+00  2.8962e-05  0.0000e+00  0.0000e+00  0.0000e+00  3.5391e-05  1.6672e-04  3.2680e-05  0.0000e+00  2.8962e-05  0.0000e+00  0.0000e+00  0.0000e+00  3.5308e-05  1.6492e-04  3.2678e-05  protein_coding  ENSG00000139915 2   2181    13  protein_coding  835332  9.9322e-01  3   2.7833e+01  1.0779e-01  NA  14  47308826    48144157
+MDGA2   ENST00000439988 438 5.5311e+02  7.9189e-01  2.9490e-05  6608    105 2.0496e+02  5.1228e-01  2386    180 1.9491e+02  9.2351e-01  9.8371e-06  2048    11  2.8074e-06  627 5.1882e+01  6.6457e-01  5.5841e-10  3.3543e-01  2.1202e-01  8.1700e-01  1.0450e+00  7.3100e-01  8.5700e-01  1.3200e-01  3.5100e-01      8.3940e-01  1.7393e+00  5.2595e+00  2989    1   0   9   3.6173e-05  4.0463e-06  124782  9   0   124791  3.6061e-05  1.6228e-04  6.4986e-05  2.8962e-05  0.0000e+00  0.0000e+00  0.0000e+00  4.4275e-05  1.6672e-04  3.2680e-05  6.4577e-05  2.8962e-05  0.0000e+00  0.0000e+00  0.0000e+00  4.4135e-05  1.6492e-04  3.2678e-05  protein_coding  ENSG00000272781 3   3075    17  protein_coding  832866  NA  NA  NA  NA  NA  14  47311134    48143999
+```
+
+In such cases, Nirvana chooses the entry with the smallest "LOEUF" value. The reason for choosing this value can be highlighted by the following table:
+
+| LOEUF decile | Haplo-insufficient | Autosomal Dominant | Autosomal Recessive | Olfactory Genes |
+|-------------:|-------------------:|-------------------:|--------------------:|----------------:|
+|        0-10% |                104 |                140 |                  36 |               0 |
+|       10-20% |                 47 |                128 |                  72 |               1 |
+|       20-30% |                 17 |                 86 |                 112 |               0 |
+|       30-40% |                  8 |                 80 |                 173 |               4 |
+|       40-50% |                  7 |                 65 |                 206 |               8 |
+|       50-60% |                  4 |                 54 |                 207 |               6 |
+|       60-70% |                  0 |                 46 |                 154 |              18 |
+|       70-80% |                  2 |                 49 |                 120 |              49 |
+|       80-90% |                  0 |                 34 |                  58 |              96 |
+|      90-100% |                  0 |                 26 |                  40 |             174 |
+
+:::info Note
+* Table source: [https://www.biorxiv.org/content/biorxiv/early/2019/01/28/531210.full-text.pdf](https://www.biorxiv.org/content/biorxiv/early/2019/01/28/531210.full-text.pdf)
+* This table indicates that lower LOEUF scores have more deleterious effect on genes.
+* Only 15 out of 19685 genes have conflicting entries.
+:::
+
+**List of genes with conflicting entries**
+```scss
+MDGA2:
+ {"pLI":9.99e-1,"pRec":7.81e-4,"pNull":8.65e-12,"synZ":8.30e-1,"misZ":1.68e0,"loeuf":2.39e-1}
+ {"pLI":6.65e-1,"pRec":3.35e-1,"pNull":5.58e-10,"synZ":8.39e-1,"misZ":1.74e0,"loeuf":3.51e-1}
+CRYBG3:
+ {"pLI":9.27e-5,"pRec":1.00e0,"pNull":1.88e-7,"synZ":1.82e0,"misZ":4.68e-1,"loeuf":4.93e-1}
+ {"pLI":2.69e-4,"pRec":1.00e0,"pNull":1.20e-4,"synZ":2.63e0,"misZ":9.80e-1,"loeuf":5.98e-1}
+CHTF8:
+ {"pLI":8.29e-1,"pRec":1.67e-1,"pNull":3.21e-3,"synZ":1.94e0,"misZ":9.48e-1,"loeuf":5.13e-1}
+ {"pLI":3.73e-1,"pRec":5.84e-1,"pNull":4.29e-2,"synZ":3.33e-1,"misZ":2.91e-1,"loeuf":9.92e-1}
+SEPT1:
+ {"pLI":6.77e-8,"pRec":8.90e-1,"pNull":1.10e-1,"synZ":1.58e-1,"misZ":1.57e0,"loeuf":9.68e-1}
+ {"pLI":1.96e-8,"pRec":6.71e-1,"pNull":3.29e-1,"synZ":1.68e-1,"misZ":1.41e0,"loeuf":1.08e0}
+ARL14EPL:
+ {"pLI":3.48e-2,"pRec":8.38e-1,"pNull":1.28e-1,"synZ":3.56e-1,"misZ":-1.87e-1,"loeuf":1.23e0}
+ {"pLI":3.23e-2,"pRec":8.29e-1,"pNull":1.38e-1,"synZ":1.15e0,"misZ":-4.05e-1,"loeuf":1.26e0}
+UGT2A1:
+ {"pLI":2.90e-13,"pRec":1.40e-1,"pNull":8.60e-1,"synZ":-1.29e0,"misZ":-1.77e0,"loeuf":1.18e0}
+ {"pLI":3.88e-17,"pRec":2.87e-3,"pNull":9.97e-1,"synZ":-8.00e-1,"misZ":-1.40e0,"loeuf":1.53e0}
+LTB4R2:
+ {"pLI":4.39e-4,"pRec":6.71e-1,"pNull":3.29e-1,"synZ":-5.24e-1,"misZ":-2.96e-1,"loeuf":1.40e0}
+ {"pLI":1.38e-5,"pRec":4.12e-1,"pNull":5.88e-1,"synZ":-4.58e-1,"misZ":-2.02e-1,"loeuf":1.54e0}
+CDRT1:
+ {"pLI":4.98e-14,"pRec":5.31e-1,"pNull":4.69e-1,"synZ":8.18e-1,"misZ":6.57e-1,"loeuf":1.00e0}
+ {"pLI":3.50e-3,"pRec":6.37e-1,"pNull":3.59e-1,"synZ":4.89e-1,"misZ":6.90e-1,"loeuf":1.63e0}
+MUC3A:
+ {"pLI":1.48e-10,"pRec":5.76e-1,"pNull":4.24e-1,"synZ":5.81e-2,"misZ":-6.01e-1,"loeuf":1.06e0}
+ {"pLI":4.03e-1,"pRec":4.79e-1,"pNull":1.17e-1,"synZ":4.05e-2,"misZ":-1.60e-1,"loeuf":1.70e0}
+COG8:
+ {"pLI":2.97e-9,"pRec":5.04e-1,"pNull":4.96e-1,"synZ":-1.35e0,"misZ":-9.37e-2,"loeuf":1.13e0}
+ {"pLI":2.31e-3,"pRec":5.47e-1,"pNull":4.50e-1,"synZ":-4.94e-1,"misZ":-1.48e-1,"loeuf":1.76e0}
+AC006486.1:
+ {"pLI":9.37e-1,"pRec":6.27e-2,"pNull":2.47e-4,"synZ":1.44e0,"misZ":2.12e0,"loeuf":3.41e-1}
+ {"pLI":1.14e-1,"pRec":6.16e-1,"pNull":2.70e-1,"synZ":-7.57e-2,"misZ":8.33e-2,"loeuf":1.84e0}
+AL645922.1:
+ {"pLI":4.67e-16,"pRec":1.00e0,"pNull":4.15e-5,"synZ":7.99e-1,"misZ":1.61e0,"loeuf":6.92e-1}
+ {"pLI":1.60e-3,"pRec":2.78e-1,"pNull":7.21e-1,"synZ":-7.30e-2,"misZ":3.21e-1,"loeuf":1.96e0}
+NBPF20:
+ {"pLI":1.42e-7,"pRec":3.40e-2,"pNull":9.66e-1,"synZ":-1.86e0,"misZ":-2.88e0,"loeuf":1.97e0}
+ {"pLI":1.92e-22,"pRec":7.96e-6,"pNull":1.00e0,"synZ":-9.73e0,"misZ":-7.67e0,"loeuf":1.97e0}
+PRAMEF11:
+ {"pLI":6.16e-4,"pRec":7.42e-1,"pNull":2.58e-1,"synZ":-4.02e0,"misZ":-3.69e0,"loeuf":1.31e0}
+ {"synZ":-3.33e0,"misZ":-2.59e0}
+FAM231D:
+ {"synZ":-1.98e0,"misZ":-1.44e0}
+ {"synZ":1.07e0,"misZ":3.13e-1}
+```
+
+**Conflict resolution**
+* Pick the entry with the lowest LOEUF score
+* If the same, pick the lowest pLI
+* Otherwise pick the entry with the max absolute value of synZ + misZ
 
 ### Download URL
 [https://storage.googleapis.com/gnomad-public/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz](https://storage.googleapis.com/gnomad-public/release/2.1.1/constraint/gnomad.v2.1.1.lof_metrics.by_gene.txt.bgz)
