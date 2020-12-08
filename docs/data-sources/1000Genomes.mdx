@@ -76,6 +76,12 @@ That is, the variant 1-20505705-C-CTG has conflicting entries. To get an idea of
 
 ## Structural Variants
 ### VCF File Parsing
+The VCF files contain entries like the following:
+```scss
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00097 HG00099 HG00100 HG00101 HG00102 HG00103
+22      16050654        esv3647175;esv3647176;esv3647177;esv3647178     A       <CN0>,<CN2>,<CN3>,<CN4> 100     PASS  AC=9,87,599,20;AF=0.00179712,0.0173722,0.119609,0.00399361;AN=5008;CS=DUP_gs;END=16063474;NS=2504;SVTYPE=CNV;DP=22545;EAS_AF=0.001,0.0169,0.2361,0.0099;AMR_AF=0,0.0101,0.219,0.0072;AFR_AF=0.0061,0.0363,0.0053,0;EUR_AF=0,0.007,0.0944,0.003;SAS_AF=0,0.0082,0.1094,0.002;VT=SV       GT      3|0     0|0     0|0     0|0     0|0     0|0     0|4
+```
+Please note that, CNVs are allele-specific. For example, HG00096 is effectively copy number 4, which would be a net gain on chr22.
 
 1000 Genomes contains 5 types of structural variants:
 * CNV
@@ -94,13 +100,6 @@ Similarly, for all other variant types except insertion, END is far larger than 
 * END = BEGIN+4 for 11/165
 * END – BEGIN range from 5 to 1156 for others.
 
-#### Example
-
-```scss
-#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  HG00096 HG00097 HG00099 HG00100 HG00101 HG00102 HG00103
-22      16050654        esv3647175;esv3647176;esv3647177;esv3647178     A       <CN0>,<CN2>,<CN3>,<CN4> 100     PASS  AC=9,87,599,20;AF=0.00179712,0.0173722,0.119609,0.00399361;AN=5008;CS=DUP_gs;END=16063474;NS=2504;SVTYPE=CNV;DP=22545;EAS_AF=0.001,0.0169,0.2361,0.0099;AMR_AF=0,0.0101,0.219,0.0072;AFR_AF=0.0061,0.0363,0.0053,0;EUR_AF=0,0.007,0.0944,0.003;SAS_AF=0,0.0082,0.1094,0.002;VT=SV       GT      3|0     0|0     0|0     0|0     0|0     0|0     0|4
-```
-CNVs are allele-specific. For example, HG00096 is effectively copy number 4, which would be a net gain on chr22.
 
 ### Converting VCF svTypes to SO sequence alterations
 The svType will be captured in our JSON file under the [sequenceAlteration](http://www.sequenceontology.org/browser/current_svn/term/SO:0001059) key. Here's the translation we'll use according to svType in 1000 Genomes.
