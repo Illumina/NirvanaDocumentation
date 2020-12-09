@@ -19,11 +19,11 @@
 | Field                | Type   | Notes                                            |
 |:---------------------|:------:|:-------------------------------------------------|
 | hgnc                 | string | HGNC gene symbol                                 |
-| acceptorGainDistance | int    | Can be negative (backward) or positive (forward) |
-| acceptorGainScore    | float  | Range: 0 - 1.0 (one decimal place precision)     |
-| acceptorLossDistance | int    | Can be negative (backward) or positive (forward) |
-| acceptorLossScore    | float  | Range: 0 - 1.0 (one decimal place precision)     |
-| donorGainDistance    | int    | Can be negative (backward) or positive (forward) |
-| donorGainScore       | float  | Range: 0 - 1.0 (one decimal place precision)     |
-| donorLossDistance    | int    | Can be negative (backward) or positive (forward) |
-| donorLossScore       | float  | Range: 0 - 1.0 (one decimal place precision)     |
+| acceptorGainDistance | int    | ± bp from current position                       |
+| acceptorGainScore    | float  | range: 0 - 1.0. 1 decimal place                  |
+| acceptorLossDistance | int    | ± bp from current position                       |
+| acceptorLossScore    | float  | range: 0 - 1.0. 1 decimal place                  |
+| donorGainDistance    | int    | ± bp from current position                       |
+| donorGainScore       | float  | range: 0 - 1.0. 1 decimal place                  |
+| donorLossDistance    | int    | ± bp from current position                       |
+| donorLossScore       | float  | range: 0 - 1.0. 1 decimal place                  |
