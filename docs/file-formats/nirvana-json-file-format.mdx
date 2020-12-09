@@ -9,6 +9,8 @@ import REVEL from '../data-sources/revel-json.md'
 import SpliceAI from '../data-sources/splice-ai-json.md'
 import MitoMapSmall from '../data-sources/mitomap-small-variants-json.md'
 import MitoMapSV from '../data-sources/mitomap-structural-variants-json.md'
+import GnomadSmall from '../data-sources/gnomad-small-variants-json.md'
+import GnomadGeneLof from '../data-sources/gnomad-lof-json.md'
 
 ## Overview
 
@@ -271,6 +273,111 @@ When two or more decomposed variants are recomposed into an MNV, the decomposed 
 Similarly, the recomposed variant will be shown as a new VCF position. This recomposed variant will be flagged with `"isRecomposedVariant":true`.
 :::
 
+### Transcripts
+```json
+"transcripts":[
+   {
+      "transcript":"ENST00000445503.1",
+      "source":"Ensembl",
+      "bioType":"nonsense_mediated_decay",
+      "codons":"gGg/gAg",
+      "aminoAcids":"G/E",
+      "cdnaPos":"268",
+      "cdsPos":"116",
+      "exons":"1/9",
+      "introns":"1/8",
+      "proteinPos":"39",
+      "geneId":"ENSG00000116062",
+      "hgnc":"MSH6",
+      "consequence":[
+         "missense_variant",
+         "NMD_transcript_variant"
+      ],
+      "hgvsc":"ENST00000445503.1:c.116G>A",
+      "hgvsp":"ENSP00000405294.1:p.(Gly39Glu)",
+      "geneFusion":{
+         "exon":6,
+         "intron":5,
+         "fusions":[
+            {
+               "hgvsc":"ETV6{ENST00000396373.4}:c.1_1009+3402_RUNX1{ENST00000437180.1}:c.58+568_1443",
+               "exon":3,
+               "intron":2
+            },
+            {
+               "hgvsc":"ETV6{ENST00000396373.4}:c.1_1009+3402_RUNX1{ENST00000300305.3}:c.58+568_1443",
+               "exon":2,
+               "intron":1
+            }
+         ]
+      },
+      "isCanonical":true,
+      "polyPhenScore":0.95,
+      "polyPhenPrediction":"probably damaging",
+      "proteinId":"ENSP00000405294.1",
+      "siftScore":0.61,
+      "siftPrediction":"tolerated",
+      "completeOverlap":true
+   }
+]
+```
+
+| Field              | Type         | Notes                                                                                                       |
+|:-------------------|:------------:|:------------------------------------------------------------------------------------------------------------|
+| transcript         | string       | transcript ID. e.g. ENST00000445503.1                                                                       |
+| source             | string       | RefSeq / Ensembl                                                                                            |
+| bioType            | string       | descriptions of the [biotypes from Ensembl](https://uswest.ensembl.org/info/genome/genebuild/biotypes.html) |
+| codons             | string       |                                                                                                             |
+| aminoAcids         | string       |                                                                                                             |
+| cdnaPos            | string       |                                                                                                             |
+| cdsPos             | string       |                                                                                                             |
+| exons              | string       | exons affected by the variant                                                                               |
+| introns            | string       | introns affected by the variant                                                                             |
+| proteinPos         | string       |                                                                                                             |
+| geneId             | string       | gene ID. e.g. ENSG00000116062                                                                               |
+| hgnc               | string       | gene symbol. e.g. MSH6                                                                                      |
+| consequence        | string array | [Sequence Ontology Consequences](http://www.sequenceontology.org/index.html)                                |
+| hgvsc              | string       | HGVS coding nomenclature                                                                                    |
+| hgvsp              | string       | HGVS protein nomenclature                                                                                   |
+| geneFusion         | object       | see [Gene Fusions entry below](#gene-fusions)                                                                  |
+| isCanonical        | bool         | true when this is a canonical transcript                                                                    |
+| polyPhenScore      | float        | range: 0 - 1.0                                                                                              |
+| polyPhenPrediction | string       | see [possible values below](#polyphen)                                                                      |
+| proteinId          | string       | protein ID. E.g. ENSP00000405294.1                                                                          |
+| siftScore          | float        | range: 0 - 1.0                                                                                              |
+| siftPrediction     | string       | see [possible values below](#sift)                                                                          |
+| completeOverlap    | bool         | true when this transcript is completely overlapped by the variant                                           |
+
+#### PolyPhen
+
+* probably damaging
+* possibly damaging
+* benign
+* unknown
+
+#### SIFT
+
+* tolerated
+* deleterious
+* tolerated - low confidence
+* deleterious - low confidence
+
+#### Gene Fusions
+
+| Field              | Type         | Notes                                          |
+|:-------------------|:------------:|:-----------------------------------------------|
+| exon               | int          | actual exon where the breakpoint was located   |
+| intron             | int          | actual intron where the breakpoint was located |
+| fusions            | object array | see [Fusion entry below](#fusion)              |
+
+#### Fusion
+
+| Field              | Type         | Notes                                                |
+|:-------------------|:------------:|:-----------------------------------------------------|
+| exon               | int          | actual exon where the other breakpoint was located   |
+| intron             | int          | actual intron where the other breakpoint was located |
+| hgvsc              | string       | HGVS coding nomenclature describing the two genes and the transcripts that are fused along with |
+
 ### Regulatory Regions
 ```json
 "regulatoryRegions":[ 
@@ -309,6 +416,9 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 ### ClinVar
 <ClinVar />
 
+### gnomAD
+<GnomadSmall />
+
 ### dbSNP
 <DbSNP />
 
@@ -323,111 +433,6 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 
 ### Splice AI
 <SpliceAI />
-
-### Transcripts
-```json
-"transcripts":[ 
-   { 
-      "transcript":"ENST00000445503.1",
-      "source":"Ensembl",
-      "bioType":"nonsense_mediated_decay",
-      "codons":"gGg/gAg",
-      "aminoAcids":"G/E",
-      "cdnaPos":"268",
-      "cdsPos":"116",
-      "exons":"1/9",
-      "introns":"1/8",
-      "proteinPos":"39",
-      "geneId":"ENSG00000116062",
-      "hgnc":"MSH6",
-      "consequence":[ 
-         "missense_variant",
-         "NMD_transcript_variant"
-      ],
-      "hgvsc":"ENST00000445503.1:c.116G>A",
-      "hgvsp":"ENSP00000405294.1:p.(Gly39Glu)",
-      "geneFusion":{ 
-         "exon":6,
-         "intron":5,
-         "fusions":[ 
-            { 
-               "hgvsc":"ETV6{ENST00000396373.4}:c.1_1009+3402_RUNX1{ENST00000437180.1}:c.58+568_1443",
-               "exon":3,
-               "intron":2
-            },
-            { 
-               "hgvsc":"ETV6{ENST00000396373.4}:c.1_1009+3402_RUNX1{ENST00000300305.3}:c.58+568_1443",
-               "exon":2,
-               "intron":1
-            }
-         ]
-      },
-      "isCanonical":true,
-      "polyPhenScore":0.95,
-      "polyPhenPrediction":"probably damaging",
-      "proteinId":"ENSP00000405294.1",
-      "siftScore":0.61,
-      "siftPrediction":"tolerated",
-      "completeOverlap":true
-   }
-]
-```
-
-| Field              | Type         | Notes                                                                                                       | 
-|:-------------------|:------------:|:------------------------------------------------------------------------------------------------------------| 
-| transcript         | string       | transcript ID. e.g. ENST00000445503.1                                                                       | 
-| source             | string       | RefSeq / Ensembl                                                                                            | 
-| bioType            | string       | descriptions of the [biotypes from Ensembl](https://uswest.ensembl.org/info/genome/genebuild/biotypes.html) | 
-| codons             | string       |                                                                                                             | 
-| aminoAcids         | string       |                                                                                                             | 
-| cdnaPos            | string       |                                                                                                             | 
-| cdsPos             | string       |                                                                                                             | 
-| exons              | string       | exons affected by the variant                                                                               | 
-| introns            | string       | introns affected by the variant                                                                             | 
-| proteinPos         | string       |                                                                                                             | 
-| geneId             | string       | gene ID. e.g. ENSG00000116062                                                                               | 
-| hgnc               | string       | gene symbol. e.g. MSH6                                                                                      | 
-| consequence        | string array | [Sequence Ontology Consequences](http://www.sequenceontology.org/index.html)                                | 
-| hgvsc              | string       | HGVS coding nomenclature                                                                                    | 
-| hgvsp              | string       | HGVS protein nomenclature                                                                                   | 
-| geneFusion         | object       | see [Gene Fusions entry below](#gene-fusions)                                                                  | 
-| isCanonical        | bool         | true when this is a canonical transcript                                                                    | 
-| polyPhenScore      | float        | range: 0 - 1.0                                                                                              | 
-| polyPhenPrediction | string       | see [possible values below](#polyphen)                                                                      | 
-| proteinId          | string       | protein ID. E.g. ENSP00000405294.1                                                                          | 
-| siftScore          | float        | range: 0 - 1.0                                                                                              | 
-| siftPrediction     | string       | see [possible values below](#sift)                                                                          | 
-| completeOverlap    | bool         | true when this transcript is completely overlapped by the variant                                           | 
-
-#### PolyPhen
-
-* probably damaging
-* possibly damaging
-* benign
-* unknown
-
-#### SIFT
-
-* tolerated
-* deleterious
-* tolerated - low confidence
-* deleterious - low confidence
-
-#### Gene Fusions
-
-| Field              | Type         | Notes                                          |
-|:-------------------|:------------:|:-----------------------------------------------|
-| exon               | int          | actual exon where the breakpoint was located   |
-| intron             | int          | actual intron where the breakpoint was located |
-| fusions            | object array | see [Fusion entry below](#fusion)              |
-
-#### Fusion
-
-| Field              | Type         | Notes                                                |
-|:-------------------|:------------:|:-----------------------------------------------------|
-| exon               | int          | actual exon where the other breakpoint was located   |
-| intron             | int          | actual intron where the other breakpoint was located |
-| hgvsc              | string       | HGVS coding nomenclature describing the two genes and the transcripts that are fused along with |
 
 ## Genes
 ```json
@@ -446,3 +451,6 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 | name    | string | HGNC gene symbol                                                 |
 | hgncId  | int    | HGNC ID                                                          |
 | summary | string | short description of the gene from [OMIM](https://www.omim.org/) |
+
+### gnomAD LoF Gene Metrics
+<GnomadGeneLof />
