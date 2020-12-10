@@ -21,7 +21,8 @@ module.exports = {
         'data-sources/mitomap',
         'data-sources/revel',
         'data-sources/splice-ai',
-        'data-sources/primate-ai'
+        'data-sources/primate-ai',
+        'data-sources/1000Genomes'
       ],
     },
     {

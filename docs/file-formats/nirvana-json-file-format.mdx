@@ -11,6 +11,8 @@ import MitoMapSmall from '../data-sources/mitomap-small-variants-json.md'
 import MitoMapSV from '../data-sources/mitomap-structural-variants-json.md'
 import GnomadSmall from '../data-sources/gnomad-small-variants-json.md'
 import GnomadGeneLof from '../data-sources/gnomad-lof-json.md'
+import ThousandGenomesSmall from '../data-sources/1000Genomes-snv-json.md'
+import ThousandGenomesSV from '../data-sources/1000Genomes-sv-json.md'
 
 ## Overview
 
@@ -145,6 +147,9 @@ For each gene that was referenced in the transcripts found in the positions sect
 | strandBias                | float         | small variant | provided by GATK (from SB) |
 | jointSomaticNormalQuality | integer       | SV            | provided by the Manta variant caller (SOMATICSCORE) |
 | cytogeneticBand           | string        | all           | e.g. 17p13.1 |
+
+### 1000 Genomes
+<ThousandGenomesSV />
 
 ## Samples
 ```json
@@ -415,6 +420,9 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 
 ### ClinVar
 <ClinVar />
+
+### 1000 Genomes
+<ThousandGenomesSmall />
 
 ### gnomAD
 <GnomadSmall />
