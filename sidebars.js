@@ -16,6 +16,7 @@ module.exports = {
       items: [
         'data-sources/clinvar',
         'data-sources/dbsnp',
+        'data-sources/gnomad',
         'data-sources/mito-heteroplasmy',
         'data-sources/mitomap',
         'data-sources/revel',

@@ -22,21 +22,21 @@
 ```
 | Field            | Type         | Notes                     |
 |:-----------------|:------------:|:--------------------------|
-| allAf            | float        | Allele frequency for all populations. Range: 0 - 1.0|
-| allAc            | int          | Allele count for all populations. Integer.|
-| allAn            | int          | Allele number for all populations. Non-zero integer.|
-| afrAf            | float        | Allele frequency for the African super population. Range: 0 - 1.0|
-| afrAc            | int          | Allele count for the African super population. Integer.|
-| afrAn            | int          | Allele number for the African super population. Non-zero integer.|
-| amrAf            | float        | Allele frequency for the Ad Mixed American super population. Range: 0 - 1.0|
-| amrAc            | int          | Allele count for the Ad Mixed American super population. Integer.|
-| amrAn            | int          | Allele number for the Ad Mixed American super population. Non-zero integer.|
-| easAf            | float        | Allele frequency for the East Asian super population. Range: 0 - 1.0|
-| easAc            | int          | Allele count for the East Asian super population. Integer.|
-| easAn            | int          | Allele number for the East Asian super population. Non-zero integer.|
-| eurAf            | float        | Allele frequency for the European super population. Range: 0 - 1.0|
-| eurAc            | int          | Allele count for the European super population. Integer.|
-| eurAn            | int          | Allele number for the European super population. Non-zero integer.|
-| sasAf            | float        | Allele frequency for the South Asian super population. Range: 0 - 1.0|
-| sasAc            | int          | Allele count for the South Asian super population. Integer.|
-| sasAn            | int          | Allele number for the South Asian super population. Non-zero integer.|
+| allAf            | float        | allele frequency for all populations. Range: 0 - 1.0|
+| allAc            | int          | allele count for all populations. Integer.|
+| allAn            | int          | allele number for all populations. Non-zero integer.|
+| afrAf            | float        | allele frequency for the African super population. Range: 0 - 1.0|
+| afrAc            | int          | allele count for the African super population. Integer.|
+| afrAn            | int          | allele number for the African super population. Non-zero integer.|
+| amrAf            | float        | allele frequency for the Ad Mixed American super population. Range: 0 - 1.0|
+| amrAc            | int          | allele count for the Ad Mixed American super population. Integer.|
+| amrAn            | int          | allele number for the Ad Mixed American super population. Non-zero integer.|
+| easAf            | float        | allele frequency for the East Asian super population. Range: 0 - 1.0|
+| easAc            | int          | allele count for the East Asian super population. Integer.|
+| easAn            | int          | allele number for the East Asian super population. Non-zero integer.|
+| eurAf            | float        | allele frequency for the European super population. Range: 0 - 1.0|
+| eurAc            | int          | allele count for the European super population. Integer.|
+| eurAn            | int          | allele number for the European super population. Non-zero integer.|
+| sasAf            | float        | allele frequency for the South Asian super population. Range: 0 - 1.0|
+| sasAc            | int          | allele count for the South Asian super population. Integer.|
+| sasAn            | int          | allele number for the South Asian super population. Non-zero integer.|

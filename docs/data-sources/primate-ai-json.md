@@ -9,4 +9,4 @@
 | Field            | Type         | Notes                     |
 |:-----------------|:------------:|:--------------------------|
 | hgnc             | string       |                           |
-| scorePercentile  | float        | Range: 0 - 1.0            |
+| scorePercentile  | float        | range: 0 - 1.0            |
