@@ -14,4 +14,4 @@
 ```
 | Field            | Type         | Notes                     |
 |:-----------------|:------------:|:--------------------------|
-| phylopScore      | float        | Range: -14.08 to 6.424    |
+| phylopScore      | float        | range: -14.08 to 6.424    |
