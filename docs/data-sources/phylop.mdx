@@ -13,7 +13,7 @@ Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K, Clawson H, 
 :::
 
 
-## File Parsing
+## WigFix File Parsing
 The data is provided in WigFix files which is a text file that provides conservation scores for contiguous intervals in the following format:
 ```scss
 fixedStep chrom=chr1 start=10918 step=1
@@ -39,8 +39,9 @@ fixedStep chrom=chr1 start=34045 step=1
 We convert them to binary files with indexes for fast query. Note that these are scores for genomic positions and are reported only for SNVs.
 ## Download URL
 
-[GRCh37](http://hgdownload.cse.ucsc.edu/goldenpath/hg19/phyloP46way/vertebrate/)
-[GRCh38](http://hgdownload.cse.ucsc.edu/goldenPath/hg38/phyloP20way/)
+GRCh37: [http://hgdownload.cse.ucsc.edu/goldenpath/hg19/phyloP46way/vertebrate/](http://hgdownload.cse.ucsc.edu/goldenpath/hg19/phyloP46way/vertebrate/)
+
+GRCh38: [http://hgdownload.cse.ucsc.edu/goldenPath/hg38/phyloP20way/](http://hgdownload.cse.ucsc.edu/goldenPath/hg38/phyloP20way/)
 
 ## JSON Output
 Unlike other supplemetary datasources, phyloP scores are reported in the variants section.
