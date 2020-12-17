@@ -14,15 +14,16 @@ module.exports = {
       type: 'category',
       label: 'Data Sources',
       items: [
-        'data-sources/clinvar',
+        'data-sources/1000Genomes',
+		'data-sources/clinvar',
         'data-sources/dbsnp',
         'data-sources/gnomad',
         'data-sources/mito-heteroplasmy',
         'data-sources/mitomap',
-        'data-sources/revel',
-        'data-sources/splice-ai',
-        'data-sources/primate-ai',
-        'data-sources/1000Genomes'
+		'data-sources/primate-ai',
+        'data-sources/phylop',
+		'data-sources/revel',
+        'data-sources/splice-ai'
       ],
     },
     {
