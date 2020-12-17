@@ -22,7 +22,8 @@ module.exports = {
         'data-sources/revel',
         'data-sources/splice-ai',
         'data-sources/primate-ai',
-        'data-sources/1000Genomes'
+        'data-sources/1000Genomes',
+		'data-sources/phylop',
       ],
     },
     {
