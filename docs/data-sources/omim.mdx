@@ -1,0 +1,219 @@
+---
+title: OMIM
+---
+
+import JSON from './omim-json.md'
+
+## Overview
+
+Nirvana uses gene symbols as the gene identifiers internally. To generate the OMIM database, we first map the MIM numbers, which are the primary identifiers used by OMIM, to gene symbols supported by Nirvana. Please note that there can be multiple MIM numbers mapped to one gene symbol. Only MIM numbers successfully mapped to a Nirvana gene symbol are further processed. The OMIM API is used to fetch all the information associated with a gene MIM number, except the gene symbols.
+
+## Download OMIM data
+
+To get access to the OMIM data, please set the "OmimApiKey" environment variable with a valid key value first. Then use the downloadOMIM command of SAUtils to download the OMIM data.
+
+```shell
+dotnet /path/to/SAUtils.dll downloadOMIM --ref  /path/to/Homo_sapiens.GRCh38.Nirvana.dat --uga /path/to/UGA.tsv.gz --out /path/to/output/
+```
+
+This command downloads three files:
+
+### 1. MimToGeneSymbol.tsv
+
+This file providing the mapping between MIM numbers and gene symbols. The complete list of MIM numbers is obtained from the mim2gene.txt ([http://omim.org/static/omim/data/mim2gene.txt](http://omim.org/static/omim/data/mim2gene.txt)). An example of this file is given below.
+
+```
+# MIM Number    MIM Entry Type (see FAQ 1.3 at https://omim.org/help/faq)   Entrez Gene ID (NCBI)   Approved Gene Symbol (HGNC) Ensembl Gene ID (Ensembl)
+100050  predominantly phenotypes
+100070  phenotype   100329167
+100100  phenotype
+100200  predominantly phenotypes
+100300  phenotype
+100500  moved/removed
+100600  phenotype
+100640  gene    216 ALDH1A1 ENSG00000165092
+100650  gene/phenotype  217 ALDH2   ENSG00000111275
+100660  gene    218 ALDH3A1 ENSG00000108602
+100670  gene    219 ALDH1B1 ENSG00000137124
+100675  predominantly phenotypes
+100678  gene    39  ACAT2   ENSG00000120437
+```
+
+The information in the "Entrez Gene ID (NCBI)",  "Approved Gene Symbol (HGNC)" and "Ensembl Gene ID (Ensembl)" columns are used to find the proper gene symbol supported by Nirvana, which may or may not be the same as the gene symbol listed here.  Every MIM number that has a Nirvana supported gene symbol will be put into the mapping file.download
+
+### 2. MimEntries.json.gz
+
+This file has the JSON response from the OMIM API. The "entry" handler is used to fetch all the annotations associated with a given OMIM gene. A sample JSON response from the API is provided there.
+
+```json
+{
+  "omim": {
+    "version": "1.0",
+    "entryList": [
+      {
+        "entry": {
+          "prefix": "*",
+          "mimNumber": 100640,
+          "status": "live",
+          "titles": {
+            "preferredTitle": "ALDEHYDE DEHYDROGENASE 1 FAMILY, MEMBER A1; ALDH1A1",
+            "alternativeTitles": "ALDEHYDE DEHYDROGENASE 1; ALDH1;;\nACETALDEHYDE DEHYDROGENASE 1;;\nALDH, LIVER CYTOSOLIC;;\nRETINAL DEHYDROGENASE 1; RALDH1"
+          },
+          "textSectionList": [
+            {
+              "textSection": {
+                "textSectionName": "description",
+                "textSectionTitle": "Description",
+                "textSectionContent": "The ALDH1A1 gene encodes a liver cytosolic isoform of acetaldehyde dehydrogenase ({EC 1.2.1.3}), an enzyme involved in the major pathway of alcohol metabolism after alcohol dehydrogenase (ADH, see {103700}). See also liver mitochondrial ALDH2 ({100650}), variation in which has been implicated in different responses to alcohol ingestion.\n\nALDH1 is associated with a low Km for NAD, a high Km for acetaldehyde, and is strongly inactivated by disulfiram. ALDH2 is associated with a high Km for NAD, and low Km for acetaldehyde, and is insensitive to inhibition by disulfiram ({4:Hsu et al., 1985})."
+              }
+            }
+          ],
+          "geneMap": {
+            "sequenceID": 7709,
+            "chromosome": 9,
+            "chromosomeSymbol": "9",
+            "chromosomeSort": 225,
+            "chromosomeLocationStart": 72900670,
+            "chromosomeLocationEnd": 72953052,
+            "transcript": "ENST00000297785.7",
+            "cytoLocation": "9q21",
+            "computedCytoLocation": "9q21.13",
+            "mimNumber": 100640,
+            "geneSymbols": "ALDH1A1",
+            "geneName": "Aldehyde dehydrogenase-1 family, member A1, soluble",
+            "mappingMethod": "REa, A",
+            "confidence": "P",
+            "mouseGeneSymbol": "Aldh1a1",
+            "mouseMgiID": "MGI:1353450",
+            "geneInheritance": null
+          },
+          "externalLinks": {
+            "geneIDs": "216",
+            "hgncID": "402",
+            "ensemblIDs": "ENSG00000165092,ENST00000297785.8",
+            "approvedGeneSymbols": "ALDH1A1",
+            "ncbiReferenceSequences": "1519246465",
+            "proteinSequences": "194378740,211947843,2183299,178400,119582947,119582948,178372,40807656,194375548,30582681,209402710,4262707,194739599,4261625,178394,261487497,16306661,21361176,32815082,118495,62089228",
+            "uniGenes": "Hs.76392",
+            "swissProtIDs": "P00352",
+            "decipherGene": false,
+            "umlsIDs": "C1412333",
+            "gtr": true,
+            "cmgGene": false,
+            "keggPathways": true,
+            "gwasCatalog": false,
+
+          }
+        }
+      },
+      {
+        "entry": {
+          "prefix": "*",
+          "mimNumber": 102560,
+          "status": "live",
+          "titles": {
+            "preferredTitle": "ACTIN, GAMMA-1; ACTG1",
+            "alternativeTitles": "ACTIN, GAMMA; ACTG;;\nCYTOSKELETAL GAMMA-ACTIN;;\nACTIN, CYTOPLASMIC, 2"
+          },
+          "textSectionList": [
+            {
+              "textSection": {
+                "textSectionName": "description",
+                "textSectionTitle": "Description",
+                "textSectionContent": "Actins are a family of highly conserved cytoskeletal proteins that play fundamental roles in nearly all aspects of eukaryotic cell biology. The ability of a cell to divide, move, endocytose, generate contractile force, and maintain shape is reliant upon functional actin-based structures. Actin isoforms are grouped according to expression patterns: muscle actins predominate in striated and smooth muscle (e.g., ACTA1, {102610}, and ACTA2, {102620}, respectively), whereas the 2 cytoplasmic nonmuscle actins, gamma-actin (ACTG1) and beta-actin (ACTB; {102630}), are found in all cells ({13:Sonnemann et al., 2006})."
+              }
+            }
+          ],
+          "geneMap": {
+            "sequenceID": 13666,
+            "chromosome": 17,
+            "chromosomeSymbol": "17",
+            "chromosomeSort": 947,
+            "chromosomeLocationStart": 81509970,
+            "chromosomeLocationEnd": 81512798,
+            "transcript": "ENST00000331925.7",
+            "cytoLocation": "17q25.3",
+            "computedCytoLocation": "17q25.3",
+            "mimNumber": 102560,
+            "geneSymbols": "ACTG1, DFNA20, DFNA26, BRWS2",
+            "geneName": "Actin, gamma-1",
+            "mappingMethod": "REa, A, Fd",
+            "confidence": "C",
+            "mouseGeneSymbol": "Actg1",
+            "mouseMgiID": "MGI:87906",
+            "geneInheritance": null,
+            "phenotypeMapList": [
+              {
+                "phenotypeMap": {
+                  "mimNumber": 102560,
+                  "phenotype": "Baraitser-Winter syndrome 2",
+                  "phenotypeMimNumber": 614583,
+                  "phenotypicSeriesNumber": "PS243310",
+                  "phenotypeMappingKey": 3,
+                  "phenotypeInheritance": "Autosomal dominant"
+                }
+              },
+              {
+                "phenotypeMap": {
+                  "mimNumber": 102560,
+                  "phenotype": "Deafness, autosomal dominant 20/26",
+                  "phenotypeMimNumber": 604717,
+                  "phenotypicSeriesNumber": "PS124900",
+                  "phenotypeMappingKey": 3,
+                  "phenotypeInheritance": "Autosomal dominant"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+OMIM API can accept almost 20 MIM numbers in one query. To simplify the work to parsing the JSON responses, this gzipped json response file has all the original responses properly concatenated as if they were returned by the server in a single query.
+
+### 3. MimEntries.json.gz.version
+
+The version file is generated automatically after all the data have been downloaded. The date in the local time zone is used to version the data. This means, if the downloader has been run twice a day, the version of downloaded data would be the same, although OMIM website may have an update between the two runs.
+
+## Generate OMIM database
+
+```shell
+dotnet /path/to/SAUtils.dll OMIM --m2g /path/to/MimToGeneSymbol.tsv --json /path/to/MimEntries.json.gz --out /path/to/output/
+```
+
+Please note that the version file is found by extending the path of MimEntries.json.gz file with ".version" suffix.
+
+## Remove links in OMIM descriptions
+
+There are different types of link in the OMIM description section. For example, in above JSON response, we have the description of MIM entry 100640:
+
+`The ALDH1A1 gene encodes a liver cytosolic isoform of acetaldehyde dehydrogenase ({EC 1.2.1.3}), an enzyme involved in the major pathway of alcohol metabolism after alcohol dehydrogenase (ADH, see {103700}). See also liver mitochondrial ALDH2 ({100650}), variation in which has been implicated in different responses to alcohol ingestion.\n\nALDH1 is associated with a low Km for NAD, a high Km for acetaldehyde, and is strongly inactivated by disulfiram. ALDH2 is associated with a high Km for NAD, and low Km for acetaldehyde, and is insensitive to inhibition by disulfiram ({4:Hsu et al., 1985}).`
+
+As the descriptions will be shown as plain text, we remove the curry brackets surrounding links and try to make the text still readable with minimal modifications. Briefly:
+
+* Links referring to another MIM entry (e.g. {100650}) will be removed. Any word(s) specifically associated with the removed link will also be removed. For example,  "(ADH, see {103700})" will become "(ADH)" after the process.
+* Links referring to a literature reference will be processed to remove the internal index and curry brackets. For example, "{4:Hsu et al., 1985}" becomes "Hsu et al., 1985".
+* All the other links will simple have their curry brackets removed. For example, "{EC 1.2.1.3}" becomes "EC 1.2.1.3".
+* If the content within a pair of parentheses becomes empty after being processed, the parentheses need to be removed as well and its surrounding white spaces should be properly processed. For example,  "ALDH2 ({100650})," will become "ALDH2,".
+
+Here is a list of examples about how the description section supposed to be processed:
+
+| Original text                                                      | Processed text                            |
+|:-------------------------------------------------------------------|:------------------------------------------|
+| ({516030}, {516040}, and {516050})                                 |                                           |
+| (e.g., D1, {168461}; D2, {123833}; D3, {123834})                   | (e.g., D1; D2; D3)                        |
+| (desmocollins; see DSC2, {125645})                                 | (desmocollins; see DSC2)                  |
+| (e.g., see {102700}, {300755})                                     |                                           |
+| (ADH, see {103700}). See also liver mitochondrial ALDH2 ({100650}) | (ADH). See also liver mitochondrial ALDH2 |
+| (see, e.g., CACNA1A; {601011})                                     | (see, e.g., CACNA1A)                      |
+| (e.g., GSTA1; {138359}), mu (e.g., {138350})                       | (e.g., GSTA1), mu                         |
+| (NFKB; see {164011})                                               | (NFKB)                                    |
+| (see ISGF3G, {147574})                                             | (see ISGF3G)                              |
+| (DCK; {EC 2.7.1.74}; {125450})                                     | (DCK; EC 2.7.1.74)                        |
+
+## JSON output
+
+<JSON />
