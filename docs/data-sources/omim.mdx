@@ -6,6 +6,8 @@ import JSON from './omim-json.md'
 
 ## Overview
 
+OMIM is a comprehensive, authoritative compendium of human genes and genetic phenotypes that is freely available and updated daily.
+
 Nirvana uses gene symbols as the gene identifiers internally. To generate the OMIM database, we first map the MIM numbers, which are the primary identifiers used by OMIM, to gene symbols supported by Nirvana. Please note that there can be multiple MIM numbers mapped to one gene symbol. Only MIM numbers successfully mapped to a Nirvana gene symbol are further processed. The OMIM API is used to fetch all the information associated with a gene MIM number, except the gene symbols.
 
 ## Download OMIM data
@@ -39,7 +41,7 @@ This file provides the mapping between MIM numbers and gene symbols. The complet
 100678  gene    39  ACAT2   ENSG00000120437
 ```
 
-The information in the "Entrez Gene ID (NCBI)",  "Approved Gene Symbol (HGNC)" and "Ensembl Gene ID (Ensembl)" columns are used to find the proper gene symbol supported by Nirvana, which may or may not be the same as the gene symbol listed here.  Every MIM number that has a Nirvana supported gene symbol will be put into the mapping file.download
+The information in the "Entrez Gene ID (NCBI)",  "Approved Gene Symbol (HGNC)" and "Ensembl Gene ID (Ensembl)" columns are used to find the proper gene symbol supported by Nirvana, which may or may not be the same as the gene symbol listed here. Every MIM number that has a Nirvana supported gene symbol will be put into the mapping file.
 
 ### 2. MimEntries.json.gz
 
