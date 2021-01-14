@@ -8,21 +8,13 @@ import JSON from './omim-json.md'
 
 OMIM is a comprehensive, authoritative compendium of human genes and genetic phenotypes that is freely available and updated daily.
 
+## Parse OMIM data
+
 Nirvana uses gene symbols as the gene identifiers internally. To generate the OMIM database, we first map the MIM numbers, which are the primary identifiers used by OMIM, to gene symbols supported by Nirvana. Please note that there can be multiple MIM numbers mapped to one gene symbol. Only MIM numbers successfully mapped to a Nirvana gene symbol are further processed. The OMIM API is used to fetch all the information associated with a gene MIM number, except the gene symbols.
 
-## Download OMIM data
+### 1. mim2gene.txt
 
-To get access to the OMIM data, please set the "OmimApiKey" environment variable with a valid key value first. Then use the downloadOMIM command of SAUtils to download the OMIM data.
-
-```shell
-dotnet /path/to/SAUtils.dll downloadOMIM --ref  /path/to/Homo_sapiens.GRCh38.Nirvana.dat --uga /path/to/UGA.tsv.gz --out /path/to/output/
-```
-
-This command downloads three files:
-
-### 1. MimToGeneSymbol.tsv
-
-This file provides the mapping between MIM numbers and gene symbols. The complete list of MIM numbers is obtained from the mim2gene.txt ([http://omim.org/static/omim/data/mim2gene.txt](http://omim.org/static/omim/data/mim2gene.txt)). An example of this file is given below.
+This mim2gene.txt ([http://omim.org/static/omim/data/mim2gene.txt](http://omim.org/static/omim/data/mim2gene.txt)) file provides the mapping between MIM numbers and gene symbols. An example of this file is given below:
 
 ```
 # MIM Number    MIM Entry Type (see FAQ 1.3 at https://omim.org/help/faq)   Entrez Gene ID (NCBI)   Approved Gene Symbol (HGNC) Ensembl Gene ID (Ensembl)
@@ -41,11 +33,11 @@ This file provides the mapping between MIM numbers and gene symbols. The complet
 100678  gene    39  ACAT2   ENSG00000120437
 ```
 
-The information in the "Entrez Gene ID (NCBI)",  "Approved Gene Symbol (HGNC)" and "Ensembl Gene ID (Ensembl)" columns are used to find the proper gene symbol supported by Nirvana, which may or may not be the same as the gene symbol listed here. Every MIM number that has a Nirvana supported gene symbol will be put into the mapping file.
+The information in the "Entrez Gene ID (NCBI)",  "Approved Gene Symbol (HGNC)" and "Ensembl Gene ID (Ensembl)" columns are used to find the proper gene symbol supported by Nirvana, which may or may not be the same as the gene symbol listed here.
 
-### 2. MimEntries.json.gz
+### 2. OMIM API
 
-This file has the JSON response from the OMIM API. The "entry" handler is used to fetch all the annotations associated with a given OMIM gene. A sample JSON response from the API is provided there.
+Nirvana retrieves the OMIM annotations from the [OMIM API](https://www.omim.org/api) JSON responses. The "entry" handler is used to fetch all the annotations associated with a given OMIM gene. A sample JSON response from the API is provided there.
 
 ```json
 {
@@ -174,21 +166,34 @@ This file has the JSON response from the OMIM API. The "entry" handler is used t
 }
 ```
 
-OMIM API can accept almost 20 MIM numbers in one query. To simplify the work to parsing the JSON responses, this gzipped json response file has all the original responses properly concatenated as if they were returned by the server in a single query.
+Content from the OMIM API JSON response is reorganized as shown in the Nirvana [JSON Output](#json-output)
 
-### 3. MimEntries.json.gz.version
+Mappings between the Nirvana JSON output and OMIM JSON API are listed in the table below:
 
-The version file is generated automatically after all the data have been downloaded. The date in the local time zone is used to version the data. This means, if the downloader has been run twice a day, the version of downloaded data would be the same, although OMIM website may have an update between the two runs.
+| Nirvana JSON key chain       | OMIM API JSON key chain                                                                                                          |
+|:-----------------------------|:---------------------------------------------------------------------------------------------------------------------------------|
+| omim:mimNumber               | omim:entryList:entry:mimNumber                                                                                                   |
+| omim:geneName                | omim:entryList:entry:geneMap:geneName                                                                                            |
+| omim:description             | omim:entryList:entry:textSectionList:textSection:textSectionContent                                                              |
+| omim:phenotypes:mimNumber    | omim:entryList:entry:geneMap:phenotypeMapList:phenotypeMap:mimNumber                                                             |
+| omim:phenotypes:phenotype    | omim:entryList:entry:geneMap:phenotypeMapList:phenotypeMap:phenotype                                                             |
+| omim:phenotypes:description  | omim:entryList:entry:textSectionList:textSection:textSectionContent                                                              |
+| omim:phenotypes:mapping      | omim:entryList:entry:geneMap:phenotypeMapList:phenotypeMap:phenotypeMappingKey ([see mapping below](#mapping-key-to-content))    |
+| omim:phenotypes:inheritances | omim:entryList:entry:geneMap:phenotypeMapList:phenotypeMap:phenotypeInheritance                                                  |
+| omim:phenotypes:comments     | omim:entryList:entry:geneMap:phenotypeMapList:phenotypeMap:phenotype ([see mapping below](#phenotype-character-to-comment))      |
 
-## Generate OMIM database
+#### Mapping key to content
+`1` to `disorder was positioned by mapping of the wild type gene`<br />
+`2` to `disease phenotype itself was mapped`<br />
+`3` to `molecular basis of the disorder is known`<br />
+`4` to `disorder is a chromosome deletion or duplication syndrome`<br />
 
-```shell
-dotnet /path/to/SAUtils.dll OMIM --m2g /path/to/MimToGeneSymbol.tsv --json /path/to/MimEntries.json.gz --out /path/to/output/
-```
+#### Phenotype character to comment
+`?` to `unconfirmed or possibly spurious mapping`<br />
+`[`/`]` to `nondiseases`<br />
+`{`/`}` to `contribute to susceptibility to multifactorial disorders or to susceptibility to infection`<br />
 
-Please note that the version file is found by extending the path of MimEntries.json.gz file with ".version" suffix.
-
-## Remove links in OMIM descriptions
+### Remove links in OMIM descriptions
 
 There are different types of link in the OMIM description section. For example, in above JSON response, we have the description of MIM entry 100640:
 
