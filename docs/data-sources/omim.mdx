@@ -12,7 +12,7 @@ OMIM is a comprehensive, authoritative compendium of human genes and genetic phe
 
 Nirvana uses gene symbols as the gene identifiers internally. To generate the OMIM database, we first map the MIM numbers, which are the primary identifiers used by OMIM, to gene symbols supported by Nirvana. Please note that there can be multiple MIM numbers mapped to one gene symbol. Only MIM numbers successfully mapped to a Nirvana gene symbol are further processed. The OMIM API is used to fetch all the information associated with a gene MIM number, except the gene symbols.
 
-### 1. mim2gene.txt
+### mim2gene.txt
 
 This mim2gene.txt ([http://omim.org/static/omim/data/mim2gene.txt](http://omim.org/static/omim/data/mim2gene.txt)) file provides the mapping between MIM numbers and gene symbols. An example of this file is given below:
 
@@ -35,7 +35,7 @@ This mim2gene.txt ([http://omim.org/static/omim/data/mim2gene.txt](http://omim.o
 
 The information in the "Entrez Gene ID (NCBI)",  "Approved Gene Symbol (HGNC)" and "Ensembl Gene ID (Ensembl)" columns are used to find the proper gene symbol supported by Nirvana, which may or may not be the same as the gene symbol listed here.
 
-### 2. OMIM API
+### OMIM API
 
 Nirvana retrieves the OMIM annotations from the [OMIM API](https://www.omim.org/api) JSON responses. The "entry" handler is used to fetch all the annotations associated with a given OMIM gene. A sample JSON response from the API is provided there.
 
