@@ -8,6 +8,12 @@ import JSON from './omim-json.md'
 
 OMIM is a comprehensive, authoritative compendium of human genes and genetic phenotypes that is freely available and updated daily.
 
+:::info Publications
+Amberger JS, Bocchini CA, Scott AF, Hamosh A. OMIM.org: leveraging knowledge across phenotype-gene relationships. Nucleic Acids Res. 2019 Jan 8;47(D1):D1038-D1043. doi:10.1093/nar/gky1151. PMID: [30445645](https://pubmed.ncbi.nlm.nih.gov/30445645/).
+
+Amberger JS, Bocchini CA, Schiettecatte FJM, Scott AF, Hamosh A. OMIM.org: Online Mendelian Inheritance in Man (OMIM®), an online catalog of human genes and genetic disorders. Nucleic Acids Res. 2015 Jan;43(Database issue):D789-98. PMID: [25428349](https://pubmed.ncbi.nlm.nih.gov/25428349/).
+:::
+
 ## Parse OMIM data
 
 Nirvana uses gene symbols as the gene identifiers internally. To generate the OMIM database, we first map the MIM numbers, which are the primary identifiers used by OMIM, to gene symbols supported by Nirvana. Please note that there can be multiple MIM numbers mapped to one gene symbol. Only MIM numbers successfully mapped to a Nirvana gene symbol are further processed. The OMIM API is used to fetch all the information associated with a gene MIM number, except the gene symbols.
