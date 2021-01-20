@@ -1,0 +1,104 @@
+{
+  "version-3.14/docs": [
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Introduction",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.14/introduction/introduction"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/introduction/dependencies"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/introduction/getting-started"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/introduction/covid19"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Data Sources",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.14/data-sources/1000Genomes"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/data-sources/clinvar"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/data-sources/dbsnp"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/data-sources/gnomad"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/data-sources/mito-heteroplasmy"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/data-sources/mitomap"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/data-sources/omim"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/data-sources/primate-ai"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/data-sources/phylop"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/data-sources/revel"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/data-sources/splice-ai"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "File Formats",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.14/file-formats/nirvana-json-file-format"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/file-formats/custom-annotations"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Core Functionality",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.14/core-functionality/variant-ids"
+        }
+      ]
+    }
+  ]
+}
