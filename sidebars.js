@@ -7,6 +7,7 @@ module.exports = {
         'introduction/introduction',
         'introduction/dependencies',
         'introduction/getting-started',
+        'introduction/parsing-json',
         'introduction/covid19'
       ],
     },
@@ -21,8 +22,8 @@ module.exports = {
         'data-sources/mito-heteroplasmy',
         'data-sources/mitomap',
         'data-sources/omim',
-        'data-sources/primate-ai',
         'data-sources/phylop',
+        'data-sources/primate-ai',
         'data-sources/revel',
         'data-sources/splice-ai'
       ],
