@@ -1,0 +1,50 @@
+---
+title: PhyloP
+---
+
+import JSON from './amino-acid-conservation-json.md'
+
+## Overview
+
+Amino acid conservation scores are obtained from multiple alignments of vertebrate exomes to the human one. The score indicate the frequency with which a particular AA is observed in Humans.
+
+
+## FASTA File
+The exon alignments are provided in FASTA files as follows:
+```scss
+>ENST00000641515.2_hg38_1_2 3 0 0 chr1:65565-65573+
+MKK
+>ENST00000641515.2_panTro4_1_2 3 0 0 chrUn_GL393541:146907-146915+
+MKK
+>ENST00000641515.2_gorGor3_1_2 3 0 0
+---
+>ENST00000641515.2_ponAbe2_1_2 3 0 0 chr15:99141417-99141425-
+MKK
+>ENST00000641515.2_hg38_2_2 324 0 0 chr1:69037-70008+
+VTAEAISWNESTSETNNSMVTEFIFLGLSDSQELQTFLFMLFFVFYGGIVFGNLLIVITVVSDSHLHSPMYFLLANLSLIDLSLSSVTAPKMITDFFSQRKVISFKGCLVQIFLLHFFGGSEMVILIAMGFDRYIAICKPLHYTTIMCGNACVGIMAVTWGIGFLHSVSQLAFAVHLLFCGPNEVDSFYCDLPRVIKLACTDTYRLDIMVIANSGVLTVCSFVLLIISYTIILMTIQHRPLDKSSKALSTLTAHITVVLLFFGPCVFIYAWPFPIKSLDKFLAVFYSVITPLLNPIIYTLRNKDMKTAIRQLRKWDAHSSVKFZ
+>ENST00000641515.2_panTro4_2_2 324 0 0 chrUn_GL393541:151333-152303+
+```
+
+## Parsing FASTA
+For each ENSEMBL transcript, we will need to aggregate all the exons together for each of the 100 species.From there, we should get a full alignment that can be used to determine conservation (ENST00000641515.2):
+```scss
+Human (hg38) MKKVTAEAISWNESTSETNNSMVTEFIFLGLSDSQELQTFLFMLFFVFYGGIVFGNLLIVITVVSDSHLHSPMYFLLANLSLIDLSLSSVTAPKMITDFFSQRKVISFKGCLVQIFLL
+Chimp        MKKVTAEAISWNESTSETNNSMVTEFIFLGLSDSQELQTFL-MLFFVFYGGIVFGNLLIVRIVVSDSHLHSPMYFLLANLSLIDLSLCSVTAPKMITDFFSQRKVISFKGCLVQIFLL
+Gorilla      ----------------------------------------------------------------------------------------------------------------------
+Orangutan    MKKVTAEAISWNESTSKTNNSVVTEFIFLGLSDSQELQTFLFMLFFVFYGGIVFGNLLIVIIVVSDSHLHSPMYFLLANLSLIDLSLSSVTAPKMITDFFSQRKVISFKGCLVQIFLL
+Gibbon       ----------------------------------------------------------------------------------------------------------------------
+Rhesus       MKKVTEAAISWNESTSETNNSIVTEFIFLGLSDSQELQIFLFVLFLVFYGGIVFGNLLIVITVVSDSHLHSPMYLLLANLSVVDLSLSSVTAPKMITDFFSQRKAISFKGCLVQIFLL
+Macaque      MKKVTEAAISWNESTSETNNSIVTEFIFLGLSDSQELQIFLFVLFLVFYGGIVFGNLLIVITVVSDSHLHSPMYLLLANLSVIDLSLSSVTAPKMITDFFSQRKAISFKGCLVQIFLL
+```
+If we look at position 6, we see that humans have an Alanine (A) residue. This residue is shared by Chimp and Orangutan. However, Rhesus and Macaque have a Glutamic acid (E) residue at that position. Moreover, Gorilla and Gibbon don't even have data for that transcript.
+For position 6, we would say that we have 43% conservation (3/7) since three organisms share the same residue as humans.
+
+## Download URL
+
+GRCh37: [http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/alignments/knownGene.exonAA.fa.gz](http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/alignments/knownGene.exonAA.fa.gz)
+
+GRCh38: [http://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz100way/alignments/knownGene.exonAA.fa.gz](http://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz100way/alignments/knownGene.exonAA.fa.gz)
+
+## JSON Output
+Conservation scores are reported in the transcript section. One score is reported for each alt allele
+<JSON />
