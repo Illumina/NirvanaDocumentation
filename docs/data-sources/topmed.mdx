@@ -1,0 +1,39 @@
+---
+title: TOPMed
+---
+
+import JSON from './topmed-json.md'
+
+## Overview
+
+The [Trans-Omics for Precision Medicine](https://www.nhlbi.nih.gov/science/trans-omics-precision-medicine-topmed-program) (TOPMed) program, sponsored by the National Institutes of Health (NIH) National Heart, Lung and Blood Institute (NHLBI), is part of a broader Precision Medicine Initiative, which aims to provide disease treatments tailored to an individual’s unique genes and environment. TOPMed contributes to this Initiative through the integration of whole-genome sequencing (WGS) and other omics (e.g., metabolic profiles, epigenomics, protein and RNA expression patterns) data with molecular, behavioral, imaging, environmental, and clinical data.
+
+## VCF extraction
+
+We currently extract the following fields from TOPMed VCF file:
+
+```scss
+##INFO=<ID=AN,Number=1,Type=Integer,Description="Number of Alleles in Samples with Coverage">
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Alternate Allele Counts in Samples with Coverage">
+##INFO=<ID=AF,Number=A,Type=Float,Description="Alternate Allele Frequencies">
+##INFO=<ID=Het,Number=A,Type=Integer,Description="Number of samples with heterozygous genotype calls">
+##INFO=<ID=Hom,Number=A,Type=Integer,Description="Number of samples with homozygous alternate genotype calls">
+```
+
+Example:
+
+```scss
+chr1    10132   TOPMed_freeze_5?chr1:10,132     T       C       255     SVM     VRT=1;NS=62784;AN=125568;AC=32;AF=0.000254842;Het=32;Hom=0      NA:FRQ  125568:0.000254842
+```
+
+## GRCh37 liftover
+
+The data is not available for GRCh37 on TOPMed website. We performed a liftover from GRCh38 to GRCh37 using dbSNP ids.
+
+## Download URL
+
+[https://bravo.sph.umich.edu/freeze5/hg38/download](https://bravo.sph.umich.edu/freeze5/hg38/download)
+
+## JSON output
+
+<JSON />

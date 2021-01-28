@@ -26,7 +26,8 @@ module.exports = {
         'data-sources/phylop',
         'data-sources/primate-ai',
         'data-sources/revel',
-        'data-sources/splice-ai'
+        'data-sources/splice-ai',
+        'data-sources/topmed'
       ],
     },
     {
