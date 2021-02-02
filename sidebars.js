@@ -16,7 +16,7 @@ module.exports = {
       label: 'Data Sources',
       items: [
         'data-sources/1000Genomes',
-		'data-sources/amino-acid-conservation',
+        'data-sources/amino-acid-conservation',
         'data-sources/clinvar',
         'data-sources/dbsnp',
         'data-sources/gnomad',
@@ -42,6 +42,7 @@ module.exports = {
       type: 'category',
       label: 'Core Functionality',
       items: [
+        'core-functionality/mnv-recomposition',
         'core-functionality/variant-ids'
       ],
     },
