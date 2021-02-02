@@ -1,0 +1,134 @@
+---
+title: ClinGen
+---
+
+import CLINGENJSON from './clingen-json.md'
+import ClinGenDosageJson from './clingen-dosage-json.md'
+
+## Overview
+
+ClinGen is a National Institutes of Health (NIH)-funded resource dedicated to building a central resource that defines the clinical relevance of genes and variants for use in precision medicine and research.
+
+:::info Publication
+Savatt, J. M., Azzariti, D.R., Faucett, W.A., Harrison, S., Hart, J., Kattman, B., Landrum, M.J., Ledbeter, D.H., Rangel Miller, V., Palen, E., Rehm, H.L., Rhode, J., Turner, S., Vidal, J.A., Wain, K.E., Riggs, E.R., and Martin, C.L. (2018).  **ClinGens GenomeConnect Registry Enables Patient-centered Data Sharing.** *Human Mutation, 39(11),1668-676. doi:10.1002/humu.23633*.
+:::
+
+## CNVs
+
+### TSV Extraction
+ClinGen contains only copy number variation variants, since the coordinates in ClinGen original file follow the same rule as BED format, the coordinates also have to be adjusted as [BEGIN+1, END]. No insertion issues in this dataset.
+
+```scss
+#bin    chrom   chromStart      chromEnd        name    score   strand  thickStart      thickEnd        attrCount       attrTags        attrVals
+nsv530705       1       564405  8597804 0       1       copy_number_loss        pathogenic      False   Developmental delay AND/OR other significant developmental or morphological phenotypes
+nsv530706       1       564424  3262790 0       1       copy_number_loss        pathogenic      False   Abnormal facial shape,Abnormality of cardiac morphology,Global developmental delay,Muscular hypotonia   HP:0001252,HP:0001263,HP:0001627,HP:0001999,MedGen:CN001147,MedGen:CN001157,MedGen:CN001482,MedGen:CN001810
+nsv530707       1       564424  7068738 0       1       copy_number_loss        pathogenic      False   Abnormality of cardiac morphology,Cleft upper lip,Failure to thrive,Global developmental delay,Intrauterine growth retardation,Microcephaly,Short stature       HP:0000204,HP:0000252,HP:0001263,HP:0001508,HP:0001511,HP:0001627,HP:0004322,MedGen:C0349588,MedGen:C1845868,MedGen:C1853481,MedGen:C2364119,MedGen:CN000197,MedGen:CN001157,MedGen:CN001482
+nsv533512       1       564435  649748  0       1       copy_number_loss        benign  False   Developmental delay AND/OR other significant developmental or morphological phenotypes
+nsv931338       1       714078  4958499 0       1       copy_number_loss        pathogenic      False   Developmental delay AND/OR other significant developmental or morphological phenotypes
+nsv530300       1       728138  5066371 1       0       copy_number_gain        pathogenic      False   Abnormality of cardiac morphology,Cleft palate,Global developmental delay       HP:0000175,HP:0001263,HP:0001627,MedGen:C2240378,MedGen:CN001157,MedGen:CN001482
+```
+#### Status levels
+ClinGen is contained in several tsv files depending on the variant status of the CNVs. We have the following status levels:
+* benign
+* curated benign
+* curated pathogenic
+* likely benign
+* likely pathogenic
+* path gain
+* path loss
+* pathogenic
+* uncertain
+
+#### Parsing
+Parse the ClinGen tsv file and extract the following:
+* chrom
+* chromStart (note this a 0-based coordinate)
+* chromEnd
+* attrTags
+* attrVals
+
+attrTags and attrVals are comma separated lists. attrTags contains the field keys and attrVals contains the field values. We will parse the following keys from the two fields:
+* parent (this will be used as the ID in our JSON output)
+* clinical_int
+* validated
+* phenotype (this should be a string array)
+* phenotype_id (this should be a string array)
+
+Observed losses and observed gains will be calculated from entries that share a common parent ID.
+* variants with a common parent ID and same coordinates are grouped
+    * create hashsets for phenotypes and phentypeIds
+    * calculated observed losses, observed gains
+    * Clinical siginificance and validation status are collapesed using the priority strategy listed below
+* Variants with the same parent ID can have different coordinates (mapped to hg38)
+    * nsv491508 : chr14:105583663-106881350 and chr14:105605043-106766076 (only one example)
+    * we kept both variants
+
+## Conflict Resolution
+### Clinical siginificance priority
+When there are a mixture of variants belonging to the same parent ID, we will choose the most pathogenic clinical significance from the available values. I.e. if 3 samples were deemed pathogenic and 2 samples were likely pathogenic, we would list the variant as pathogenic.
+
+**Priority** (high to low)
+* Priority
+* Pathogenic
+* Likely pathogenic
+* Benign
+* Likely benign
+* Uncertain significance
+
+### Validation Priority
+When there are a mixture of variants belonging to same parent ID, we will set the validation status to true if any of the variants were validated.
+### Download URL
+
+[https://cirm.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=iscaComposite](https://cirm.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=iscaComposite)
+
+### JSON Output
+
+<CLINGENJSON />
+
+## Dosage Sensitivity Map
+The Clinical Genome Resource (ClinGen) consortium is curating genes and regions of the genome to assess whether there is evidence to support that these genes/regions are dosage sensitive and should be targeted on a cytogenomic array. Nirvana reports these annotations for overlapping SVs.
+
+### TSV Source files
+**Regions**
+```scss
+#ClinGen Region Curation Results
+#07 May,2019
+#Genomic Locations are reported on GRCh38 (hg38): GCF_000001405.36
+#https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen
+#to create link: https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/clingen_region.cgi?id=key
+#ISCA ID    ISCA Region Name    cytoBand    Genomic Location    Haploinsufficiency Score    Haploinsufficiency Description  Haploinsufficiency PMID1    Haploinsufficiency PMID2    Haploinsufficiency PMID3    Triplosensitivity Score Triplosensitivity Description   Triplosensitivity PMID1 Triplosensitivity PMID2 Triplosensitivity PMID3 Date Last Evaluated Loss phenotype OMIM ID  Triplosensitive phenotype OMIM ID
+ISCA-46299  Xp11.22 region (includes HUWE1) Xp11.22 tbd 0   No evidence available               3   Sufficient evidence for dosage pathogenicity    22840365    20655035    26692240    2018-11-19
+ISCA-46295  15q13.3 recurrent region (D-CHRNA7 to BP5) (includes CHRNA7 and OTUD7A) 15q13.3 chr15:31727418-32153204 3   Sufficient evidence for dosage pathogenicity    19898479    20236110    22775350    40  Dosage sensitivity unlikely 26968334    22420048        2018-05-10
+ISCA-46291  7q11.23 recurrent distal region (includes HIP1, YWHAG)  7q11.23 chr7:75528718-76433859  2   Some evidence for dosage pathogenicity  21109226    16971481        1   Little evidence for dosage pathogenicity    21109226    27867344        2018-12-31
+ISCA-46290  Xp11.22p11.23 recurrent region (includes SHROOM4)   Xp11.22-p11.23  chrX: 48447780-52444264 0   No evidence available               3   Sufficient evidence for dosage pathogenicity    19716111    21418194    25425167    2017-12-14      300801
+```
+**Genes**
+```scss
+#ClinGen Gene Curation Results
+#24 May,2019
+#Genomic Locations are reported on GRCh37 (hg19): GCF_000001405.13
+#https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen
+#to create link: https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/clingen_gene.cgi?sym=Gene Symbol
+#Gene Symbol    Gene ID cytoBand    Genomic Location    Haploinsufficiency Score    Haploinsufficiency Description  Haploinsufficiency PMID1    Haploinsufficiency PMID2    Haploinsufficiency PMID3    Triplosensitivity Score Triplosensitivity Description   Triplosensitivity PMID1 Triplosensitivity PMID2 Triplosensitivity PMID3 Date Last Evaluated Loss phenotype OMIM ID  Triplosensitive phenotype OMIM ID
+A4GALT  53947   22q13.2 chr22:43088121-43117307 30  Gene associated with autosomal recessive phenotype              0   No evidence available               2014-12-11  111400
+AAGAB   79719   15q23   chr15:67493013-67547536 3   Sufficient evidence for dosage pathogenicity    23064416    23000146        0   No evidence available               2013-02-28  148600
+```
+
+### Dosage Rating System
+
+| Rating | Possible Clinical Interpretation                                                        |
+|--------|-----------------------------------------------------------------------------------------|
+| 0      | No evidence to suggest that dosage sensitivity is associated with clinical phenotype    |
+| 1      | Little evidence suggesting dosage sensitivity is associated with clinical phenotype     |
+| 2      | Emerging evidence suggesting dosage sensitivity is associated with clinical phenotype   |
+| 3      | Sufficient evidence suggesting dosage sensitivity is associated with clinical phenotype |
+| 30     | Gene associated with autosomal recessive phenotype                                      |
+| 40     | Dosage sensitivity unlikely                                                             |
+
+Reference: [https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/help.shtml](https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/help.shtml)
+
+### Download URL
+[ftp://ftp.clinicalgenome.org/](ftp://ftp.clinicalgenome.org/)
+
+### JSON Output
+<ClinGenDosageJson/>
