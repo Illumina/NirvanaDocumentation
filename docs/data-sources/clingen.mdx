@@ -16,7 +16,7 @@ Savatt, J. M., Azzariti, D.R., Faucett, W.A., Harrison, S., Hart, J., Kattman, B
 ## CNVs
 
 ### TSV Extraction
-ClinGen contains only copy number variation variants, since the coordinates in ClinGen original file follow the same rule as BED format, the coordinates also have to be adjusted as [BEGIN+1, END]. No insertion issues in this dataset.
+ClinGen contains only copy number variation variants, since the coordinates in ClinGen original file follow the same rule as BED format, the coordinates had to be adjusted to [BEGIN+1, END].
 
 ```scss
 #bin    chrom   chromStart      chromEnd        name    score   strand  thickStart      thickEnd        attrCount       attrTags        attrVals
@@ -27,7 +27,8 @@ nsv533512       1       564435  649748  0       1       copy_number_loss        
 nsv931338       1       714078  4958499 0       1       copy_number_loss        pathogenic      False   Developmental delay AND/OR other significant developmental or morphological phenotypes
 nsv530300       1       728138  5066371 1       0       copy_number_gain        pathogenic      False   Abnormality of cardiac morphology,Cleft palate,Global developmental delay       HP:0000175,HP:0001263,HP:0001627,MedGen:C2240378,MedGen:CN001157,MedGen:CN001482
 ```
-#### Status levels
+**Status levels**
+
 ClinGen is contained in several tsv files depending on the variant status of the CNVs. We have the following status levels:
 * benign
 * curated benign
@@ -40,14 +41,14 @@ ClinGen is contained in several tsv files depending on the variant status of the
 * uncertain
 
 #### Parsing
-Parse the ClinGen tsv file and extract the following:
+We parse the ClinGen tsv file and extract the following:
 * chrom
 * chromStart (note this a 0-based coordinate)
 * chromEnd
 * attrTags
 * attrVals
 
-attrTags and attrVals are comma separated lists. attrTags contains the field keys and attrVals contains the field values. We will parse the following keys from the two fields:
+*attrTags* and *attrVals* are comma separated lists. *attrTags* contains the field keys and *attrVals* contains the field values. We will parse the following keys from the two fields:
 * parent (this will be used as the ID in our JSON output)
 * clinical_int
 * validated
@@ -58,14 +59,14 @@ Observed losses and observed gains will be calculated from entries that share a 
 * variants with a common parent ID and same coordinates are grouped
     * create hashsets for phenotypes and phentypeIds
     * calculated observed losses, observed gains
-    * Clinical siginificance and validation status are collapesed using the priority strategy listed below
+    * Clinical siginificance and validation status are collapesed using the priority strategy described below
 * Variants with the same parent ID can have different coordinates (mapped to hg38)
     * nsv491508 : chr14:105583663-106881350 and chr14:105605043-106766076 (only one example)
     * we kept both variants
 
 ## Conflict Resolution
 ### Clinical siginificance priority
-When there are a mixture of variants belonging to the same parent ID, we will choose the most pathogenic clinical significance from the available values. I.e. if 3 samples were deemed pathogenic and 2 samples were likely pathogenic, we would list the variant as pathogenic.
+When there are a mixture of variants belonging to the same parent ID, we will choose the most pathogenic clinical significance from the available values. i.e. if 3 samples were deemed pathogenic and 2 samples were likely pathogenic, we would list the variant as pathogenic.
 
 **Priority** (high to low)
 * Priority
