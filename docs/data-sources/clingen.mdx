@@ -4,6 +4,7 @@ title: ClinGen
 
 import CLINGENJSON from './clingen-json.md'
 import ClinGenDosageJson from './clingen-dosage-json.md'
+import ClinGenGeneValidity from './clingen-gene-validity-json.md'
 
 ## Overview
 
@@ -13,7 +14,7 @@ ClinGen is a National Institutes of Health (NIH)-funded resource dedicated to bu
 Savatt, J. M., Azzariti, D.R., Faucett, W.A., Harrison, S., Hart, J., Kattman, B., Landrum, M.J., Ledbeter, D.H., Rangel Miller, V., Palen, E., Rehm, H.L., Rhode, J., Turner, S., Vidal, J.A., Wain, K.E., Riggs, E.R., and Martin, C.L. (2018).  **ClinGens GenomeConnect Registry Enables Patient-centered Data Sharing.** *Human Mutation, 39(11),1668-676. doi:10.1002/humu.23633*.
 :::
 
-## CNVs
+## ISCA Regions
 
 ### TSV Extraction
 ClinGen contains only copy number variation variants, since the coordinates in ClinGen original file follow the same rule as BED format, the coordinates had to be adjusted to [BEGIN+1, END].
@@ -133,3 +134,43 @@ Reference: [https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/help.shtml](http
 
 ### JSON Output
 <ClinGenDosageJson/>
+
+## Gene-Disease Validity
+The ClinGen Gene-Disease Clinical Validity curation process involves evaluating the strength of evidence supporting or refuting a claim that variation in a particular gene causes a particular disease. Nirvana reports these annotations for genes in the genes section of the JSON.
+
+### Source TSV
+The source data comes in a CSV file that we convert to a TSV as follows:
+```scss
+CLINGEN GENE VALIDITY CURATIONS
+FILE CREATED: 2019-05-28
+WEBPAGE: https://search.clinicalgenome.org/kb/gene-validity
++++++++++++,++++++++++++++,+++++++++++++,++++++++++++++++++,+++++++++,++++++++++++++,+++++++++++++,+++++++++++++++++++
+GENE SYMBOL,GENE ID (HGNC),DISEASE LABEL,DISEASE ID (MONDO),SOP,CLASSIFICATION,ONLINE REPORT,CLASSIFICATION DATE
++++++++++++,++++++++++++++,+++++++++++++,++++++++++++++++++,+++++++++,++++++++++++++,+++++++++++++,+++++++++++++++++++
+A2ML1,HGNC:23336,Noonan syndrome with multiple lentigines,MONDO_0007893,SOP5,No Reported Evidence,https://search.clinicalgenome.org/kb/gene-validity/59b87033-dd91-4f1e-aec1-c9b1f5124b16--2018-06-07T14:37:47,2018-06-07T14:37:47.175Z
+A2ML1,HGNC:23336,cardiofaciocutaneous syndrome,MONDO_0015280,SOP5,No Reported Evidence,https://search.clinicalgenome.org/kb/gene-validity/fc3c41d8-8497-489b-a350-c9e30016bc6a--2018-06-07T14:31:03,2018-06-07T14:31:03.696Z
+A2ML1,HGNC:23336,Costello syndrome,MONDO_0009026,SOP5,No Reported Evidence,https://search.clinicalgenome.org/kb/gene-validity/ea72ba8d-cf62-44bc-86be-da64e3848eba--2018-06-07T14:34:05,2018-06-07T14:34:05.324Z
+```
+### Download URL
+[https://search.clinicalgenome.org/kb/gene-validity.csv](https://search.clinicalgenome.org/kb/gene-validity.csv)
+
+### Conlict Resolution
+#### Multiple Classifications
+Here is an example of multiple classifications.
+```scss
+$ grep MONDO_0010192 ClinGen-Gene-Disease-Summary-2019-12-02.csv  | grep EDNRB
+EDNRB,HGNC:3180,Waardenburg syndrome type 4A,MONDO_0010192,SOP6,Moderate,https://search.clinicalgenome.org/kb/gene-validity/d7abbd45-7915-437b-849b-dea876bfc2f5--2018-05-08T04:00:00,2018-05-08T04:00:00.000Z
+EDNRB,HGNC:3180,Waardenburg syndrome type 4A,MONDO_0010192,SOP6,Limited,https://search.clinicalgenome.org/kb/gene-validity/73ee9727-60c1-40fd-830f-08c2b513d2ee--2018-05-08T04:00:00,2018-05-08T04:00:00.000Z
+```
+In such cases, we select the more severe classification.
+
+#### Multiple Dates
+```scss
+$ grep MONDO_0016419 ClinGen-Gene-Disease-Summary-2019-12-02.csv  | grep MUTYH
+MUTYH,HGNC:7527,hereditary breast carcinoma,MONDO_0016419,SOP4,No Reported Evidence,https://search.clinicalgenome.org/kb/gene-validity/9904,2017-05-24T00:00:00
+MUTYH,HGNC:7527,hereditary breast carcinoma,MONDO_0016419,SOP4,No Reported Evidence,https://search.clinicalgenome.org/kb/gene-validity/9902,2017-05-25T00:00:00
+```
+If the classifications are the same, we should select the latest classification date.
+
+### JSON Output
+<ClinGenGeneValidity/>
