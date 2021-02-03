@@ -29,7 +29,7 @@ The following criteria must also be met for at least one sample:
 1. All the available phase set IDs are the same (homozygous variants are available to all phase sets)
 1. The genotype ploidy for all the variants are the same.
 1. No unsupported variant type (i.e. insertion or deletion) overlaps the recomposed variants
-1. The first and last base in at least one of the recomposed alllels must be non-reference.
+1. The first and last base in at least one of the recomposed allelles must be non-reference.
 
 ## Examples
 
