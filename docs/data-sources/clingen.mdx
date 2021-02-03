@@ -11,7 +11,7 @@ import ClinGenGeneValidity from './clingen-gene-validity-json.md'
 ClinGen is a National Institutes of Health (NIH)-funded resource dedicated to building a central resource that defines the clinical relevance of genes and variants for use in precision medicine and research.
 
 :::info Publication
-Savatt, J. M., Azzariti, D.R., Faucett, W.A., Harrison, S., Hart, J., Kattman, B., Landrum, M.J., Ledbeter, D.H., Rangel Miller, V., Palen, E., Rehm, H.L., Rhode, J., Turner, S., Vidal, J.A., Wain, K.E., Riggs, E.R., and Martin, C.L. (2018).  **ClinGens GenomeConnect Registry Enables Patient-centered Data Sharing.** *Human Mutation, 39(11),1668-676. doi:10.1002/humu.23633*.
+Heidi L. Rehm, Ph.D., Jonathan S. Berg, M.D., Ph.D., Lisa D. Brooks, Ph.D., Carlos D. Bustamante, Ph.D., James P. Evans, M.D., Ph.D., Melissa J. Landrum, Ph.D., David H. Ledbetter, Ph.D., Donna R. Maglott, Ph.D., Christa Lese Martin, Ph.D., Robert L. Nussbaum, M.D., Sharon E. Plon, M.D., Ph.D., Erin M. Ramos, Ph.D., Stephen T. Sherry, Ph.D., and Michael S. Watson, Ph.D., for ClinGen. **ClinGen The Clinical Genome Resource.** *N Engl J Med 2015; 372:2235-2242 June 4, 2015 DOI: 10.1056/NEJMsr1406261.*
 :::
 
 ## ISCA Regions
@@ -47,7 +47,7 @@ We parse the ClinGen tsv file and extract the following:
 * attrTags
 * attrVals
 
-*attrTags* and *attrVals* are comma separated lists. *attrTags* contains the field keys and *attrVals* contains the field values. We will parse the following keys from the two fields:
+`attrTags` and `attrVals` are comma separated lists. `attrTags` contains the field keys and `attrVals` contains the field values. We will parse the following keys from the two fields:
 * parent (this will be used as the ID in our JSON output)
 * clinical_int
 * validated
@@ -56,15 +56,14 @@ We parse the ClinGen tsv file and extract the following:
 
 Observed losses and observed gains will be calculated from entries that share a common parent ID.
 * variants with a common parent ID and same coordinates are grouped
-    * create hashsets for phenotypes and phentypeIds
-    * calculated observed losses, observed gains
-    * Clinical siginificance and validation status are collapesed using the priority strategy described below
+    * calculated observed losses, observed gains for each group
+    * Clinical significance and validation status are collapsed using the priority strategy described below
 * Variants with the same parent ID can have different coordinates (mapped to hg38)
     * nsv491508 : chr14:105583663-106881350 and chr14:105605043-106766076 (only one example)
     * we kept both variants
 
 ## Conflict Resolution
-### Clinical siginificance priority
+### Clinical significance priority
 When there are a mixture of variants belonging to the same parent ID, we will choose the most pathogenic clinical significance from the available values. i.e. if 3 samples were deemed pathogenic and 2 samples were likely pathogenic, we would list the variant as pathogenic.
 
 **Priority** (high to low)
@@ -152,7 +151,7 @@ A2ML1,HGNC:23336,Costello syndrome,MONDO_0009026,SOP5,No Reported Evidence,https
 ### Download URL
 [https://search.clinicalgenome.org/kb/gene-validity.csv](https://search.clinicalgenome.org/kb/gene-validity.csv)
 
-### Conlict Resolution
+### Conflict Resolution
 #### Multiple Classifications
 Here is an example of multiple classifications.
 ```scss
