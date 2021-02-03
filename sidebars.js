@@ -42,6 +42,7 @@ module.exports = {
       type: 'category',
       label: 'Core Functionality',
       items: [
+        'core-functionality/canonical-transcripts',
         'core-functionality/mnv-recomposition',
         'core-functionality/variant-ids'
       ],
