@@ -17,8 +17,9 @@ module.exports = {
       items: [
         'data-sources/1000Genomes',
         'data-sources/amino-acid-conservation',
-        'data-sources/clinvar',
-        'data-sources/dbsnp',
+		'data-sources/clingen',
+		'data-sources/clinvar',
+		'data-sources/dbsnp',
         'data-sources/gnomad',
         'data-sources/mito-heteroplasmy',
         'data-sources/mitomap',

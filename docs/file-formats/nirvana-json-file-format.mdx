@@ -2,7 +2,11 @@
 title: Nirvana JSON File Format
 ---
 
+import AminoAcidConservation from '../data-sources/amino-acid-conservation-json.md'
 import ClinVar from '../data-sources/clinvar-json.md'
+import ClinGen from '../data-sources/clingen-json.md'
+import ClinGenDosage from '../data-sources/clingen-dosage-json.md'
+import ClinGenDiseaseValidity from '../data-sources/clingen-gene-validity-json.md'
 import DbSNP from '../data-sources/dbsnp-json.md'
 import PrimateAI from '../data-sources/primate-ai-json.md'
 import REVEL from '../data-sources/revel-json.md'
@@ -11,6 +15,7 @@ import MitoMapSmall from '../data-sources/mitomap-small-variants-json.md'
 import MitoMapSV from '../data-sources/mitomap-structural-variants-json.md'
 import GnomadSmall from '../data-sources/gnomad-small-variants-json.md'
 import GnomadGeneLof from '../data-sources/gnomad-lof-json.md'
+import phyloP from '../data-sources/phylop-json.md'
 import ThousandGenomesSmall from '../data-sources/1000Genomes-snv-json.md'
 import ThousandGenomesSV from '../data-sources/1000Genomes-sv-json.md'
 import Omim from '../data-sources/omim-json.md'
@@ -42,38 +47,38 @@ We've put together a [new section that discusses how to parse our JSON files](..
 
 ## Header
 ```json
-{ 
-   "header":{ 
+{
+   "header":{
       "annotator":"Nirvana 3.0.0-alpha.5+g6c52e247",
       "creationTime":"2017-06-14 15:53:13",
       "genomeAssembly":"GRCh37",
-      "dataSources":[ 
-         { 
+      "dataSources":[
+         {
             "name":"OMIM",
             "version":"unknown",
             "description":"An Online Catalog of Human Genes and Genetic Disorders",
             "releaseDate":"2017-05-03"
          },
-         { 
+         {
             "name":"VEP",
             "version":"84",
             "description":"BothRefSeqAndEnsembl",
             "releaseDate":"2017-01-16"
          },
-         { 
+         {
             "name":"ClinVar",
             "version":"20170503",
             "description":"A freely accessible, public archive of reports of the relationships among human variations and phenotypes, with supporting evidence",
             "releaseDate":"2017-05-03"
          },
-         { 
+         {
             "name":"phyloP",
             "version":"hg19",
             "description":"46 way conservation score between humans and 45 other vertebrates",
             "releaseDate":"2009-11-10"
          }
       ],
-      "samples":[ 
+      "samples":[
          "NA12878",
          "NA12891",
          "NA12892"
@@ -108,27 +113,27 @@ We've put together a [new section that discusses how to parse our JSON files](..
 
 ## Positions
 ```json
-"positions":[ 
-   { 
+"positions":[
+   {
       "chromosome":"chr2",
       "position":48010488,
       "repeatUnit":"GGCCCC",
       "refRepeatCount":3,
       "svEnd":48020488,
       "refAllele":"G",
-      "altAlleles":[ 
+      "altAlleles":[
          "A",
          "GT"
       ],
       "quality":461,
-      "filters":[ 
+      "filters":[
          "PASS"
       ],
-      "ciPos":[ 
+      "ciPos":[
          -170,
          170
       ],
-      "ciEnd":[ 
+      "ciEnd":[
          -175,
          175
       ],
@@ -155,6 +160,10 @@ We've put together a [new section that discusses how to parse our JSON files](..
 | strandBias                | float         | small variant | provided by GATK (from SB) |
 | jointSomaticNormalQuality | integer       | SV            | provided by the Manta variant caller (SOMATICSCORE) |
 | cytogeneticBand           | string        | all           | e.g. 17p13.1 |
+
+### ClinGen
+<ClinGen/>
+<ClinGenDosage/>
 
 ### 1000 Genomes (SV)
 <ThousandGenomesSV />
@@ -229,8 +238,8 @@ We've put together a [new section that discusses how to parse our JSON files](..
 If a sample does not contain any entries, we will create a sample object that contains the `isEmpty` key. This ensures that sample ordering is preserved while indicating that a sample is intentionally empty.
 
 ```json
-"samples":[ 
-   { 
+"samples":[
+   {
       "isEmpty":true
    }
 ],
@@ -240,8 +249,8 @@ If a sample does not contain any entries, we will create a sample object that co
 
 ## Variants
 ```json
-"variants":[ 
-   { 
+"variants":[
+   {
       "vid":"2:48010488:A",
       "chromosome":"chr2",
       "begin":48010488,
@@ -258,23 +267,23 @@ If a sample does not contain any entries, we will create a sample object that co
       "phylopScore":0.459
 ```
 
-| Field                  | Type         | Notes                                                                                                                | 
-|:-----------------------|:------------:|:---------------------------------------------------------------------------------------------------------------------| 
-| vid                    | string       | see [Variant Identifiers](../core-functionality/variant-ids)                                                         | 
-| chromosome             | string       |                                                                                                                      | 
-| begin                  | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          | 
-| end                    | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          | 
-| isReferenceMinorAllele | bool         | true when this is a reference minor allele                                                                           | 
-| isStructuralVariant    | bool         | true when the variant is a structural variant                                                                        | 
-| inLowComplexityRegion  | bool         | true when the variant lies in a low complexity region (gnomAD low complexity regions)                                | 
-| refAllele              | string       | parsimonious representation of the reference allele                                                                  | 
-| altAllele              | string       | parsimonious representation of the alternate allele.                                                                 | 
-| variantType            | string       | uses [Sequence Ontology sequence alterations](http://www.sequenceontology.org/browser/current_svn/term/SO:0001059)   | 
-| isDecomposedVariant    | bool         | true when the decomposed variant has been used to create another recomposed variant                                  | 
-| isRecomposedVariant    | bool         | true when the variant is recomposed from two or more decomposed variants                                             | 
-| linkedVids             | string array | list of [VIDs](../core-functionality/variant-ids) for variants connecting decomposed and recomposed variants         | 
-| hgvsg                  | string       | HGVS g. notation                                                                                                     | 
-| phylopScore            | float        | phyloP conservation score. Range: -14.08 to 6.424                                                                    | 
+| Field                  | Type         | Notes                                                                                                                |
+|:-----------------------|:------------:|:---------------------------------------------------------------------------------------------------------------------|
+| vid                    | string       | see [Variant Identifiers](../core-functionality/variant-ids)                                                         |
+| chromosome             | string       |                                                                                                                      |
+| begin                  | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          |
+| end                    | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          |
+| isReferenceMinorAllele | bool         | true when this is a reference minor allele                                                                           |
+| isStructuralVariant    | bool         | true when the variant is a structural variant                                                                        |
+| inLowComplexityRegion  | bool         | true when the variant lies in a low complexity region (gnomAD low complexity regions)                                |
+| refAllele              | string       | parsimonious representation of the reference allele                                                                  |
+| altAllele              | string       | parsimonious representation of the alternate allele.                                                                 |
+| variantType            | string       | uses [Sequence Ontology sequence alterations](http://www.sequenceontology.org/browser/current_svn/term/SO:0001059)   |
+| isDecomposedVariant    | bool         | true when the decomposed variant has been used to create another recomposed variant                                  |
+| isRecomposedVariant    | bool         | true when the variant is recomposed from two or more decomposed variants                                             |
+| linkedVids             | string array | list of [VIDs](../core-functionality/variant-ids) for variants connecting decomposed and recomposed variants         |
+| hgvsg                  | string       | HGVS g. notation                                                                                                     |
+| phylopScore            | float        | phyloP conservation score. Range: -14.08 to 6.424                                                                    |
 
 :::info Reference Minor Alleles
 Nirvana supports annotating reference minor alleles. In such a case, `refAllele` will be replaced by the global major allele and `altAllele` will be replaced with the original reference allele.
@@ -375,6 +384,9 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 * tolerated - low confidence
 * deleterious - low confidence
 
+#### Amino Acid Conservation
+<AminoAcidConservation/>
+
 #### Gene Fusions
 
 | Field              | Type         | Notes                                          |
@@ -393,22 +405,22 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 
 ### Regulatory Regions
 ```json
-"regulatoryRegions":[ 
-   { 
+"regulatoryRegions":[
+   {
       "id":"ENSR00001542175",
       "type":"promoter",
-      "consequence":[ 
+      "consequence":[
          "regulatory_region_variant"
       ]
    }
 ]
 ```
 
-| Field             | Type         | Notes | 
-|:------------------|:------------:|-------| 
-| id                | string       |       | 
-| type              | string       | see [possible values below](#regulatory-types) | 
-| consequence       | string array | see [possible values below](#regulatory-consequences) | 
+| Field             | Type         | Notes |
+|:------------------|:------------:|-------|
+| id                | string       |       |
+| type              | string       | see [possible values below](#regulatory-types) |
+| consequence       | string array | see [possible values below](#regulatory-consequences) |
 
 #### Regulatory Types
 
@@ -441,6 +453,8 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 ### MITOMAP
 <MitoMapSmall />
 
+### PhyloP
+<phylop />
 ### Primate AI
 <PrimateAI />
 
@@ -455,8 +469,8 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 
 ## Genes
 ```json
-"genes":[ 
-   { 
+"genes":[
+   {
       "name":"MSH6",
       "hgncId":7329,
       "summary":"This gene encodes a member of the DNA mismatch repair MutS family. In E. coli, the MutS protein helps in the recognition of mismatched nucleotides prior to their repair. A highly conserved region of approximately 150 aa, called the Walker-A adenine nucleotide binding motif, exists in MutS homologs. The encoded protein heterodimerizes with MSH2 to form a mismatch recognition complex that functions as a bidirectional molecular switch that exchanges ADP and ATP as DNA mismatches are bound and dissociated. Mutations in this gene may be associated with hereditary nonpolyposis colon cancer, colorectal cancer, and endometrial cancer. Transcripts variants encoding different isoforms have been described. [provided by RefSeq, Jul 2013]",
@@ -476,3 +490,6 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 
 ### gnomAD LoF Gene Metrics
 <GnomadGeneLof />
+
+### ClinGen Disease Validity
+<ClinGenDiseaseValidity />
