@@ -2,8 +2,8 @@
 "mitomap":[ 
    { 
       "chromosome":"MT",
-      "begin":"3166",
-      "end":"14152",
+      "begin":3166,
+      "end":14152,
       "variantType":"deletion",
       "reciprocalOverlap":0.18068,
       "annotationOverlap":0.42405
