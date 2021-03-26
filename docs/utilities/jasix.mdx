@@ -8,7 +8,7 @@ The JASIX index is aimed at providing TABIX like indexing capabilities for the N
 
 ## Creating the JASIX index
 
-The JASIX index (that comes in a .jsi) file is generated on-the-fly with Nirvana output. It can also be generated independently by running the Jasix command line utility on the JSON output file. Please note that the Jasix utility can only consume JSON files that follow the Nirvana JSON output format. The following code blocks demonstrate the help menu and index generating functionalities of Jasix.
+The JASIX index (that comes in a .jsi) file is generated on-the-fly with Nirvana output. It can also be generated independently by running the Jasix command line utility on the JSON output file. Please note that the Jasix utility can only consume JSON files that follow the Nirvana JSON output format. The following code blocks demonstrate the help menu and index generating functionalities of JASIX.
 
 ### Example
 
@@ -48,7 +48,7 @@ Time: 00:01:14.8
 The Jasix query format is chr:start-end. If not provided, it assumes end=start. If only chr is provided, all entries for that chromosome will be provided.
 
 ```scss
-dotnet Jasix.dll -i  input.json.gz chrM:5000-7000
+dotnet Jasix.dll -i input.json.gz chrM:5000-7000
 ```
 
 ```json
@@ -128,7 +128,7 @@ dotnet Jasix.dll -i  input.json.gz chrM:5000-7000
 }
 
 ```
-The default output stream is Console. However, if an output filename is provided, Jasix outputs the results to that file in a bgzipped format. The output is always a valid JSON entry. If requested (via -t option) the header of the indexed file will be provided. Multiple queries can be submitted in the same command and the output will contain them within the same "positions" block in order of the submitted queries (Warning: if the queries are out of order, or overlapping, the output will be out or order and intersecting).
+The default output stream is Console. However, if an output filename is provided, Jasix outputs the results to that file in a bgzip compressed format. The output is always a valid JSON entry. If requested (via -t option) the header of the indexed file will be provided. Multiple queries can be submitted in the same command and the output will contain them within the same "positions" block in order of the submitted queries (Warning: if the queries are out of order, or overlapping, the output will be out or order and intersecting).
 
 ```scss
 dotnet Jasix.dll -i input.json.gz  -q chrM:5000-7000 -q chrM:8500-9500 -t
