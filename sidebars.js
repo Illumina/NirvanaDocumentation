@@ -17,9 +17,9 @@ module.exports = {
       items: [
         'data-sources/1000Genomes',
         'data-sources/amino-acid-conservation',
-		'data-sources/clingen',
-		'data-sources/clinvar',
-		'data-sources/dbsnp',
+        'data-sources/clingen',
+        'data-sources/clinvar',
+        'data-sources/dbsnp',
         'data-sources/gnomad',
         'data-sources/mito-heteroplasmy',
         'data-sources/mitomap',
@@ -44,6 +44,7 @@ module.exports = {
       label: 'Core Functionality',
       items: [
         'core-functionality/canonical-transcripts',
+        'core-functionality/gene-fusions',
         'core-functionality/mnv-recomposition',
         'core-functionality/variant-ids'
       ],
