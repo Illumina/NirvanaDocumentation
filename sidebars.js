@@ -48,5 +48,12 @@ module.exports = {
         'core-functionality/variant-ids'
       ],
     },
+	{
+      type: 'category',
+      label: 'Utilities',
+      items: [
+        'utilities/jasix'
+      ],
+    },
   ],
 };

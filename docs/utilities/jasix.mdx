@@ -1,0 +1,299 @@
+---
+title: Jasix
+---
+
+## Overview
+
+The Jasix index is aimed at providing TABIX like indexing capabilities for the Nirvana JSON output.
+
+## Creating the Jasix index
+
+The Jasix index (that comes in a .jsi) file is generated on-the-fly with Nirvana output. It can also be generated independently by running the Jasix command line utility on the JSON output file. Please note that the Jasix utility can only consume JSON files that follow the Nirvana JSON output format. The following code blocks demonstrate the help menu and index generating functionalities of Jasix.
+
+### Example
+
+```scss
+dotnet Jasix.dll -h
+USAGE: dotnet Jasix.dll -i in.json.gz [options]
+Indexes a Nirvana annotated JSON file
+
+OPTIONS:
+      --header, -t           print also the header lines
+      --only-header, -H      print only the header lines
+      --chromosomes, -l      list chromosome names
+      --index, -c            create index
+      --in, -i <VALUE>       input
+      --out, -o <VALUE>      compressed output file name (default:console)
+      --query, -q <VALUE>    query range
+      --help, -h             displays the help menu
+      --version, -v          displays the version
+```
+```scss
+dotnet Jasix.dll --index -i input.json.gz
+---------------------------------------------------------------------------
+Jasix                                               (c) 2017 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                          2.0.0
+---------------------------------------------------------------------------
+
+Ref Sequence chrM indexed in 00:00:00.2
+Ref Sequence chr1 indexed in 00:00:05.8
+Ref Sequence chr2 indexed in 00:00:06.0
+.
+.
+.
+Peak memory usage: 28.5 MB
+Time: 00:01:14.8
+```
+## Querying the index
+The Jasix query format is chr:start-end. If not provided, it assumes end=start. If only chr is provided, all entries for that chromosome will be provided.
+
+```scss
+dotnet Jasix.dll -i input.json.gz chrM:5000-7000
+```
+
+```json
+{
+   "positions":[
+      {
+         "chromosome":"chrM",
+         "refAllele":"C",
+         "position":5581,
+         "quality":3070.00,
+         "filters":[
+            "LowGQXHomSNP"
+         ],
+         "altAlleles":[
+            "T"
+         ],
+         "samples":[
+            {
+               "variantFreq":1,
+               "totalDepth":1625,
+               "genotypeQuality":1,
+               "alleleDepths":[
+                  0,
+                  1625
+               ],
+               "genotype":"1/1"
+            }
+         ],
+         "variants":[
+            {
+               "altAllele":"T",
+               "refAllele":"C",
+               "begin":5581,
+               "chromosome":"chrM",
+               "end":5581,
+               "variantType":"SNV",
+               "vid":"MT:5581:T"
+            }
+         ]
+      },
+      {
+         "chromosome":"chrM",
+         "refAllele":"A",
+         "position":6267,
+         "quality":1637.00,
+         "filters":[
+            "LowGQXHetSNP"
+         ],
+         "altAlleles":[
+            "G"
+         ],
+         "samples":[
+            {
+               "variantFreq":0.6873,
+               "totalDepth":323,
+               "genotypeQuality":1,
+               "alleleDepths":[
+                  101,
+                  222
+               ],
+               "genotype":"0/1"
+            }
+         ],
+         "variants":[
+            {
+               "altAllele":"G",
+               "refAllele":"A",
+               "begin":6267,
+               "chromosome":"chrM",
+               "end":6267,
+               "variantType":"SNV",
+               "vid":"MT:6267:G"
+            }
+         ]
+      }
+   ]
+}
+
+```
+The default output stream is Console. However, if an output filename is provided, Jasix outputs the results to that file in a bgzip compressed format. The output is always a valid JSON entry. If requested (via -t option) the header of the indexed file will be provided. Multiple queries can be submitted in the same command and the output will contain them within the same "positions" block in order of the submitted queries (Warning: if the queries are out of order, or overlapping, the output will be out or order and intersecting).
+
+```scss
+dotnet Jasix.dll -i input.json.gz  -q chrM:5000-7000 -q chrM:8500-9500 -t
+```
+```json
+{
+   "header":{
+      "annotator":"Illumina Annotation Engine 1.6.2.0",
+      "creationTime":"2017-08-30 11:42:57",
+      "genomeAssembly":"GRCh37",
+      "schemaVersion":6,
+      "dataVersion":"84.24.39",
+      "dataSources":[
+         {
+            "name":"VEP",
+            "version":"84",
+            "description":"Ensembl",
+            "releaseDate":"2017-01-16"
+         }
+      ],
+      "samples":[
+         "Mother"
+      ]
+   },
+   "positions":[
+      {
+         "chromosome":"chrM",
+         "refAllele":"C",
+         "position":5581,
+         "quality":3070.00,
+         "filters":[
+            "LowGQXHomSNP"
+         ],
+         "altAlleles":[
+            "T"
+         ],
+         "samples":[
+            {
+               "variantFreq":1,
+               "totalDepth":1625,
+               "genotypeQuality":1,
+               "alleleDepths":[
+                  0,
+                  1625
+               ],
+               "genotype":"1/1"
+            }
+         ],
+         "variants":[
+            {
+               "altAllele":"T",
+               "refAllele":"C",
+               "begin":5581,
+               "chromosome":"chrM",
+               "end":5581,
+               "variantType":"SNV",
+               "vid":"MT:5581:T"
+            }
+         ]
+      },
+      {
+         "chromosome":"chrM",
+         "refAllele":"A",
+         "position":6267,
+         "quality":1637.00,
+         "filters":[
+            "LowGQXHetSNP"
+         ],
+         "altAlleles":[
+            "G"
+         ],
+         "samples":[
+            {
+               "variantFreq":0.6873,
+               "totalDepth":323,
+               "genotypeQuality":1,
+               "alleleDepths":[
+                  101,
+                  222
+               ],
+               "genotype":"0/1"
+            }
+         ],
+         "variants":[
+            {
+               "altAllele":"G",
+               "refAllele":"A",
+               "begin":6267,
+               "chromosome":"chrM",
+               "end":6267,
+               "variantType":"SNV",
+               "vid":"MT:6267:G"
+            }
+         ]
+      },
+      {
+         "chromosome":"chrM",
+         "refAllele":"G",
+         "position":8702,
+         "quality":3070.00,
+         "filters":[
+            "LowGQXHomSNP"
+         ],
+         "altAlleles":[
+            "A"
+         ],
+         "samples":[
+            {
+               "variantFreq":0.9987,
+               "totalDepth":1534,
+               "genotypeQuality":1,
+               "alleleDepths":[
+                  2,
+                  1532
+               ],
+               "genotype":"1/1"
+            }
+         ],
+         "variants":[
+            {
+               "altAllele":"A",
+               "refAllele":"G",
+               "begin":8702,
+               "chromosome":"chrM",
+               "end":8702,
+               "variantType":"SNV",
+               "vid":"MT:8702:A"
+            }
+         ]
+      },
+      {
+         "chromosome":"chrM",
+         "refAllele":"G",
+         "position":9378,
+         "quality":3070.00,
+         "filters":[
+            "LowGQXHomSNP"
+         ],
+         "altAlleles":[
+            "A"
+         ],
+         "samples":[
+            {
+               "variantFreq":1,
+               "totalDepth":1018,
+               "genotypeQuality":1,
+               "alleleDepths":[
+                  0,
+                  1018
+               ],
+               "genotype":"1/1"
+            }
+         ],
+         "variants":[
+            {
+               "altAllele":"A",
+               "refAllele":"G",
+               "begin":9378,
+               "chromosome":"chrM",
+               "end":9378,
+               "variantType":"SNV",
+               "vid":"MT:9378:A"
+            }
+         ]
+      }
+   ]
+}
+```
