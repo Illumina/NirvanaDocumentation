@@ -52,20 +52,20 @@ We think Docker is fantastic. However, because our data files are usually access
 ```bash	
 mkdir -p Nirvana/Data
 cd Nirvana
-docker pull annotation/nirvana:3.9.1
+docker pull annotation/nirvana:3.14
 ```
 
 For Docker, we have special instructions for running the Downloader:
 
 ```bash
-sudo docker run --rm -it -v Data:/scratch annotation/nirvana:3.9.1 dotnet \
+sudo docker run --rm -it -v Data:/scratch annotation/nirvana:3.14 dotnet \
      /opt/nirvana/Downloader.dll --ga GRCh37 -o /scratch
 ```
 
 Similarly, we have special instructions for running Nirvana (Here's [a toy VCF](https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz) in case you need it):
 
 ```bash
-sudo docker run --rm -it -v Data:/scratch annotation/nirvana:3.9.1 dotnet \
+sudo docker run --rm -it -v Data:/scratch annotation/nirvana:3.14 dotnet \
      /opt/nirvana/Nirvana.dll -c /scratch/Cache/GRCh37/Both \
      -r /scratch/References/Homo_sapiens.GRCh37.Nirvana.dat \
      --sd /scratch/SupplementaryAnnotation/GRCh37 \
