@@ -25,6 +25,7 @@ OPTIONS:
       --in, -i <VALUE>       input
       --out, -o <VALUE>      compressed output file name (default:console)
       --query, -q <VALUE>    query range
+      --section, -s <VALUE>  complete section (positions or genes) to output
       --help, -h             displays the help menu
       --version, -v          displays the version
 ```
@@ -44,6 +45,7 @@ Ref Sequence chr2 indexed in 00:00:06.0
 Peak memory usage: 28.5 MB
 Time: 00:01:14.8
 ```
+
 ## Querying the index
 The Jasix query format is chr:start-end. If not provided, it assumes end=start. If only chr is provided, all entries for that chromosome will be provided.
 
@@ -296,4 +298,46 @@ dotnet Jasix.dll -i input.json.gz  -q chrM:5000-7000 -q chrM:8500-9500 -t
       }
    ]
 }
+```
+## Extracting a section
+The Nirvana JSON file has three sections: header, positions and genes. Header can be printed using the -H option. If you are interested in only the positions or genes section, you can use the -s or --section option.
+
+```scss
+dotnet Jasix.dll -i input.json.gz  -s genes
+```
+```json
+[
+{
+  "name": "ABCB10",
+  "omim": [
+    {
+      "mimNumber": 605454,
+      "geneName": "ATP-binding cassette, subfamily B, member 10"
+    }
+  ]
+},
+{
+  "name": "ABCD3",
+  "omim": [
+    {
+      "mimNumber": 170995,
+      "geneName": "ATP-binding cassette, subfamily D, member 3 (peroxisomal membrane protein 1, 70kD)",
+      "description": "The ABCD3 gene encodes a peroxisomal membrane transporter involved in the transport of branched-chain fatty acids and C27 bile acids into the peroxisome; the latter function is a crucial step in bile acid biosynthesis (summary by Ferdinandusse et al., 2015).",
+      "phenotypes": [
+        {
+          "mimNumber": 616278,
+          "phenotype": "?Bile acid synthesis defect, congenital, 5",
+          "mapping": "molecular basis of the disorder is known",
+          "inheritances": [
+            "Autosomal recessive"
+          ],
+          "comments": [
+            "unconfirmed or possibly spurious mapping"
+          ]
+        }
+      ]
+    }
+  ]
+}
+]
 ```
