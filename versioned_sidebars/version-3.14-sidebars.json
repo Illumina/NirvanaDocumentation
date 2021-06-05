@@ -97,6 +97,10 @@
         {
           "type": "doc",
           "id": "version-3.14/core-functionality/variant-ids"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.14/core-functionality/gene-fusions"
         }
       ]
     }
