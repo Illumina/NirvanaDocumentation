@@ -1,0 +1,134 @@
+---
+title: FusionCatcher
+---
+
+import JSON from './fusioncatcher-json.md'
+
+## Overview
+
+[FusionCatcher](https://github.com/ndaniel/fusioncatcher) is a well-known tool that searches for somatic novel/known fusion genes, translocations, and/or chimeras in RNA-seq data. While FusionCatcher itself is not part of Nirvana, we have included a subset of their genomic databases in Nirvana.
+
+:::info Publication
+Daniel Nicorici, Mihaela Şatalan, Henrik Edgren, Sara Kangaspeska, Astrid Murumägi, Olli Kallioniemi, Sami Virtanen, Olavi Kilkku. (2014) [FusionCatcher – a tool for finding somatic fusion genes in paired-end RNA-sequencing data](https://www.biorxiv.org/content/10.1101/011650v1). *bioRxiv* 011650
+:::
+
+## Supported Data Sources
+
+### Oncogenes
+
+The following data sources are aggregated and used to populate the `isOncogene` field in the gene JSON object:
+
+| Description         | Reference | Data    | FusionCatcher filename |
+|:--------------------|:----------|:--------|:-----------------------|
+| Bushman             | | [bushmanlab.org](http://www.bushmanlab.org/links/genelists) | cancer_genes.txt |
+| ONGENE              | [JGG](https://www.sciencedirect.com/science/article/pii/S1673852716302053)| [bioinfo-minzhao.org](http://ongene.bioinfo-minzhao.org) | oncogenes_more.txt |
+| UniProt tumor genes | [NAR](https://academic.oup.com/nar/article/49/D1/D480/6006196) | [uniprot.org](https://www.uniprot.org/downloads) | tumor_genes.txt |
+
+### Germline
+
+| Nirvana label        | Reference | Data    | FusionCatcher filename |
+|:---------------------|:----------|:--------|:-----------------------|
+| 1000 Genomes Project | [PLOS ONE](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0104567) | | 1000genomes.txt |
+| Healthy (strong support) | | | banned.txt |
+| Illumina Body Map 2.0 | | [EBI](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-513)| bodymap2.txt |
+| CACG | [Genomics](https://www.sciencedirect.com/science/article/pii/S0888754312000821) |  | cacg.txt |
+| ConjoinG | [PLOS ONE](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0013284) | | conjoing.txt |
+| Healthy prefrontal cortex | [BMC Medical Genomics](https://bmcmedgenomics.biomedcentral.com/articles/10.1186/s12920-016-0164-y) | [NCBI GEO](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE68719) | cortex.txt |
+| Duplicated Genes Database | [PLOS ONE](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0050653) | [genouest.org](http://dgd.genouest.org/) | dgd.txt |
+| GTEx healthy tissues | | [gtexportal.org](https://gtexportal.org/home/) | gtex.txt |
+| Healthy | | | healthy.txt |
+| Human Protein Atlas | [MCP](https://www.mcponline.org/article/S1535-9476(20)34633-8/fulltext) | [EBI](https://www.ebi.ac.uk/arrayexpress/experiments/E-MTAB-1733/) | hpa.txt |
+| Babiceanu non-cancer tissues | [NAR](https://academic.oup.com/nar/article/44/6/2859/2499453) | [NAR](https://academic.oup.com/nar/article/44/6/2859/2499453#supplementary-data) | non-cancer_tissues.txt |
+| non-tumor cell lines | | | non-tumor_cells.txt |
+| TumorFusions normal | [NAR](https://academic.oup.com/nar/article/46/D1/D1144/4584571) | [NAR](https://academic.oup.com/nar/article/46/D1/D1144/4584571#supplementary-data) | tcga-normal.txt |
+
+### Somatic
+
+| Nirvana label        | Reference | Data    | FusionCatcher filename |
+|:---------------------|:----------|:--------|:-----------------------|
+| Alaei-Mahabadi 18 cancers | [PNAS](https://www.pnas.org/content/113/48/13768.long) |  | 18cancers.txt |
+| DepMap CCLE | | [depmap.org](https://depmap.org/portal/download/) | ccle.txt |
+| CCLE Klijn | [Nature Biotechnology](https://www.nature.com/articles/nbt.3080) | [Nature Biotechnology](https://www.nature.com/articles/nbt.3080#Sec27) | ccle2.txt |
+| CCLE Vellichirammal | [Molecular Therapy Nucleic Acids](https://www.cell.com/molecular-therapy-family/nucleic-acids/fulltext/S2162-2531(20)30058-5) | | ccle3.txt |
+| Cancer Genome Project | | [COSMIC](https://cancer.sanger.ac.uk/cosmic/download) | cgp.txt |
+| ChimerKB 4.0 | [NAR](https://academic.oup.com/nar/article/48/D1/D817/5611671) | [kobic.re.kr](https://www.kobic.re.kr/chimerdb_mirror/download) | chimerdb4kb.txt |
+| ChimerPub 4.0 | [NAR](https://academic.oup.com/nar/article/48/D1/D817/5611671) | [kobic.re.kr](https://www.kobic.re.kr/chimerdb_mirror/download) | chimerdb4pub.txt |
+| ChimerSeq 4.0 | [NAR](https://academic.oup.com/nar/article/48/D1/D817/5611671) | [kobic.re.kr](https://www.kobic.re.kr/chimerdb_mirror/download) | chimerdb4seq.txt |
+| COSMIC | [NAR](https://academic.oup.com/nar/article/47/D1/D941/5146192)| [COSMIC](https://cancer.sanger.ac.uk/cosmic/download) | cosmic.txt |
+| Bao gliomas | [Genome Research](https://genome.cshlp.org/content/24/11/1765) | | gliomas.txt |
+| Known | | | known.txt |
+| Mitelman DB | [ISB-CGC](https://mitelmandatabase.isb-cgc.org) | [Google Cloud](https://storage.cloud.google.com/mitelman-data-files/prod/mitelman_db.zip)| mitelman.txt |
+| TCGA oesophageal carcinomas | [Nature](https://www.nature.com/articles/nature20805) | | oesophagus.txt |
+| OncoKB | [JCO PO](https://ascopubs.org/doi/full/10.1200/PO.17.00011) | [oncokb.org](http://oncokb.org/api/v1/utils/allAnnotatedVariants.txt) | oncokb.txt |
+| Bailey pancreatic cancers | [Nature](https://www.nature.com/articles/nature16965) | [Nature](https://www.nature.com/articles/nature16965#Sec44) | pancreases.txt |
+| PCAWG | [Cell](https://doi.org/10.1016/j.cell.2018.03.042) | [ICGC](https://dcc.icgc.org/releases/PCAWG/transcriptome/fusion) | pcawg.txt |
+| Robinson prostate cancers | [Cell](https://doi.org/10.1016/j.cell.2015.05.001) | [Cell](https://www.cell.com/cell/fulltext/S0092-8674(15)00548-6?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0092867415005486%3Fshowall%3Dtrue#supplementaryMaterial) | prostate_cancer.txt |
+| TCGA | | [cancer.gov](https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga) | tcga.txt |
+| TumorFusions tumor | [NAR](https://academic.oup.com/nar/article/46/D1/D1144/4584571) | [NAR](https://academic.oup.com/nar/article/46/D1/D1144/4584571#supplementary-data) | tcga-cancer.txt |
+| TCGA Gao | [Cell](https://doi.org/10.1016/j.celrep.2018.03.050) | [Cell](https://www.cell.com/cell-reports/fulltext/S2211-1247(18)30395-4?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS2211124718303954%3Fshowall%3Dtrue#supplementaryMaterial) | tcga2.txt |
+| TCGA Vellichirammal | [Molecular Therapy Nucleic Acids](https://www.cell.com/molecular-therapy-family/nucleic-acids/fulltext/S2162-2531(20)30058-5) | | tcga3.txt |
+| TICdb | [BMC Genomics](https://bmcgenomics.biomedcentral.com/articles/10.1186/1471-2164-8-33) | [unav.edu](https://genetica.unav.edu/TICdb/allseqs_TICdb.txt) | ticdb.txt |
+
+## Gene Pair TSV File
+
+Most of the data files in FusionCatcher are two-column TSV files containing the Ensembl gene IDs that are paired together.
+
+### Example
+
+Here are the first few lines of the 1000genomes.txt file:
+
+```
+ENSG00000006210 ENSG00000102962
+ENSG00000006652 ENSG00000181016
+ENSG00000014138 ENSG00000149798
+ENSG00000026297 ENSG00000071242
+ENSG00000035499 ENSG00000155959
+ENSG00000055211 ENSG00000131013
+ENSG00000055332 ENSG00000179915
+ENSG00000062485 ENSG00000257727
+ENSG00000065978 ENSG00000166501
+ENSG00000066044 ENSG00000104980
+```
+
+### Parsing
+
+In Nirvana, we will only import a gene pair if both Ensembl gene IDs are recognized from either our GRCh37 or GRCh38 cache files.
+
+## Gene TSV File
+
+Some of the data files are single-column files containing Ensembl gene IDs. This is commonly used in the data files representing oncogene data sources.
+
+### Example
+
+Here are the first few lines of the oncogenes_more.txt file:
+
+```
+ENSG00000000938
+ENSG00000003402
+ENSG00000005469
+ENSG00000005884
+ENSG00000006128
+ENSG00000006453
+ENSG00000006468
+ENSG00000007350
+ENSG00000008294
+ENSG00000008952
+```
+
+### Parsing
+
+## Known Issues
+
+:::caution Known Issues
+FusionCatcher also uses creates custom Ensembl genes (e.g. `ENSG09000000002`) to handle missing Ensembl genes. Nirvana will ignore these entries since we only include the gene IDs that are currently recognized by Nirvana.
+
+I suspect that these were originally RefSeq genes and if so, we can support those directly in Nirvana in the future.
+:::
+
+## Download URL
+
+[https://sourceforge.net/projects/fusioncatcher/files/data](https://sourceforge.net/projects/fusioncatcher/files/data)
+
+## JSON Output
+
+<JSON />
