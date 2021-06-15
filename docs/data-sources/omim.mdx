@@ -230,3 +230,76 @@ Here is a list of examples about how the description section supposed to be proc
 ## JSON output
 
 <JSON />
+
+## Building the supplementary files
+The first step in builing the OMIM ``.nga`` files is to use the ``SAUtils`` command's subcommand ``downloadOMIM`` to download the necessary data. In order to download the data the user must possess an API key obtained from OMIM. This key has to be set as the environment variable *OmimApiKey*.
+```scss
+export OmimApiKey=<users-omim-api-key>
+dotnet NirvanaBuild/SAUtils.dll downloadOMIM
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.15.0
+---------------------------------------------------------------------------
+
+USAGE: dotnet SAUtils.dll downloadomim [options]
+Download the OMIM gene annotation data
+
+OPTIONS:
+      --uga, -u <path>       universal gene archive path
+      --ref, -r <filename>   input reference filename
+      --out, -o <VALUE>      output directory
+      --help, -h             displays the help menu
+      --version, -v          displays the version
+
+dotnet NirvanaBuild/SAUtils.dll downloadOMIM --ref References/7/Homo_sapiens.GRCh38.Nirvana.dat --uga Cache/27/UGA.tsv.gz --out ExternalDataSources/OMIM/2021-06-14
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.15.0
+---------------------------------------------------------------------------
+
+Unable to resolve gene symbol conflict for CD300H: Ensembl: [ENSG00000284690]: AC079325.2, Entrez Gene: [100130520]: LOC100130520
+Unable to resolve gene symbol conflict for STRIT1: Ensembl: [ENSG00000240045]: DWORF, Entrez Gene: [100507537]: LOC100507537
+Unable to resolve gene symbol conflict for WAKMAR2: Ensembl: [ENSG00000237499]: AL357060.2, Entrez Gene: [100130476]: LOC100130476
+Unable to resolve gene symbol conflict for PERCC1: Ensembl: [ENSG00000284395]: AL032819.3, Entrez Gene: [105371045]: LOC105371045
+Unable to resolve gene symbol conflict for LASTR: Ensembl: [ENSG00000242147]: AL365356.5, Entrez Gene: [105376382]: LOC105376382
+Unable to resolve gene symbol conflict for PRANCR: Ensembl: [ENSG00000257815]: LINC01481, Entrez Gene: [101928062]: LOC101928062
+Unable to resolve gene symbol conflict for THORLNC: Ensembl: [ENSG00000226856]: AC093901.1, Entrez Gene: [100506797]: LOC100506797
+Gene Symbol Update Statistics
+============================================
+# of gene symbols already up-to-date:   15,952
+# of gene symbols updated:              330
+# of genes where both IDs are null:     0
+# of gene symbols not in cache:         148
+# of resolved gene symbol conflicts:    15
+# of unresolved gene symbol conflicts:  7
+
+Time: 00:02:38.2
+```
+Once the download has succeeded, the ``nga`` files can be produced using the ``SAUtils`` command's subcommand ``omim``.
+```scss
+dotnet NirvanaBuild/SAUtils.dll omim
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.15.0
+---------------------------------------------------------------------------
+
+USAGE: dotnet SAUtils.dll omim [options]
+Creates a gene annotation database from OMIM data
+
+OPTIONS:
+      --m2g, -m <VALUE>      MimToGeneSymbol tsv file
+      --json, -j <VALUE>     OMIM entry json file
+      --out, -o <VALUE>      output directory
+      --help, -h             displays the help menu
+      --version, -v          displays the version
+
+
+dotnet NirvanaBuild/SAUtils.dll omim --m2g ExternalDataSources/OMIM/2021-06-14/MimToGeneSymbol.tsv --json ExternalDataSources/OMIM/2021-06-14/MimEntries.json.gz --out SupplementaryDatabase/63/
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.15.0
+---------------------------------------------------------------------------
+
+
+Time: 00:00:04.5
+```
