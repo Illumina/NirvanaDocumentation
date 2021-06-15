@@ -232,7 +232,7 @@ Here is a list of examples about how the description section supposed to be proc
 <JSON />
 
 ## Building the supplementary files
-The first step in builing the OMIM ``.nga`` files is to use the ``SAUtils`` command's subcommand ``downloadOMIM`` to download the necessary data. In order to download the data the user must possess an API key obtained from OMIM. This key has to be set as the environment variabale *OmimApiKey*.
+The first step in builing the OMIM ``.nga`` files is to use the ``SAUtils`` command's subcommand ``downloadOMIM`` to download the necessary data. In order to download the data the user must possess an API key obtained from OMIM. This key has to be set as the environment variable *OmimApiKey*.
 ```scss
 export OmimApiKey=<users-omim-api-key>
 dotnet NirvanaBuild/SAUtils.dll downloadOMIM
@@ -277,7 +277,7 @@ Time: 00:02:38.2
 ```
 Once the download has succeeded, the ``nga`` files can be produced using the ``SAUtils`` command's subcommand ``omim``.
 ```scss
-dotnet NirvanaBuild/SAUtils.dll omim        
+dotnet NirvanaBuild/SAUtils.dll omim
 ---------------------------------------------------------------------------
 SAUtils                                             (c) 2021 Illumina, Inc.
 Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.15.0
