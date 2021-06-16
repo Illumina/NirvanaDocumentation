@@ -26,7 +26,7 @@ In the following section, we discuss which field of the XML was used to extract 
 
 ```xml {3}
 <ClinVarSet>
-   <ReferenceClinVarAssertion>    
+   <ReferenceClinVarAssertion>
        <ClinVarAccession Acc="RCV000000001" Version="2">
 </ClinVarSet>
 ```
@@ -45,9 +45,9 @@ The Acc and Version fields are merged to form the ID (RCV000000001.2)
 ```xml {5}
 <ClinVarSet>
    <ReferenceClinVarAssertion>
-       <ClinicalSignificance DateLastEvaluated="1996-04-01">        
-           <ReviewStatus>no assertion criteria provided</ReviewStatus>              
-           <Description>Pathogenic</Description>            
+       <ClinicalSignificance DateLastEvaluated="1996-04-01">
+           <ReviewStatus>no assertion criteria provided</ReviewStatus>
+           <Description>Pathogenic</Description>
        </ClinicalSignificance>
 </ClinVarSet>
 ```
@@ -56,10 +56,10 @@ The Acc and Version fields are merged to form the ID (RCV000000001.2)
 
 ```xml {4}
 <ClinVarSet>
-   <ReferenceClinVarAssertion>    
-       <ClinicalSignificance DateLastEvaluated="1996-04-01">        
-           <ReviewStatus>no assertion criteria provided</ReviewStatus>             
-           <Description>Pathogenic</Description>            
+   <ReferenceClinVarAssertion>
+       <ClinicalSignificance DateLastEvaluated="1996-04-01">
+           <ReviewStatus>no assertion criteria provided</ReviewStatus>
+           <Description>Pathogenic</Description>
        </ClinicalSignificance>
 </ClinVarSet>
 ```
@@ -86,13 +86,13 @@ We only use the field with Type="Preferred". Multiple phenotypes may be reported
 <GenotypeSet Type="CompoundHeterozygote" ID="424709">
    <MeasureSet Type="Variant" ID="81">
        <Measure Type="single nucleotide variant" ID="15120">
-        <SequenceLocation Assembly="GRCh38" AssemblyAccessionVersion="GCF_000001405.38"  
-          AssemblyStatus="current" Chr="10" Accession="NC_000010.11" start="89222510"  
-          stop="89222510" display_start="89222510" display_stop="89222510" variantLength="1"  
-          positionVCF="89222510" referenceAlleleVCF="C" alternateAlleleVCF="T"/>  
-        <SequenceLocation Assembly="GRCh37" AssemblyAccessionVersion="GCF_000001405.25"  
-          AssemblyStatus="previous" Chr="10" Accession="NC_000010.10" start="90982267"  
-          stop="90982267" display_start="90982267" display_stop="90982267" variantLength="1"  
+        <SequenceLocation Assembly="GRCh38" AssemblyAccessionVersion="GCF_000001405.38"
+          AssemblyStatus="current" Chr="10" Accession="NC_000010.11" start="89222510"
+          stop="89222510" display_start="89222510" display_stop="89222510" variantLength="1"
+          positionVCF="89222510" referenceAlleleVCF="C" alternateAlleleVCF="T"/>
+        <SequenceLocation Assembly="GRCh37" AssemblyAccessionVersion="GCF_000001405.25"
+          AssemblyStatus="previous" Chr="10" Accession="NC_000010.10" start="90982267"
+          stop="90982267" display_start="90982267" display_stop="90982267" variantLength="1"
           positionVCF="90982267" referenceAlleleVCF="C" alternateAlleleVCF="T"/>
        </Measure>
    </MeasureSet>
@@ -185,7 +185,7 @@ Extracting significance(s) may involve parsing multiple fields. Take the followi
 </ClinicalSignificance>
 ```
 
-Given the evidence, we converted the significance field into an array of strings which may be parsed out of the `Descriptions` or `Explanation` fields. 
+Given the evidence, we converted the significance field into an array of strings which may be parsed out of the `Descriptions` or `Explanation` fields.
 
 :::caution Varying Delimiters
 The delimiters in each field may vary. Currently, the delimiters for `Description` are `,` and `/`. The delimiters for `Explanation` are `;` and `/`.
@@ -297,14 +297,98 @@ May have multiple significances listed.
 :::caution Known Issues
 * The XML file contains ~1k more entries (out of 162K) than the VCF file
 * The XML file does not have a field indicating that a record is associated with the reference base - something that was present in VCF
-* The XML file contains entries (e.g. RCV000016645 version=1) which have IUPAC ambiguous bases ("R", "Y", "H", 
+* The XML file contains entries (e.g. RCV000016645 version=1) which have IUPAC ambiguous bases ("R", "Y", "H",
 etc.) as their alternate allele
 :::
 
-## Download URL
+## Download URLs
 
 [ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_00-latest.xml.gz](ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_00-latest.xml.gz)
+
+[https://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/clinvar_variation/ClinVarVariationRelease_00-latest.xml.gz](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/clinvar_variation/ClinVarVariationRelease_00-latest.xml.gz)
 
 ## JSON Output
 
 <JSON />
+
+## Building the supplementary files
+The ClinVar ``.nsa`` for Nirvana can be built using the ``SAUtils`` command's ``clinvar`` subcommand.
+### Source data files
+Two input ``.xml`` files and a ``.version`` file are required in order to build the ``.nsa`` file. You should have the following files:
+
+```scss
+ClinVarFullRelease_2021-06.xml.gz		ClinVarVariationRelease_2021-06.xml.gz
+ClinVarFullRelease_2021-06.xml.gz.version
+```
+The version file is a text file with the follwoing format.
+```scss
+NAME=ClinVar
+VERSION=20210603
+DATE=2021-06-03
+DESCRIPTION=A freely accessible, public archive of reports of the relationships among human variations and phenotypes, with supporting evidence
+```
+The help menu for the utility is as follows:
+```scss
+dotnet SAUtils.dll clinvar
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.15.0
+---------------------------------------------------------------------------
+
+USAGE: dotnet SAUtils.dll clinvar [options]
+Creates a supplementary database with ClinVar annotations
+
+OPTIONS:
+      --ref, -r <VALUE>      compressed reference sequence file
+      --rcv, -i <VALUE>      ClinVar Full release XML file
+      --vcv, -c <VALUE>      ClinVar Variation release XML file
+      --out, -o <VALUE>      output directory
+      --help, -h             displays the help menu
+      --version, -v          displays the version
+
+dotnet SAUtils.dll clinvar
+```
+Here is a sample execution:
+```scss
+dotnet ~/development/Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll clinvar \\
+--ref ~/development/References/7/Homo_sapiens.GRCh38.Nirvana.dat --rcv ClinVarFullRelease_2021-06.xml.gz \\
+--vcv ClinVarVariationRelease_2021-06.xml.gz --out ~/development/SupplementaryDatabase/63/GRCh38
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2020 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.13.0
+---------------------------------------------------------------------------
+
+Found 983417 VCV records
+Chromosome 1 completed in 00:09:46.2
+Chromosome 2 completed in 00:00:16.4
+Chromosome 3 completed in 00:00:06.9
+Unknown vcv id:982521 found in RCV001262095.1
+Chromosome 4 completed in 00:00:03.9
+Chromosome 5 completed in 00:00:07.1
+Chromosome 6 completed in 00:00:05.7
+Chromosome 7 completed in 00:00:06.6
+Unknown vcv id:430873 found in RCV000493222.1
+Chromosome 8 completed in 00:00:04.6
+Chromosome 9 completed in 00:00:06.2
+Chromosome 10 completed in 00:00:05.6
+Chromosome 11 completed in 00:00:10.2
+Chromosome 12 completed in 00:00:06.9
+Chromosome 13 completed in 00:00:05.9
+Chromosome 14 completed in 00:00:04.9
+Chromosome 15 completed in 00:00:05.4
+Chromosome 16 completed in 00:00:08.9
+Chromosome 17 completed in 00:00:13.1
+Chromosome 18 completed in 00:00:02.4
+Chromosome 19 completed in 00:00:07.6
+Chromosome 20 completed in 00:00:02.4
+Chromosome 21 completed in 00:00:01.6
+Chromosome 22 completed in 00:00:02.6
+Chromosome MT completed in 00:00:00.3
+Chromosome X completed in 00:00:05.5
+2 unknown VCVs found in RCVs.
+982521,430873
+Chromosome Y completed in 00:00:00.0
+
+Time: 00:12:08.2
+
+```
