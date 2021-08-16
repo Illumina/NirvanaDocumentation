@@ -9,9 +9,10 @@
 # https://www.microsoft.com/net/download/core
 
 TOP_DIR=~
+TARGET_FRAMEWORK=netcoreapp3.1
 NIRVANA_ROOT=$TOP_DIR/Nirvana
-NIRVANA_BIN=$NIRVANA_ROOT/bin/Release/netcoreapp2.1/Nirvana.dll
-DOWNLOADER_BIN=$NIRVANA_ROOT/bin/Release/netcoreapp2.1/Downloader.dll
+NIRVANA_BIN=$NIRVANA_ROOT/bin/Release/$TARGET_FRAMEWORK/Nirvana.dll
+DOWNLOADER_BIN=$NIRVANA_ROOT/bin/Release/$TARGET_FRAMEWORK/Downloader.dll
 DATA_DIR=$NIRVANA_ROOT/Data
 
 VCF_PATH=HiSeq.10000.vcf.gz
