@@ -1,0 +1,103 @@
+---
+title: Primate AI
+---
+
+import JSON from './primate-ai-json.md'
+
+## Overview
+
+Primate AI is a deep residual neural network for classifying the pathogenicity of missense mutations. The method is described in the publication:
+
+:::info Publication
+Sundaram, L., Gao, H., Padigepati, S.R. et al. Predicting the clinical impact of human mutation with deep neural networks. *Nat Genet* **50**, 1161–1170 (2018). [https://doi.org/10.1038/s41588-018-0167-z](https://doi.org/10.1038/s41588-018-0167-z)
+:::
+
+## TSV File
+
+### Example
+
+```scss
+chr	pos	ref	alt	refAA	altAA	strand_1pos_0neg	trinucleotide_context	UCSC_gene	ExAC_coverage	primateDL_score
+chr10	1046704	C	T	R	C	1	CCG	uc001ift.3	45.49	0.849114537239
+chr10	1046704	C	G	R	G	1	CCG	uc001ift.3	45.49	0.795686006546
+```
+
+### Parsing
+
+From the TSV file, we're mainly interested in the following columns:
+* `chr`
+* `pos`
+* `ref`
+* `alt`
+* `primateDL_score`
+
+We also use `UCSC_gene` to filter out variants that don't have matching gene models in Nirvana.
+
+## Pre-processing
+
+### Converting UCSC IDs
+
+Primate AI only provides UCSC IDs. As an initial pre-processing step, we'll need to convert these to either Entrez or Ensembl Gene IDs.
+
+The following queries are used to download the conversions from UCSC:
+
+```bash
+mysql -h genome-mysql.soe.ucsc.edu -u genome -A -P 3306 \
+      -e "select * FROM knownToLocusLink;" hg19 > ucsc_locuslink.tsv
+
+mysql -h genome-mysql.soe.ucsc.edu -u genome -A -P 3306 \
+      -e "select knownToEnsembl.name, knownToEnsembl.value, ensGene.name2 FROM knownToEnsembl, ensGene WHERE knownToEnsembl.value = ensGene.name;" \
+      hg19 > ucsc_ensembl.tsv
+```
+
+### Running the Pre-Processor
+
+The Primate AI pre-processor can be run as follows:
+
+```bash
+dotnet PrimateAiPreProcessor.dll UGA_develop.tsv PrimateAI_scores_v0.2.tsv.gz \
+     ucsc_locuslink.tsv ucsc_ensembl.tsv PrimateAI_0.2_GRCh37.tsv.gz
+```
+
+During conversion, 0.5% of the UCSC Ids cannot be converted to either Entrez or Ensembl gene IDs. Once the gene IDs have been acquired, we check to see which are available in Nirvana.
+
+The following Entrez Gene IDs were not found:
+
+```scss
+399753
+401980
+504189
+504191
+100293534
+```
+
+Here is the output from the pre-processor:
+
+```scss
+- loading UCSC to Entrez Gene ID dictionary... 73,432 genes loaded.
+- loading UCSC to Ensembl Gene ID dictionary... 76,178 genes loaded.
+- loading UGA gene ID to gene dictionary... 103,277 genes loaded.
+- parsing Primate AI variants... 70,121,953 variants parsed.
+ 
+# variants with unknown gene ID: 27,253 / 70,121,953
+# genes with unknown gene ID:    109 / 19,614
+ 
+# variants not in UGA: 2,036 / 70,121,953
+# genes not in UGA:    6 / 19,614
+```
+
+## Known Issues
+
+:::caution Known Issues
+The Primate AI data set provides raw scores, but the scores are biased according to gene context. I.e. a 0.4 means something different in `TP53` than it does in `KRAS`.
+
+As a result, the Primate AI team provided guidance on aggregating these scores and presenting them as percentiles with respect to the associated gene. According to their research, the 25<sup>th</sup> percentile is a good proxy for benign variants and the 75<sup>th</sup> percentile is a good proxy for pathogenic variants.
+:::
+
+## Download URL
+
+[https://basespace.illumina.com/s/cPgCSmecvhb4](https://basespace.illumina.com/s/cPgCSmecvhb4)
+
+## JSON Output
+
+<JSON />

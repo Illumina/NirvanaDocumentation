@@ -1,0 +1,156 @@
+{
+  "version-3.16/docs": [
+    {
+      "type": "category",
+      "label": "Introduction",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.16/introduction/introduction"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/introduction/dependencies"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/introduction/getting-started"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/introduction/parsing-json"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/introduction/covid19"
+        }
+      ],
+      "collapsible": true,
+      "collapsed": true
+    },
+    {
+      "type": "category",
+      "label": "Data Sources",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/1000Genomes"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/amino-acid-conservation"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/clingen"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/clinvar"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/cosmic"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/dbsnp"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/fusioncatcher"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/gnomad"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/mito-heteroplasmy"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/mitomap"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/omim"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/phylop"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/primate-ai"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/revel"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/splice-ai"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/data-sources/topmed"
+        }
+      ],
+      "collapsible": true,
+      "collapsed": true
+    },
+    {
+      "type": "category",
+      "label": "File Formats",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.16/file-formats/nirvana-json-file-format"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/file-formats/custom-annotations"
+        }
+      ],
+      "collapsible": true,
+      "collapsed": true
+    },
+    {
+      "type": "category",
+      "label": "Core Functionality",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.16/core-functionality/canonical-transcripts"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/core-functionality/gene-fusions"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/core-functionality/mnv-recomposition"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.16/core-functionality/variant-ids"
+        }
+      ],
+      "collapsible": true,
+      "collapsed": true
+    },
+    {
+      "type": "category",
+      "label": "Utilities",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.16/utilities/jasix"
+        }
+      ],
+      "collapsible": true,
+      "collapsed": true
+    }
+  ]
+}
