@@ -214,23 +214,28 @@ We've put together a [new section that discusses how to parse our JSON files](..
 ]
 ```
 
-| Field                        | Type          | Notes |
-|:-----------------------------|:-------------:|:------|
-| genotype                     | string        | |
-| variantFrequencies           | float array   | range: 0 - 1.0. One value per alternate allele |
-| totalDepth                   | integer       | non-negative integer values |
-| genotypeQuality              | integer       | non-negative integer values. Typically maxes out at 99 |
-| copyNumber                   | integer       | non-negative integer values |
-| repeatUnitCounts             | integer array | ExpansionHunter-specific |
-| alleleDepths                 | integer array | non-negative integer values |
-| failedFilter                 | bool          | |
-| splitReadCounts              | integer array | Manta-specific |
-| pairedEndReadCounts          | integer array | Manta-specific |
-| isDeNovo                     | bool          | |
-| diseaseAffectedStatuses      | string array  | ExpansionHunter-specific |
-| artifactAdjustedQualityScore | float         | PEPE-specific. Range: 0 - 100.0 |
-| likelihoodRatioQualityScore  | float         | PEPE-specific. Range: 0 - 100.0 |
-| heteroplasmyPercentile       | float         | range: 0 - 100. 2 decimal places. One value per alternate allele |
+| Field                        | Type          | VCF     | Notes |
+|:-----------------------------|:-------------:|:-------:|:------|
+| genotype                     | string        | GT      | |
+| variantFrequencies           | float array   | VF, AD  | range: 0 - 1.0. One value per alternate allele |
+| totalDepth                   | integer       | DP      | non-negative integer values |
+| genotypeQuality              | integer       | GQ      | non-negative integer values. Typically maxes out at 99 |
+| copyNumber                   | integer       | CN      | non-negative integer values |
+| minorHaplotypeCopyNumber     | integer       | MCN     | non-negative integer values |
+| repeatUnitCounts             | integer array | REPCN   | ExpansionHunter-specific |
+| alleleDepths                 | integer array | AD      | non-negative integer values |
+| failedFilter                 | bool          | FT      | |
+| splitReadCounts              | integer array | SR      | Manta-specific |
+| pairedEndReadCounts          | integer array | PR      | Manta-specific |
+| isDeNovo                     | bool          | DN      | |
+| deNovoQuality                | float         | DQ      | |
+| diseaseAffectedStatuses      | string array  | DST     | ExpansionHunter-specific |
+| artifactAdjustedQualityScore | float         | AQ      | PEPE-specific. Range: 0 - 100.0 |
+| likelihoodRatioQualityScore  | float         | LQ      | PEPE-specific. Range: 0 - 100.0 |
+| lossOfHeterozygosity         | bool          | CN, MCN | |
+| somaticQuality               | float         | SQ      |
+| heteroplasmyPercentile       | float         | VF      | range: 0 - 100. 2 decimal places. One value per alternate allele |
+| binCount                     | integer       | BC      | non-negative integer values |
 
 :::info Empty Samples
 
