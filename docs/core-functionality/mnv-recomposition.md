@@ -210,46 +210,49 @@ Each original variant would be annotated as usual. The difference is that both w
 
 The recomposed variant gets a separate entry where the `isRecomposedVariant` flag is set to true and the `linkedVids` field links to the constituent SNVs:
 
-```json {31-34}
-{
-   "chromosome":"chr1",
-   "position":12861478,
-   "refAllele":"G",
-   "altAlleles":[
-      "A"
-   ],
-   "filters":[
-      "PASS"
-   ],
-   "samples":[
-      {
-         "genotype":"0/0",
-      },
-      {
-         "genotype":"0/0",
-      },
-      {
-         "genotype":"0|1",
-      }
-   ],
-   "variants":[
-      {
-         "vid":"1-12861478-G-A",
-         "chromosome":"chr1",
-         "begin":12861478,
-         "end":12861478,
-         "refAllele":"G",
-         "altAllele":"A",
-         "variantType":"SNV",
-         "isDecomposedVariant":true,
-         "linkedVids":[
-            "1-12861477-TG-CA"
-         ],
-         "hgvsg":"NC_000001.11:g.12861478G>A",
-         "transcripts":[ ... ]
-      }
-   ]
-}
+```json {32-36}
+    {
+      "chromosome": "chr1",
+      "position": 12861477,
+      "refAllele": "TG",
+      "altAlleles": [
+        "CA"
+      ],
+      "filters": [
+        "PASS"
+      ],
+      "cytogeneticBand": "1p36.21",
+      "samples": [
+        {
+          "genotype": "0|0"
+        },
+        {
+          "genotype": "0|0"
+        },
+        {
+          "genotype": "0|1"
+        }
+      ],
+      "variants": [
+        {
+          "vid": "1-12861477-TG-CA",
+          "chromosome": "chr1",
+          "begin": 12861477,
+          "end": 12861478,
+          "refAllele": "TG",
+          "altAllele": "CA",
+          "variantType": "MNV",
+          "isRecomposedVariant": true,
+          "linkedVids": [
+            "1-12861477-T-C",
+            "1-12861478-G-A"
+          ],
+          "hgvsg": "NC_000001.11:g.12861477_12861478inv",
+          "transcripts":[ ... ]
+          ]
+        }
+      ]
+    },
 ```
 
 :::info Recomposed QUAL, FILTER, and GQ
