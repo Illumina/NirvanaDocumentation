@@ -55,7 +55,8 @@ module.exports = {
       type: 'category',
       label: 'Utilities',
       items: [
-        'utilities/jasix'
+        'utilities/jasix',
+		'utilities/sautils'
       ],
     },
   ],

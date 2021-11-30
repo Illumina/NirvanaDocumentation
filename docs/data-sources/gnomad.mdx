@@ -114,6 +114,61 @@ The following strategy will be used when there's a conflict in filter status:
 
 <JSONV />
 
+### Building the supplementary files
+The gnomAD ``.nsa`` for Nirvana can be built using the ``SAUtils`` command's ``gnomad`` subcommand. We will describe building gnomAD version 3.1 here.
+#### Source data files
+Input VCF files (one per chromosome) and a ``.version`` file are required in a folder to build the ``.nsa`` file. For example, my directory contains:
+```scss
+chr10.vcf.bgz  chr22.vcf.bgz
+chr11.vcf.bgz  chr2.vcf.bgz
+chr12.vcf.bgz  chr3.vcf.bgz
+chr13.vcf.bgz  chr4.vcf.bgz
+chr14.vcf.bgz  chr5.vcf.bgz
+chr15.vcf.bgz  chr6.vcf.bgz
+chr16.vcf.bgz  chr7.vcf.bgz
+chr17.vcf.bgz  chr8.vcf.bgz
+chr18.vcf.bgz  chr9.vcf.bgz
+chr19.vcf.bgz  chrM.vcf.bgz
+chr1.vcf.bgz   chrX.vcf.bgz
+chr20.vcf.bgz  chrY.vcf.bgz
+chr21.vcf.bgz  gnomad.r3.1.version
+```
+The version file is a text file with the following content.
+```scss
+NAME=gnomAD
+VERSION=3.1
+DATE=2020-10-29
+DESCRIPTION=Allele frequencies from Genome Aggregation Database (gnomAD)
+```
+The help menu for the utility is as follows:
+```scss
+SAUtils.dll gnomad
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+---------------------------------------------------------------------------
+
+USAGE: dotnet SAUtils.dll gnomad [options]
+Reads provided supplementary data files and populates tsv files
+
+OPTIONS:
+      --ref, -r <VALUE>      compressed reference sequence file
+      --genome, -g <VALUE>   input directory containing VCF (and .version)
+                               files with genomic frequencies
+      --exome, -e <VALUE>    input directory containing VCF (and .version)
+                               files with exomic frequencies
+      --temp, -t <VALUE>     output temp directory for intermediate (per chrom)
+                                NSA files
+      --out, -o <VALUE>      output directory for NSA file
+      --help, -h             displays the help menu
+      --version, -v          displays the version
+```
+Here is a sample execution:
+```scss
+dotnet ~/Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll Gnomad \\
+--ref ~/References/7/Homo_sapiens.GRCh38.Nirvana.dat --genome genomes/ \\
+--out ~/SupplementaryDatabase/63/GRCh38 --temp ~/ExternalDataSources/gnomAD/3.1/GRCh38/temp
+```
 ## LoF Gene Metrics
 
 ### Tab delimited file example
