@@ -56,7 +56,7 @@ module.exports = {
       label: 'Utilities',
       items: [
         'utilities/jasix',
-		'utilities/sautils'
+        'utilities/sautils'
       ],
     },
   ],
