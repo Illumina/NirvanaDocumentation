@@ -136,6 +136,45 @@ Reference: [https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/help.shtml](http
 ### JSON Output
 <ClinGenDosageJson/>
 
+### Building the supplementary files
+The gene dosage sensitivity ``.nga`` for Nirvana can be built using the ``SAUtils`` command's ``DosageSensitivity`` subcommand. The required data file is ``ClinGen_gene_curation_list_{ASSEMBLY}.tsv`` (url provided above) and its associated ``.version`` file.
+```scss
+NAME=ClinGen Dosage Sensitivity Map
+VERSION=20211201
+DATE=2021-12-01
+DESCRIPTION=Dosage sensitivity map from ClinGen (dbVar)
+```
+Here is a sample run:
+```scss
+dotnet Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll DosageSensitivity --out SupplementaryDatabase/64/GRCh37 --tsv ClinGen_gene_curation_list_GRCh37.tsv
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+---------------------------------------------------------------------------
+
+
+Time: 00:00:00.1
+```
+For building the ``.nsi`` files, we use the ``SAUtils`` command's ``DosageMapRegions`` subcommand. The required data file is ``ClinGen_region_curation_list_{ASSEMBLY}.tsv`` (url provided above) and its associated ``.version`` file.
+```scss
+NAME=ClinGen Dosage Sensitivity Map
+VERSION=20211201
+DATE=2021-12-01
+DESCRIPTION=Dosage sensitivity map from ClinGen (dbVar)
+```
+Here is a sample run:
+```scss
+dotnet Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll DosageMapRegions --out SupplementaryDatabase/64/GRCh37 --ref References/7/Homo_sapiens.GRCh37.Nirvana.dat --tsv ClinGen_region_curation_list_GRCh37.tsv
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+---------------------------------------------------------------------------
+
+Writing 505 intervals to database...
+
+Time: 00:00:00.1
+```
+
 ## Gene-Disease Validity
 The ClinGen Gene-Disease Clinical Validity curation process involves evaluating the strength of evidence supporting or refuting a claim that variation in a particular gene causes a particular disease. Nirvana reports these annotations for genes in the genes section of the JSON.
 
@@ -143,7 +182,7 @@ The ClinGen Gene-Disease Clinical Validity curation process involves evaluating 
 Strande NT, Riggs ER, Buchanan AH, et al. **Evaluating the Clinical Validity of Gene-Disease Associations: An Evidence-Based Framework Developed by the Clinical Genome Resource.** *Am J Hum Genet. 2017;100(6):895-906. doi:10.1016/j.ajhg.2017.04.015*
 :::
 ### Source TSV
-The source data comes in a CSV file that we convert to a TSV as follows:
+The source data comes in a CSV file that we convert to a TSV.
 ```scss
 CLINGEN GENE VALIDITY CURATIONS
 FILE CREATED: 2019-05-28
@@ -156,7 +195,7 @@ A2ML1,HGNC:23336,cardiofaciocutaneous syndrome,MONDO_0015280,SOP5,No Reported Ev
 A2ML1,HGNC:23336,Costello syndrome,MONDO_0009026,SOP5,No Reported Evidence,https://search.clinicalgenome.org/kb/gene-validity/ea72ba8d-cf62-44bc-86be-da64e3848eba--2018-06-07T14:34:05,2018-06-07T14:34:05.324Z
 ```
 ### Download URL
-[https://search.clinicalgenome.org/kb/gene-validity.csv](https://search.clinicalgenome.org/kb/gene-validity.csv)
+[https://search.clinicalgenome.org/kb/downloads#section_gene-disease-validity](https://search.clinicalgenome.org/kb/downloads#section_gene-disease-validity)
 
 ### Conflict Resolution
 #### Multiple Classifications
@@ -178,3 +217,25 @@ If the classifications are the same, we should select the latest classification 
 
 ### JSON Output
 <ClinGenGeneValidity/>
+
+### Building the supplementary files
+The gene disease validity ``.nga`` for Nirvana can be built using the ``SAUtils`` command's ``DiseaseValidity`` subcommand. The only required data file is ``Clingen-Gene-Disease-Summary-2021-12-01.tsv`` (url provided above) and its associated ``.version`` file.
+```scss
+NAME=ClinGen disease validity curations
+VERSION=20211201
+DATE=2021-12-01
+DESCRIPTION=Disease validity curations from ClinGen (dbVar)
+```
+Here is a sample run:
+```scss
+dotnet Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll DiseaseValidity --tsv Clingen-Gene-Disease-Summary-2021-12-01.tsv \\
+--uga Cache/27/UGA.tsv.gz --out SupplementaryDatabase/64/GRCh37
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+---------------------------------------------------------------------------
+
+Number of geneIds missing from the cache:0 (0%)
+
+Time: 00:00:00.2
+```
