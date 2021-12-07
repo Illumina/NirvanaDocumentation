@@ -19,7 +19,7 @@
 | clingenGeneValidity | object |                                     |
 | diseaseId           | string | Monarch Disease Ontology ID (MONDO) |
 | disease             | string | disease label                       |
-| classification      | string | see below for possible values       | 
+| classification      | string | see below for possible values       |
 | classificationDate  | string | yyyy-MM-dd                          |
 
 
@@ -31,3 +31,4 @@
 - definitive
 - strong
 - refuted
+- no known disease relationship
