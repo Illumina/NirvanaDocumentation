@@ -4,7 +4,7 @@ title: SAUtils
 
 ## Overview
 
-SAUtils is a utility tool that creates binary supplementary annotation files (*.nsa, *.npd, *.nsi, etc.) from original data files (e.g. VCFs, TSVs, XML, HTML, etc.) for various data sources (e.g. ClinVar, dbSNP, gnomAD, etc.). These binary files can be fed into the Nirvana Annotation engine to provide supplementary annotations in the output.
+SAUtils is a utility tool that creates binary supplementary annotation files (*.nsa, *.gsa, *.npd, *.nsi, etc.) from original data files (e.g. VCFs, TSVs, XML, HTML, etc.) for various data sources (e.g. ClinVar, dbSNP, gnomAD, etc.). These binary files can be fed into the Nirvana Annotation engine to provide supplementary annotations in the output.
 
 ## The SAUtils Menu
 
@@ -13,7 +13,7 @@ SAUtils supports building binary files for many data sources. The help menu list
 dotnet Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll
 ---------------------------------------------------------------------------
 SAUtils                                             (c) 2021 Illumina, Inc.
-Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.18.0
 ---------------------------------------------------------------------------
 
 Utilities focused on supplementary annotation
@@ -30,6 +30,7 @@ COMMAND: AaCon                create AA conservation database
          CosmicFusion         create COSMIC gene fusion database
          CustomGene           create custom gene annotation database
          CustomVar            create custom variant annotation database
+         Dann                 create DANN database
          Dbsnp                create dbSNP database
          Dgv                  create DGV database
          DiseaseValidity      create disease validity database
@@ -41,6 +42,7 @@ COMMAND: AaCon                create AA conservation database
          ExtractMiniXml       extracts mini XML (ClinVar)
          FilterSpliceNetTsv   filter SpliceNet predictions
          FusionCatcher        create FusionCatcher database
+         Gerp                 create GERP conservation database
          GlobalMinor          create global minor allele database
          Gnomad               create gnomAD database
          Gnomad-lcr           create gnomAD low complexity region database
@@ -66,7 +68,7 @@ You can get further detailed help for each sub-command by typing in the subcomma
 dotnet Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll clinvar
 ---------------------------------------------------------------------------
 SAUtils                                             (c) 2021 Illumina, Inc.
-Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.18.0
 ---------------------------------------------------------------------------
 
 USAGE: dotnet SAUtils.dll clinvar [options]
@@ -87,6 +89,7 @@ The format of the binary file SAUtils produce depend on the type of annotation d
 | File Extension  | Description                                               |
 |-----------------|-----------------------------------------------------------|
 | .nsa            | Small variant annotations (e.g. SNV, insertions, deletions, etc.)|
+| .gsa            | Compact variant annotations (e.g. SNV, insertions, deletions, etc.)|
 | .idx            | Index file|
 | .nsi            | Interval annotations (e.g. SV, CNVs, intervals)|
 | .nga            | Gene annotations |
