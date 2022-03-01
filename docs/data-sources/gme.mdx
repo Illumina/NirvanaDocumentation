@@ -1,0 +1,40 @@
+---
+title: GME
+---
+
+import JSON from './gme-json.md'
+
+## Overview
+
+The [Greater Middle East (GME) Variome](http://igm.ucsd.edu/gme/index.php) Project is aimed at generating a coding base reference for the countries found in the Greater Middle East.
+
+:::info Publication
+Scott, E. M., Halees, A., Itan, Y., Spencer, E. G., He, Y., Azab, M. A., Gabriel, S. B., Belkadi, A., Boisson, B., Abel, L., Clark, A. G., Greater Middle East Variome Consortium, Alkuraya, F. S., Casanova, J. L., & Gleeson, J. G. (2016). Characterization of Greater Middle Eastern genetic variation for enhanced disease gene discovery. *Nature genetics*, 48(9), 1071–1076. https://doi.org/10.1038/ng.3592
+:::
+
+### TSV Extraction
+```scss
+chrom   pos     ref     alt     AA      filter  FunctionGVS     geneFunction    Gene    GeneID  SIFT_pred       GERP++  AF      GME_GC  GME_AC  GME_AF  NWA     NEA     AP      Israel  SD      TP      CA      FunctionGVS_new Priority        Polyphen2_HVAR_pred     LRT_pred        MutationTaster_pred     rsid    OMIM_MIM        OMIM_Disease    AA_AC   EA_AC   rsid_link       position_link
+1       69134   A       G       A       VQSRTrancheSNP99.90to100.00     nonsynonymous_SNV       exonic  OR4F5   79501   T       2.31            96:0:5  10,192  0.04950495049504951     4:0:0   59:0:2  12:0:0  0:0:0   6:0:0   9:0:2   13:0:2  nonsynonymous_SNV       MODERATE        B       N       N       none    -       -       none    none    -       http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&org=human&position=chr1%3A69134-69133
+1       69270   A       G       A       PASS    synonymous_SNV  exonic  OR4F5   79501   .       .               93:38:240       518,224 0.6981132075471698      5:5:11  63:30:86        12:5:28 1:0:2   2:2:18  7:3:46  7:2:52  synonymous_SNV  LOW     .       .       .       rs201219564     -       -       none    none    http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?searchType=adhoc_search&type=rs&rs=rs201219564     http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&org=human&position=chr1%3A69270-69269
+1       69428   T       G       T       PASS    nonsynonymous_SNV       exonic  OR4F5   79501   D       0.891           676:44:15       74,1396 0.050340136054421766    43:0:2  313:16:10       88:7:3  6:0:0   44:8:0  102:9:0 102:4:2 nonsynonymous_SNV       MODERATE        D       N       N       rs140739101     -       -       14,3808 313,6535        http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?searchType=adhoc_search&type=rs&rs=rs140739101     http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&org=human&position=chr1%3A69428-69427
+```
+
+#### Parsing
+We parse the GME tsv file and extract the following columns:
+* chrom
+* pos
+* ref
+* alt
+* filter
+* GME_AC
+* GME_AF
+
+
+## GRCh37 liftover
+The data is not available for GRCh38 on GME website. We performed a liftover from GRCh37 to GRCh38 using CrossMap.
+
+## Download URL
+[http://igm.ucsd.edu/gme/download.shtml](http://igm.ucsd.edu/gme/download.shtml)
+
+## JSON output
