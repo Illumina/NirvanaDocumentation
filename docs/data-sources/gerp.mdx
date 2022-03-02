@@ -6,6 +6,8 @@ import JSON from './gerp-json.md'
 
 ## Overview
 GERP identifies constrained elements in multiple alignments by quantifying substitution deficits.
+These deficits represent substitutions that would have occurred if the element were neutral DNA, but did not occur because the element has been under functional constraint (Rejected Substitutions).
+Nirvana uses GERP++ which is based on a significantly faster and more statistically robust maximum likelihood estimation procedure to compute expected rates of evolution.
 
 
 :::info Publication
@@ -49,15 +51,15 @@ From the CSV file, we are interested in columns:
 * `position`
 * `GERP`
 
-## GRCh38 liftover
-
-The data is not available for GRCh38 on GERP website. We performed a lift-over from GRCh37 to GRCh38 using crossmap.
-
 ## Known Issues
 None
 
 ## Download URL
+### GRCh37
 [http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html](http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html)
+
+### GRCh38
+The data is not available for GRCh38 on GERP++ website, and was obtained from [https://personal.broadinstitute.org/konradk/loftee_data/GRCh38/](https://personal.broadinstitute.org/konradk/loftee_data/GRCh38/)
 
 ## JSON Output
 

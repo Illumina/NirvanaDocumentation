@@ -5,7 +5,10 @@ title: DANN
 import JSON from './dann-json.md'
 
 ## Overview
-DANN is a Deep Artificial Neural Network for identifying the genetic variants responsible for diseases.
+DANN uses the same feature set and training data as CADD (Combined Annotation-Dependent Depletion) to train a deep neural network (DNN).
+CADD is an algorithm designed to annotate both coding and non-coding variants, and has been shown to outperform other annotation algorithms.
+DANN improves on CADD (which uses Support Vector Machines (SVMs)) by capturing non-linear relationships by using a deep neural network instead of SVMs.
+DANN achieves about a 19% relative reduction in the error rate and about a 14% relative increase in the area under the curve (AUC) metric over CADD’s SVM methodology.
 
 :::info Publication
 Quang, Daniel, Yifei Chen, and Xiaohui Xie. DANN: a deep learning approach for annotating the pathogenicity of genetic variants. *Bioinformatics* **31.5** 761-763 (2015). [https://doi.org/10.1093/bioinformatics/btu703](https://doi.org/10.1093/bioinformatics/btu703)
