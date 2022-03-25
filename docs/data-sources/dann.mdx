@@ -1,0 +1,52 @@
+---
+title: DANN
+---
+
+import JSON from './dann-json.md'
+
+## Overview
+DANN uses the same feature set and training data as CADD (Combined Annotation-Dependent Depletion) to train a deep neural network (DNN).
+CADD is an algorithm designed to annotate both coding and non-coding variants, and has been shown to outperform other annotation algorithms.
+DANN improves on CADD (which uses Support Vector Machines (SVMs)) by capturing non-linear relationships by using a deep neural network instead of SVMs.
+DANN achieves about a 19% relative reduction in the error rate and about a 14% relative increase in the area under the curve (AUC) metric over CADD’s SVM methodology.
+
+:::info Publication
+Quang, Daniel, Yifei Chen, and Xiaohui Xie. DANN: a deep learning approach for annotating the pathogenicity of genetic variants. *Bioinformatics* **31.5** 761-763 (2015). [https://doi.org/10.1093/bioinformatics/btu703](https://doi.org/10.1093/bioinformatics/btu703)
+:::
+
+## TSV File
+
+### Example
+
+```tsv
+chr     grch37_pos  ref     alt     DANN
+1       10001       T       A       0.16461391399220135
+1       10001       T       C       0.4396994049749739
+1       10001       T       G       0.38108629377072734
+1       10002       A       C       0.36182020272810128
+1       10002       A       G       0.44413258111779291
+1       10002       A       T       0.16812846819989813
+```
+
+### Parsing
+
+From the CSV file, we are interested in all columns:
+* `chr`
+* `grch37_pos`
+* `ref`
+* `alt`
+* `DANN`
+
+## GRCh38 liftover
+
+The data is not available for GRCh38 on DANN website. We performed a liftover from GRCh37 to GRCh38 using crossmap.
+
+## Known Issues
+None
+
+## Download URL
+[https://cbcl.ics.uci.edu/public_data/DANN/](https://cbcl.ics.uci.edu/public_data/DANN/)
+
+## JSON Output
+
+<JSON />
