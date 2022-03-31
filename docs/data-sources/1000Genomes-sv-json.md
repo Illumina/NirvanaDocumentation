@@ -18,19 +18,20 @@
    }
 ],
 ```
-| Field             | Type           | Notes                                                                                                                           |
-|-------------------|----------------|---------------------------------------------------------------------------------------------------------------------------------|
-| chromosome        | string         |  |
-| begin             | integer        |  |
-| end               | integer        |  |
-| variantType       | string         |  |
-| id                | string         |  |
-| allAn             | floating point | allele number for all populations. Non-zero integer.                                                       |
-| allAc             | floating point | allele count for all populations. Integer.                                                                 |
-| allAf             | floating point | allele frequency for all populations. Range: 0 - 1.0                                                       |
-| afrAf             | floating point | allele frequency for the African super population. Range: 0 - 1.0                                          |
-| amrAf             | floating point | allele frequency for the Ad Mixed American super population. Range: 0 - 1.0                                |
-| eurAf             | floating point | allele frequency for the European super population. Range: 0 - 1.0                                         |
-| easAf             | integer        | allele frequency for the East Asian super population. Range: 0 - 1.0                                       |
-| sasAf             | integer        | allele frequency for the South Asian super population. Range: 0 - 1.0                                      |
-| reciprocalOverlap | floating point | range: 0 - 1. |
+
+| Field             | Type           | Notes                                                                       |
+|-------------------|----------------|-----------------------------------------------------------------------------|
+| chromosome        | string         |                                                                             |
+| begin             | integer        |                                                                             |
+| end               | integer        |                                                                             |
+| variantType       | string         |                                                                             |
+| id                | string         |                                                                             |
+| allAn             | integer        | allele number for all populations. Non-zero integer.                        |
+| allAc             | integer        | allele count for all populations. Integer.                                  |
+| allAf             | floating point | allele frequency for all populations. Range: 0 - 1.0                        |
+| afrAf             | floating point | allele frequency for the African super population. Range: 0 - 1.0           |
+| amrAf             | floating point | allele frequency for the Ad Mixed American super population. Range: 0 - 1.0 |
+| eurAf             | floating point | allele frequency for the European super population. Range: 0 - 1.0          |
+| easAf             | floating point | allele frequency for the East Asian super population. Range: 0 - 1.0        |
+| sasAf             | floating point | allele frequency for the South Asian super population. Range: 0 - 1.0       |
+| reciprocalOverlap | floating point | range: 0 - 1.                                                               |
