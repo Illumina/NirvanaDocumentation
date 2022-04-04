@@ -10,6 +10,6 @@
 | Field        | Type  | Notes                                   |
 |--------------|-------|-----------------------------------------|
 | allAc        | int   | GME allele count                        |
-| allAn        | int   | GME allele number.                      |
+| allAn        | int   | GME allele number                       |
 | allAf        | float | GME allele frequency                    |
 | failedFilter | bool  | True if this variant failed any filters |

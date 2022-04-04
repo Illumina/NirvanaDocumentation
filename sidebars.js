@@ -30,7 +30,8 @@ module.exports = {
         'data-sources/primate-ai',
         'data-sources/revel',
         'data-sources/splice-ai',
-        'data-sources/topmed'
+        'data-sources/topmed',
+        'data-sources/gme'
       ],
     },
     {
