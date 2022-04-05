@@ -13,9 +13,10 @@ nssv15777856	gnomAD-SV_v2.1_CNV_10_564_alt_1	copy number variation	1		1	GRCh38.p
 ```
 
 #### Structural Variant Type Mapping
-The source files represented the structural variants with varying names, following mapping was used to bring them to the Nirvana standard.
+The source files represented the structural variants with keys using various naming conventions.
+In the Nirvana JSON output, these keys will be mapped according to the following. 
 
-| Nirvana Json SV Type Key | GRCh37 Source SV Type Key | GRCh38 Source SV Type Key |
+| Nirvana JSON SV Type Key | GRCh37 Source SV Type Key | GRCh38 Source SV Type Key |
 |--------------------------|---------------------------|---------------------------|
 | copy_number_variation    |                           | copy number variation     |
 | deletion                 | DEL, CN=0                 | deletion                  |
@@ -26,6 +27,6 @@ The source files represented the structural variants with varying names, followi
 | mobile_element_insertion | INS:ME:ALU                | alu insertion             |
 | mobile_element_insertion | INS:ME:LINE1              | line1 insertion           |
 | mobile_element_insertion | INS:ME:SVA                | sva insertion             |
+| structural alteration    |                           | sequence alteration       |
 | translocation_breakend   | BND                       |                           |
 | unknown                  | CPX, CTX                  |                           |
-| structural alteration    |                           | sequence alteration       |
