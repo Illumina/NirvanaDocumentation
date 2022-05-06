@@ -16,17 +16,16 @@ nssv15777856	gnomAD-SV_v2.1_CNV_10_564_alt_1	copy number variation	1		1	GRCh38.p
 The source files represented the structural variants with keys using various naming conventions.
 In the Nirvana JSON output, these keys will be mapped according to the following. 
 
-| Nirvana JSON SV Type Key | GRCh37 Source SV Type Key | GRCh38 Source SV Type Key |
-|--------------------------|---------------------------|---------------------------|
-| copy_number_variation    |                           | copy number variation     |
-| deletion                 | DEL, CN=0                 | deletion                  |
-| duplication              | DUP                       | duplication               |
-| insertion                | INS                       | insertion                 |
-| inversion                | INV                       | inversion                 |
-| mobile_element_insertion | INS:ME                    | mobile element insertion  |
-| mobile_element_insertion | INS:ME:ALU                | alu insertion             |
-| mobile_element_insertion | INS:ME:LINE1              | line1 insertion           |
-| mobile_element_insertion | INS:ME:SVA                | sva insertion             |
-| structural alteration    |                           | sequence alteration       |
-| translocation_breakend   | BND                       |                           |
-| unknown                  | CPX, CTX                  |                           |
+| Nirvana JSON SV Type Key      | GRCh37 Source SV Type Key | GRCh38 Source SV Type Key |
+|-------------------------------|---------------------------|---------------------------|
+| copy_number_variation         |                           | copy number variation     |
+| deletion                      | DEL, CN=0                 | deletion                  |
+| duplication                   | DUP                       | duplication               |
+| insertion                     | INS                       | insertion                 |
+| inversion                     | INV                       | inversion                 |
+| mobile_element_insertion      | INS:ME                    | mobile element insertion  |
+| mobile_element_insertion      | INS:ME:ALU                | alu insertion             |
+| mobile_element_insertion      | INS:ME:LINE1              | line1 insertion           |
+| mobile_element_insertion      | INS:ME:SVA                | sva insertion             |
+| structural alteration         |                           | sequence alteration       |
+| complex_structural_alteration | CPX                       |                           |
