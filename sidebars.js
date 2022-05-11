@@ -33,7 +33,8 @@ module.exports = {
         'data-sources/revel',
         'data-sources/splice-ai',
         'data-sources/topmed',
-        'data-sources/gme'
+        'data-sources/gme',
+        'data-sources/decipher'
       ],
     },
     {
