@@ -4,6 +4,9 @@ title: gnomAD
 
 import JSONV from './gnomad-small-variants-json.md'
 import JSONG from './gnomad-lof-json.md'
+import JSONSV from './gnomad-structural-variants-json.md'
+import SVDATADESCRIPTION from './gnomad-structural-variants-data_description.md'
+
 
 ## Overview
 
@@ -70,18 +73,18 @@ We also extract the following extra fields from gnomAD exome VCF file:
 Using these, we compute the following:
 * Coverage
 * Allele count, Homozygous count, allele number and allele frequencies for:
-  * Global population
-  * African/African Americans
-  * Admixed Americans
-  * Ashkenazi Jews
-  * East Asians
-  * Finnish
-  * Non-Finnish Europeans
-  * South Asian
-  * Others (population not assigned)
-  * Male
-  * Female
-  * Controls
+* Global population
+* African/African Americans
+* Admixed Americans
+* Ashkenazi Jews
+* East Asians
+* Finnish
+* Non-Finnish Europeans
+* South Asian
+* Others (population not assigned)
+* Male
+* Female
+* Controls
 
 :::tip Note
 * Coverage = DP / AN. Frequencies are computed using AC/AN for each population.
@@ -112,7 +115,7 @@ The following strategy will be used when there's a conflict in filter status:
 
 ### JSON output
 
-<JSONV />
+<JSONV/>
 
 ### Building the supplementary files
 The gnomAD ``.nsa`` for Nirvana can be built using the ``SAUtils`` command's ``gnomad`` subcommand. We will describe building gnomAD version 3.1 here.
@@ -281,4 +284,33 @@ FAM231D:
 
 ### JSON output
 
-<JSONG />
+<JSONG/>
+
+## Structural Variants
+:::info Publication
+Collins, R.L., Brand, H., Karczewski, K.J. et al. 2020. A structural variation reference for medical and population genetics. *Nature* **581**, pp.444–451. https://doi.org/10.1038/s41586-020-2287-8
+:::
+
+
+**Note**
+The gnomAD structural variant annotations are in a preview stage at the moment.
+Currently, the annotations do not include translocation breakends.
+Future updates will include a better way of annotating the structural variants.
+
+### Source Files
+<SVDATADESCRIPTION/>
+
+### Download URLs
+#### GRCh37
+The GRCh37 file was downloaded from the original source. Following table gives some essential data metrics:
+
+[https://storage.googleapis.com/gcp-public-data--gnomad/papers/2019-sv/gnomad_v2.1_sv.sites.bed.gz](https://storage.googleapis.com/gcp-public-data--gnomad/papers/2019-sv/gnomad_v2.1_sv.sites.bed.gz)
+
+#### GRCh38
+Note: The data was unavailable from gnomAD 2.1 original source, however the lifted over structural variant dataset was created by dbVar and was obtained from them [https://www.ncbi.nlm.nih.gov/sites/dbvarapp/studies/nstd166/](https://www.ncbi.nlm.nih.gov/sites/dbvarapp/studies/nstd166/).
+
+#### Download URL
+[https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/nstd166.GRCh38.variant_call.tsv.gz](https://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/tsv/nstd166.GRCh38.variant_call.tsv.gz)
+
+### JSON output
+<JSONSV/>

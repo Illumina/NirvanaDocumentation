@@ -22,8 +22,10 @@ module.exports = {
         'data-sources/cosmic',
         'data-sources/dann',
         'data-sources/dbsnp',
+        'data-sources/decipher',
         'data-sources/fusioncatcher',
         'data-sources/gerp',
+        'data-sources/gme',
         'data-sources/gnomad',
         'data-sources/mito-heteroplasmy',
         'data-sources/mitomap',
@@ -32,9 +34,7 @@ module.exports = {
         'data-sources/primate-ai',
         'data-sources/revel',
         'data-sources/splice-ai',
-        'data-sources/topmed',
-        'data-sources/gme',
-        'data-sources/decipher'
+        'data-sources/topmed'
       ],
     },
     {
