@@ -22,6 +22,7 @@ module.exports = {
         'data-sources/cosmic',
         'data-sources/dann',
         'data-sources/dbsnp',
+        'data-sources/decipher',
         'data-sources/fusioncatcher',
         'data-sources/gerp',
         'data-sources/gme',
