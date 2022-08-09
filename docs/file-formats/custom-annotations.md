@@ -4,7 +4,7 @@ title: Custom Annotations
 
 ## Overview
 
-While the team tries to keep data sources up-to-date, you might want to start incorporate new annotations ahead of our update cycle. Another 
+While the team tries to keep data sources up-to-date, you might want to start incorporate new annotations ahead of our update cycle. Another
 common use case involves protected health information (PHI). Custom annotations are a mechanism that enables both use cases.
 
 Here are some examples of how our collaborators use custom annotations:
@@ -35,7 +35,7 @@ a tool knows that this is an allele frequency, it can validate user input to ens
 
 #### Create the Custom Annotation TSV
 
-Imagine that you want to create a basic allele frequency custom annotation for small variants. If we visualized the tab-delimited file 
+Imagine that you want to create a basic allele frequency custom annotation for small variants. If we visualized the tab-delimited file
 (TSV), it would look something like this:
 
 
@@ -49,27 +49,34 @@ Imagine that you want to create a basic allele frequency custom annotation for s
 | #descriptions           | .        | .     | .     | ALL             |
 | #type                   | .        | .     | .     | number          |
 | chr16                   | 23603511 | TGA   | T     | 0.000006579     |
-| chr16                   | 68801894 | G     | A     | 0.000006569     | 
+| chr16                   | 68801894 | G     | A     | 0.000006569     |
 | chr19                   | 11107436 | G     | A     | 0.00003291      |
 
 Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource.tsv).
 
 Let's go over the header and discuss the contents:
 * `title` indicates the name of the JSON key
-* `assembly` indicates that this data is only valid for `GRCh38`
-* `matchVariantsBy` indicates that we should only match the annotations if they are allele-specific
-* `categories` provides hints to downstream tools on how they might want to treat the data. In this case, we indicate that it's an allele 
-frequency.
-* `descriptions` are used in special circumstances to provide more context. Even though column 5 is called `allAf`, it might not be clear to a 
+* `assembly` indicates that this data is only valid for `GRCh38`. Nirvana only accepts `GRCh38` and `GRCh37`.
+* `matchVariantsBy` indicates how annotations should be matched and reported. Allowed values are  `allele` (allele specific small variants), `position` (positional small variants), `sv` (structural variants).
+* `categories` provides hints to downstream tools on how they might want to treat the data. In this case, we indicate that it's an allele frequency. Allowed values are `AlleleCount`, `allelenumber`, `allelefrequency`, `homozygouscount`, `prediction`, `filter`, `identifier`, `description` and `score`. To indicate a missing or unknown category, you can use `.`.
+* `descriptions` are used in special circumstances to provide more context. Even though column 5 is called `allAf`, it might not be clear to a
 downstream tool that this means a global allele frequency using all sub-populations. In this case, `ALL` indicates the intended population.
-* `type` indicates to downstream tools the data type. Since allele frequencies are numbers, we'll write `number` in this column.
+* `type` indicates to downstream tools the data type. Since allele frequencies are numbers, we'll write `number` in this column. Valid values are `bool`, `string` and `number`. This is a required field and missing values are not allowed.
 
 :::caution Reference Base Checking
 Nirvana validates all the reference bases in a custom annotation. If a variant or genomic region is specified that has the wrong reference base, an error will be produced.
 :::
 
+:::caution File Format
+Nirvana expects plain text (or gzipped text) files. Using tools like Excel can add extra characters that can break parsing. We highly recommend creating and modifying these files with plain text editor like Notepad, Notepad++ or Atom.
+:::
+
 :::caution Sorting
 The variants within each chromosome must be sorted by genomic position.
+:::
+
+:::caution Matching annotations
+It is vary important to correctly choose the value of `matchVariantsBy`. When your annotation is allele specific as in gnomAD allele frequencies, we recommend it to be `allele`. If you want all values for a given position (e.g. you want to see all ClinVar entries for a genomic position) use `position`. If your annotations are for structural variants, please use `sv`.
 :::
 
 #### Convert to Nirvana Format
@@ -183,20 +190,20 @@ Building on the previous example, we can add other types of annotations like pre
 Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource2.tsv).
 
 :::tip Placeholders
-You can use a period to denote an empty value (much in the same way as periods are used in VCF files to signify missing values). While 
+You can use a period to denote an empty value (much in the same way as periods are used in VCF files to signify missing values). While
 Nirvana also accepts empty columns in the TSV file, we use them in these examples to promote readability.
 :::
 
 Let's go over what's new in this example:
-* **Column 6** adds a field called `pathogenicity` which uses the `Prediction` category. When using this category, Nirvana will 
-validate to make 
+* **Column 6** adds a field called `pathogenicity` which uses the `Prediction` category. When using this category, Nirvana will
+validate to make
 sure that the field contains either the abbreviations (B, LB, VUS, LP, and P) or the long-form equivalents (e.g. benign or pathogenic).
-* **Column 7** adds a field called `notes` and it doesn't have a category or description. We're just going to use it to add some internal 
+* **Column 7** adds a field called `notes` and it doesn't have a category or description. We're just going to use it to add some internal
 notes.
 
 #### Annotate with Nirvana
 
-Let's use a new VCF file. It includes all the same positions as our custom annotation file, but only the middle variant also matches the 
+Let's use a new VCF file. It includes all the same positions as our custom annotation file, but only the middle variant also matches the
 alternate allele (allele-specific match):
 
 ```scss
@@ -313,7 +320,7 @@ Let's go over what's new in this example:
 * **Column 5** now has a field called `notes`. In essence, it looks exactly like column 7 from our previous example.
 * The main difference is that now one of our custom annotation entries is actually a genomic region. Any variant that overlaps with that region will get a custom annotation.
 
-In the previous example we learned about positional matching vs allele-specific matching. For genomic regions, `#matchVariantsBy=allele` and `#matchVariantsBy=position` produce 
+In the previous example we learned about positional matching vs allele-specific matching. For genomic regions, `#matchVariantsBy=allele` and `#matchVariantsBy=position` produce
 the same result.
 
 #### Annotate with Nirvana
@@ -346,8 +353,8 @@ Let's use the same VCF file as our previous example.
 Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/TestCA3.json.gz).
 
 :::tip Reciprocal & Annotation Overlap
-For all intervals, Nirvana internally calculates two overlaps: a **variant overlap** and an **annotation overlap**. Variant overlap is the percentage of the variant's length that is 
-overlapped. Annotation overlap is the percentage of the annotation's length that is overlap. 
+For all intervals, Nirvana internally calculates two overlaps: a **variant overlap** and an **annotation overlap**. Variant overlap is the percentage of the variant's length that is
+overlapped. Annotation overlap is the percentage of the annotation's length that is overlap.
 
 **Reciprocal overlap** is the minimum of those two overlaps. Given that the annotation is 50 Mbp and the deletion is one 1 bp, both overlaps will be pretty close to 0.
 :::
@@ -376,7 +383,7 @@ We will also see this annotation for the other variant on chr16:
 ```
 
 :::tip Targeting Structural Variants
-Often we use genomic regions to represent other known CNVs and SVs in the genome. In this use case, we usually don't want to match these regions to other small variants. To 
+Often we use genomic regions to represent other known CNVs and SVs in the genome. In this use case, we usually don't want to match these regions to other small variants. To
 force Nirvana to match regions only to other SVs, use the `#matchVariantsBy=sv` option in the header.
 :::
 
@@ -486,7 +493,7 @@ Further down the JSON file, we find the annotated translocation breakend:
 
 #### Create the Custom Annotation TSV
 
-Previously we looked at examples that either had small variants or genomic regions, however, sometimes we would like to add custom gene annotations. The gene custom annotation file format 
+Previously we looked at examples that either had small variants or genomic regions, however, sometimes we would like to add custom gene annotations. The gene custom annotation file format
 looks slightly different:
 
 | Col 1                   | Col 2           | Col 3                                              | Col 4    |
@@ -505,12 +512,12 @@ Let's go over what's in this example:
 * **Column 2** has the `geneId` field. This can be either an **Entrez Gene ID** or an **Ensembl ID**.
 
 :::caution Gene Symbols
-Gene symbols are always in flux and are being updated on a daily basis at the NCBI and at HGNC. Due to this, Nirvana uses the `geneId` to match genes rather than the gene symbol. However, to 
+Gene symbols are always in flux and are being updated on a daily basis at the NCBI and at HGNC. Due to this, Nirvana uses the `geneId` to match genes rather than the gene symbol. However, to
 make the custom annotation files easier to read, we've included the `geneSymbol` column as well.
 :::
 
 :::caution Unknown Gene IDs
-When Nirvana parses the gene custom annotation file, it will note any gene IDs that are currently not recognized in Nirvana. In such a case, Nirvana will display an error showing all the 
+When Nirvana parses the gene custom annotation file, it will note any gene IDs that are currently not recognized in Nirvana. In such a case, Nirvana will display an error showing all the
 unrecognized gene IDs.
 :::
 
@@ -572,10 +579,10 @@ For the title, you can provide any string that hasn't already been used. The tit
 Make sure that the title does not conflict with other keys in the JSON file.
 :::
 
-For small variants, you can't provide a title that conflicts with other keys in the variant object. Some examples of this would be 
+For small variants, you can't provide a title that conflicts with other keys in the variant object. Some examples of this would be
 `vid`, `chromosome`, `transcripts`, etc.. The title should also not conflict with other data source keys like `clinvar` or `gnomad`.
 
-For structural variants, you can't provide a title that conflicts with other keys in the position object. Some examples of this would be 
+For structural variants, you can't provide a title that conflicts with other keys in the position object. Some examples of this would be
 `chromosome`, `svLength`, `cytogeneticBand`, etc. The title should also not conflict with other data source keys like `clingen` or `dgv`.
 
 :::caution
@@ -595,12 +602,12 @@ The matching criteria instructs how Nirvana should match a VCF variant to the cu
 The following matching criteria can be specified:
 * `allele` - use this when you only want allele-specific matches. This is commonly the case when using allele frequency data sources like `gnomAD`
 * `position` - use this when you want positional matches. This is commonly used with disease phenotype data sources like `ClinVar`
-* `sv` - use this when you want to match to all other overlapping SVs. This use case arose when we were adding custom annotations for baseline 
+* `sv` - use this when you want to match to all other overlapping SVs. This use case arose when we were adding custom annotations for baseline
 copy number intervals along the genome.
 
 ### Categories
 
-Categories are not used by Nirvana, but are often used by downstream tools. Categories provide hints for how those tools should filter or display 
+Categories are not used by Nirvana, but are often used by downstream tools. Categories provide hints for how those tools should filter or display
 the annotation data.
 
 When a category is specified, Nirvana will provide additional validation for those fields. The following table describes each category:
@@ -625,45 +632,45 @@ Descriptions are used to add more context to the categories. For now, descriptio
 
 The following populations were specified in the HapMap project, 1000 Genomes Project, ExAC, and gnomAD.
 
-| Population Code | Super-population Code | Description                                                       | 
+| Population Code | Super-population Code | Description                                                       |
 |:----------------|:----------------------|:------------------------------------------------------------------|
-| ACB             | AFR                   | African Caribbeans in Barbados                                    | 
-| AFR             | AFR                   | African                                                           | 
-| ALL             | ALL                   | All populations                                                   | 
-| AMR             | AMR                   | Ad Mixed American                                                 | 
-| ASJ             |                       | Ashkenazi Jewish                                                  | 
-| ASW             | AFR                   | Americans of African Ancestry in SW USA                           | 
-| BEB             | SAS                   | Bengali from Bangladesh                                           | 
-| CDX             | EAS                   | Chinese Dai in Xishuangbanna, China                               | 
-| CEU             | EUR                   | Utah Residents (CEPH) with Northern and Western European Ancestry | 
-| CHB             | EAS                   | Han Chinese in Beijing, China                                     | 
-| CHS             | EAS                   | Southern Han Chinese                                              | 
-| CLM             | AMR                   | Colombians from Medellin, Colombia                                | 
-| EAS             | EAS                   | East Asian                                                        | 
-| ESN             | AFR                   | Esan in Nigeria                                                   | 
-| EUR             | EUR                   | European                                                          | 
-| FIN             | EUR                   | Finnish in Finland                                                | 
-| GBR             | EUR                   | British in England and Scotland                                   | 
-| GIH             | SAS                   | Gujarati Indian from Houston, Texas                               | 
-| GWD             | AFR                   | Gambian in Western Divisions in the Gambia                        | 
-| IBS             | EUR                   | Iberian population in Spain                                       | 
-| ITU             | SAS                   | Indian Telugu from the UK                                         | 
-| JPT             | EAS                   | Japanese in Tokyo, Japan                                          | 
-| KHV             | EAS                   | Kinh in Ho Chi Minh City, Vietnam                                 | 
-| LWK             | AFR                   | Luhya in Webuye, Kenya                                            | 
-| MAG             | AFR                   | Mandinka in the Gambia                                            | 
-| MKK             | AFR                   | Maasai in Kinyawa, Kenya                                          | 
-| MSL             | AFR                   | Mende in Sierra Leone                                             | 
-| MXL             | AMR                   | Mexican Ancestry from Los Angeles, USA                            | 
-| NFE             | EUR                   | European (Non-Finnish)                                            | 
-| OTH             | OTH                   | Other                                                             | 
-| PEL             | AMR                   | Peruvians from Lima, Peru                                         | 
-| PJL             | SAS                   | Punjabi from Lahore, Pakistan                                     | 
-| PUR             | AMR                   | Puerto Ricans from Puerto Rico                                    | 
-| SAS             | SAS                   | South Asian                                                       | 
-| STU             | SAS                   | Sri Lankan Tamil from the UK                                      | 
-| TSI             | EUR                   | Toscani in Italia                                                 | 
-| YRI             | AFR                   | Yoruba in Ibadan, Nigeria                                         | 
+| ACB             | AFR                   | African Caribbeans in Barbados                                    |
+| AFR             | AFR                   | African                                                           |
+| ALL             | ALL                   | All populations                                                   |
+| AMR             | AMR                   | Ad Mixed American                                                 |
+| ASJ             |                       | Ashkenazi Jewish                                                  |
+| ASW             | AFR                   | Americans of African Ancestry in SW USA                           |
+| BEB             | SAS                   | Bengali from Bangladesh                                           |
+| CDX             | EAS                   | Chinese Dai in Xishuangbanna, China                               |
+| CEU             | EUR                   | Utah Residents (CEPH) with Northern and Western European Ancestry |
+| CHB             | EAS                   | Han Chinese in Beijing, China                                     |
+| CHS             | EAS                   | Southern Han Chinese                                              |
+| CLM             | AMR                   | Colombians from Medellin, Colombia                                |
+| EAS             | EAS                   | East Asian                                                        |
+| ESN             | AFR                   | Esan in Nigeria                                                   |
+| EUR             | EUR                   | European                                                          |
+| FIN             | EUR                   | Finnish in Finland                                                |
+| GBR             | EUR                   | British in England and Scotland                                   |
+| GIH             | SAS                   | Gujarati Indian from Houston, Texas                               |
+| GWD             | AFR                   | Gambian in Western Divisions in the Gambia                        |
+| IBS             | EUR                   | Iberian population in Spain                                       |
+| ITU             | SAS                   | Indian Telugu from the UK                                         |
+| JPT             | EAS                   | Japanese in Tokyo, Japan                                          |
+| KHV             | EAS                   | Kinh in Ho Chi Minh City, Vietnam                                 |
+| LWK             | AFR                   | Luhya in Webuye, Kenya                                            |
+| MAG             | AFR                   | Mandinka in the Gambia                                            |
+| MKK             | AFR                   | Maasai in Kinyawa, Kenya                                          |
+| MSL             | AFR                   | Mende in Sierra Leone                                             |
+| MXL             | AMR                   | Mexican Ancestry from Los Angeles, USA                            |
+| NFE             | EUR                   | European (Non-Finnish)                                            |
+| OTH             | OTH                   | Other                                                             |
+| PEL             | AMR                   | Peruvians from Lima, Peru                                         |
+| PJL             | SAS                   | Punjabi from Lahore, Pakistan                                     |
+| PUR             | AMR                   | Puerto Ricans from Puerto Rico                                    |
+| SAS             | SAS                   | South Asian                                                       |
+| STU             | SAS                   | Sri Lankan Tamil from the UK                                      |
+| TSI             | EUR                   | Toscani in Italia                                                 |
+| YRI             | AFR                   | Yoruba in Ibadan, Nigeria                                         |
 
 ### Data Types
 
