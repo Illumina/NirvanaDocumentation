@@ -378,9 +378,75 @@ We will also see this annotation for the other variant on chr16:
       "variants": [
 ```
 
-:::tip Targeting Structural Variants
-Often we use genomic regions to represent other known CNVs and SVs in the genome. In this use case, we usually don't want to match these regions to other small variants. To force Nirvana to match regions only to other SVs, use the `#matchVariantsBy=sv` option in the header.
-:::
+### Genomic Regions for Structural Variants Example
+
+#### Create the Custom Annotation TSV
+
+Often we use genomic regions to represent other known CNVs and SVs in the genome. In this use case, we usually don't want to match these regions to other small variants. To force Nirvana to match regions only to other SVs, use the `#matchVariantsBy=sv` option in the header. Here is an example:
+
+| Col 1                   | Col 2    | Col 3 | Col 4 | Col 5 |
+|:------------------------|:---------|:------|:------|:------|
+| #title=MyDataSource     |          |       |       | |
+| #assembly=GRCh38        |          |       |       | |
+| #matchVariantsBy=sv     |          |       |       | |
+| #CHROM                  | POS      | REF   | END   | notes |
+| #categories             | .        | .     | .     | . |
+| #descriptions           | .        | .     | .     | . |
+| #type                   | .        | .     | .     | string |
+| chr16                   | 20000000 | T     | 70000000 | Lots of false positives in this region |
+
+Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource6.tsv).
+
+Let's go over what's new in this example:
+* The main difference is the header field `#matchVariantsBy=sv` which indicates that only structural variants that overlap these genomic regions will receive annotations.
+
+#### Annotate with Nirvana
+
+Let's use a new VCF file. It contains the first variant from the previous file and a structural variant deletion- both of which overlap the given genomic region.
+
+```scss
+##fileformat=VCFv4.1
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
+16	23603511	.	TG	T	.	.	.
+16	68801894	.	G	<DEL>	.	.	END=73683789;SVTYPE=DEL
+```
+Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files/TestCA6.vcf).
+
+#### Investigate the Results
+Note that this time, `MyDataSource` only showed up for the `<DEL>` and not the deletion `16-23603511-TG-T`.
+```json {21-29}
+	{
+	  "chromosome": "16",
+	  "position": 23603511,
+	  "refAllele": "TG",
+	  "altAlleles": [
+	    "T"
+	  ],
+	  "cytogeneticBand": "16p12.2",
+	  "variants": [
+	 ...
+	 ...
+	{
+	  "chromosome": "16",
+	  "position": 68801894,
+	  "svEnd": 73683789,
+	  "refAllele": "G",
+	  "altAlleles": [
+	    "<DEL>"
+	  ],
+	  "cytogeneticBand": "16q22.1-q22.3",
+	  "MyDataSource": [
+	    {
+	      "start": 20000000,
+	      "end": 70000000,
+	      "notes": "Lots of false positives in this region",
+	      "reciprocalOverlap": 0.02396,
+	      "annotationOverlap": 0.02396
+	    }
+	  ],
+	  "variants": [
+
+```
 
 ### Mixing Small Variants and Genomic Regions
 
