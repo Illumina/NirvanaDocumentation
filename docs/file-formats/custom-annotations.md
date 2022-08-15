@@ -31,6 +31,10 @@ a tool knows that this is an allele frequency, it can validate user input to ens
 
 ## Variant File Format
 
+:::caution File Format
+Nirvana expects plain text (or gzipped text) files. Using tools like Excel can add extra characters that can break parsing. We highly recommend creating and modifying these files with plain text editor like Notepad, Notepad++ or Atom.
+:::
+
 ### Basic Allele Frequency Example
 
 #### Create the Custom Annotation TSV
@@ -56,27 +60,19 @@ Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files
 
 Let's go over the header and discuss the contents:
 * `title` indicates the name of the JSON key
-* `assembly` indicates that this data is only valid for `GRCh38`. Nirvana only accepts `GRCh38` and `GRCh37`.
-* `matchVariantsBy` indicates how annotations should be matched and reported. Allowed values are  `allele` (allele specific small variants), `position` (positional small variants), `sv` (structural variants).
-* `categories` provides hints to downstream tools on how they might want to treat the data. In this case, we indicate that it's an allele frequency. Allowed values are `AlleleCount`, `allelenumber`, `allelefrequency`, `homozygouscount`, `prediction`, `filter`, `identifier`, `description` and `score`. To indicate a missing or unknown category, you can use `.`.
+* `assembly` indicates that this data is only valid for `GRCh38`.
+* `matchVariantsBy` indicates how annotations should be matched and reported. In this case annotations will be matched and reported by allele.
+* `categories` provides hints to downstream tools on how they might want to treat the data. In this case, we indicate that it's an allele frequency.
 * `descriptions` are used in special circumstances to provide more context. Even though column 5 is called `allAf`, it might not be clear to a
 downstream tool that this means a global allele frequency using all sub-populations. In this case, `ALL` indicates the intended population.
-* `type` indicates to downstream tools the data type. Since allele frequencies are numbers, we'll write `number` in this column. Valid values are `bool`, `string` and `number`. This is a required field and missing values are not allowed.
+* `type` indicates to downstream tools the data type. Since allele frequencies are numbers, we'll write `number` in this column.
 
 :::caution Reference Base Checking
 Nirvana validates all the reference bases in a custom annotation. If a variant or genomic region is specified that has the wrong reference base, an error will be produced.
 :::
 
-:::caution File Format
-Nirvana expects plain text (or gzipped text) files. Using tools like Excel can add extra characters that can break parsing. We highly recommend creating and modifying these files with plain text editor like Notepad, Notepad++ or Atom.
-:::
-
 :::caution Sorting
 The variants within each chromosome must be sorted by genomic position.
-:::
-
-:::caution Matching annotations
-It is vary important to correctly choose the value of `matchVariantsBy`. When your annotation is allele specific as in gnomAD allele frequencies, we recommend it to be `allele`. If you want all values for a given position (e.g. you want to see all ClinVar entries for a genomic position) use `position`. If your annotations are for structural variants, please use `sv`.
 :::
 
 #### Convert to Nirvana Format
@@ -382,10 +378,75 @@ We will also see this annotation for the other variant on chr16:
       "variants": [
 ```
 
-:::tip Targeting Structural Variants
-Often we use genomic regions to represent other known CNVs and SVs in the genome. In this use case, we usually don't want to match these regions to other small variants. To
-force Nirvana to match regions only to other SVs, use the `#matchVariantsBy=sv` option in the header.
-:::
+### Genomic Regions for Structural Variants Example
+
+#### Create the Custom Annotation TSV
+
+Often we use genomic regions to represent other known CNVs and SVs in the genome. In this use case, we usually don't want to match these regions to other small variants. To force Nirvana to match regions only to other SVs, use the `#matchVariantsBy=sv` option in the header. Here is an example:
+
+| Col 1                   | Col 2    | Col 3 | Col 4 | Col 5 |
+|:------------------------|:---------|:------|:------|:------|
+| #title=MyDataSource     |          |       |       | |
+| #assembly=GRCh38        |          |       |       | |
+| #matchVariantsBy=sv     |          |       |       | |
+| #CHROM                  | POS      | REF   | END   | notes |
+| #categories             | .        | .     | .     | . |
+| #descriptions           | .        | .     | .     | . |
+| #type                   | .        | .     | .     | string |
+| chr16                   | 20000000 | T     | 70000000 | Lots of false positives in this region |
+
+Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource6.tsv).
+
+Let's go over what's new in this example:
+* The main difference is the header field `#matchVariantsBy=sv` which indicates that only structural variants that overlap these genomic regions will receive annotations.
+
+#### Annotate with Nirvana
+
+Let's use a new VCF file. It contains the first variant from the previous file and a structural variant deletion- both of which overlap the given genomic region.
+
+```scss
+##fileformat=VCFv4.1
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO
+16	23603511	.	TG	T	.	.	.
+16	68801894	.	G	<DEL>	.	.	END=73683789;SVTYPE=DEL
+```
+Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files/TestCA6.vcf).
+
+#### Investigate the Results
+Note that this time, `MyDataSource` only showed up for the `<DEL>` and not the deletion `16-23603511-TG-T`.
+```json {21-29}
+	{
+	  "chromosome": "16",
+	  "position": 23603511,
+	  "refAllele": "TG",
+	  "altAlleles": [
+	    "T"
+	  ],
+	  "cytogeneticBand": "16p12.2",
+	  "variants": [
+	 ...
+	 ...
+	{
+	  "chromosome": "16",
+	  "position": 68801894,
+	  "svEnd": 73683789,
+	  "refAllele": "G",
+	  "altAlleles": [
+	    "<DEL>"
+	  ],
+	  "cytogeneticBand": "16q22.1-q22.3",
+	  "MyDataSource": [
+	    {
+	      "start": 20000000,
+	      "end": 70000000,
+	      "notes": "Lots of false positives in this region",
+	      "reciprocalOverlap": 0.02396,
+	      "annotationOverlap": 0.02396
+	    }
+	  ],
+	  "variants": [
+
+```
 
 ### Mixing Small Variants and Genomic Regions
 

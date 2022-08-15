@@ -1,0 +1,8 @@
+#title=MyDataSource
+#assembly=GRCh38
+#matchVariantsBy=sv
+#CHROM	POS	REF	END	notes
+#categories	.	.	.	.
+#descriptions	.	.	.	.
+#type	.	.	.	string
+chr16	20000000	T	70000000	Lots of false positives in this region
