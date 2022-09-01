@@ -312,9 +312,9 @@ etc.) as their alternate allele
 <JSON />
 
 ## Building the supplementary files
-The ClinVar ``.nsa`` for Nirvana can be built using the ``SAUtils`` command's ``clinvar`` subcommand.
+The ClinVar ``.nsa`` and ``.nsi`` for Nirvana can be built using the ``SAUtils`` command's ``clinvar`` subcommand.
 ### Source data files
-Two input ``.xml`` files and a ``.version`` file are required in order to build the ``.nsa`` file. You should have the following files:
+Two input ``.xml`` files and a ``.version`` file are required in order to build the ``.nsa`` and ``.nsi`` file. You should have the following files:
 
 ```scss
 ClinVarFullRelease_2021-06.xml.gz		ClinVarVariationRelease_2021-06.xml.gz
@@ -358,37 +358,43 @@ SAUtils                                             (c) 2020 Illumina, Inc.
 Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.13.0
 ---------------------------------------------------------------------------
 
-Found 983417 VCV records
-Chromosome 1 completed in 00:09:46.2
-Chromosome 2 completed in 00:00:16.4
-Chromosome 3 completed in 00:00:06.9
-Unknown vcv id:982521 found in RCV001262095.1
-Chromosome 4 completed in 00:00:03.9
-Chromosome 5 completed in 00:00:07.1
-Chromosome 6 completed in 00:00:05.7
-Chromosome 7 completed in 00:00:06.6
-Unknown vcv id:430873 found in RCV000493222.1
-Chromosome 8 completed in 00:00:04.6
-Chromosome 9 completed in 00:00:06.2
-Chromosome 10 completed in 00:00:05.6
-Chromosome 11 completed in 00:00:10.2
-Chromosome 12 completed in 00:00:06.9
-Chromosome 13 completed in 00:00:05.9
-Chromosome 14 completed in 00:00:04.9
-Chromosome 15 completed in 00:00:05.4
-Chromosome 16 completed in 00:00:08.9
-Chromosome 17 completed in 00:00:13.1
-Chromosome 18 completed in 00:00:02.4
-Chromosome 19 completed in 00:00:07.6
-Chromosome 20 completed in 00:00:02.4
-Chromosome 21 completed in 00:00:01.6
-Chromosome 22 completed in 00:00:02.6
-Chromosome MT completed in 00:00:00.3
-Chromosome X completed in 00:00:05.5
-2 unknown VCVs found in RCVs.
-982521,430873
+Found 1535677 VCV records
+Unknown vcv id:225946 found in RCV000211201.2
+Unknown vcv id:225946 found in RCV000211253.2
+Unknown vcv id:225946 found in RCV000211375.2
+Unknown vcv id:976117 found in RCV001253316.1
+Unknown vcv id:1321016 found in RCV001776995.2
+3 unknown VCVs found in RCVs.
+225946,976117,1321016
+0 unknown VCVs found in RCVs.
+Chromosome 1 completed in 00:00:15.1
+Chromosome 2 completed in 00:00:20.0
+Chromosome 3 completed in 00:00:09.7
+Chromosome 4 completed in 00:00:05.9
+Chromosome 5 completed in 00:00:09.8
+Chromosome 6 completed in 00:00:08.3
+Chromosome 7 completed in 00:00:08.7
+Chromosome 8 completed in 00:00:06.2
+Chromosome 9 completed in 00:00:08.6
+Chromosome 10 completed in 00:00:07.0
+Chromosome 11 completed in 00:00:11.7
+Chromosome 12 completed in 00:00:08.0
+Chromosome 13 completed in 00:00:06.3
+Chromosome 14 completed in 00:00:06.0
+Chromosome 15 completed in 00:00:06.6
+Chromosome 16 completed in 00:00:10.8
+Chromosome 17 completed in 00:00:13.8
+Chromosome 18 completed in 00:00:02.9
+Chromosome 19 completed in 00:00:08.7
+Chromosome 20 completed in 00:00:03.6
+Chromosome 21 completed in 00:00:02.4
+Chromosome 22 completed in 00:00:03.6
+Chromosome MT completed in 00:00:00.2
+Chromosome X completed in 00:00:07.5
 Chromosome Y completed in 00:00:00.0
+Maximum bp shifted for any variant:2
+Writing 37097 intervals to database...
 
-Time: 00:12:08.2
+Time: 00:13:26.9
 
 ```

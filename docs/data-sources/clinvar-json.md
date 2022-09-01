@@ -1,3 +1,4 @@
+**small variants:**
 ```json
 "clinvar":[
    {
@@ -37,22 +38,60 @@
    }
 ]
 ```
-| Field            | Type         | Notes                     |
-|:-----------------|:------------:|:--------------------------|
-| id               | string       | ClinVar ID                |
-| variationId      | string       | ClinVar VCV ID            |
-| reviewStatus     | string       | see possible values below |
-| alleleOrigins    | string array | see possible values below |
-| refAllele        | string       |                           |
-| altAllele        | string       |                           |
-| phenotypes       | string array |                           |
-| medGenIds        | string array | MedGen IDs                |
-| omimIds          | string array | OMIM IDs                  |
-| orphanetIds      | string array | Orphanet IDs              |
-| significance     | string array | see possible values below |
-| lastUpdatedDate  | string       | yyyy-MM-dd                |
-| pubMedIds        | string array | PubMed IDs                |
+**large variants:**
+```json
+"clinvar":[
+   {
+      "chromosome":"1", 
+      "begin":629025, 
+      "end":8537745, 
+      "variantType":"copy_number_loss", 
+      "id":"RCV000051993.4", 
+      "variationId":"VCV000058242.1", 
+      "reviewStatus":"criteria provided, single submitter", 
+      "alleleOrigins":[
+         "not provided"
+      ], 
+      "phenotypes":[
+         "See cases"
+      ], 
+      "significance":[
+         "pathogenic"
+      ], 
+      "lastUpdatedDate":"2022-04-21", 
+      "pubMedIds":[
+         "21844811"
+      ]
+   },
+   {
+      "id":"VCV000058242.1",
+      "reviewStatus":"criteria provided, single submitter",
+      "significance":[
+         "pathogenic"
+      ],
+      "lastUpdatedDate":"2022-04-21"
+   },
+        ......
+]
+```
+| Field            | Type         | Notes                                                                               |
+|:-----------------|:------------:|:------------------------------------------------------------------------------------|
+| id               | string       | ClinVar ID                                                                          |
+| variationId      | string       | ClinVar VCV ID                                                                      |
+| variantType      | string       | variant type                                                                        |
+| reviewStatus     | string       | see possible values below                                                           |
+| alleleOrigins    | string array | see possible values below                                                           |
+| refAllele        | string       |                                                                                     |
+| altAllele        | string       |                                                                                     |
+| phenotypes       | string array |                                                                                     |
+| medGenIds        | string array | MedGen IDs                                                                          |
+| omimIds          | string array | OMIM IDs                                                                            |
+| orphanetIds      | string array | Orphanet IDs                                                                        |
+| significance     | string array | see possible values below                                                           |
+| lastUpdatedDate  | string       | yyyy-MM-dd                                                                          |
+| pubMedIds        | string array | PubMed IDs                                                                          |
 | isAlleleSpecific | bool         | true when the current variant alternate allele matches the ClinVar alternate allele |
+
 
 **reviewStatus:**
 - no assertion provided
