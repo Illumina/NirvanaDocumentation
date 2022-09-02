@@ -79,7 +79,7 @@ The Acc and Version fields are merged to form the ID (RCV000000001.2)
 ```
 We only use the field with Type="Preferred". Multiple phenotypes may be reported
 
-**Location and Variant Id**
+**Location, Variant Type and Variant Id**
 
 ```xml {3,5-12}
 <ReferenceClinVarAssertion>
@@ -106,6 +106,7 @@ We only use the field with Type="Preferred". Multiple phenotypes may be reported
 - If a required allele is not available, we extract it from the reference sequence.
 - Only variants having a dbSNP id are extracted.
 - Note that a ClinVar accession may have multiple variants associated with it (possible in different locations)
+- VariantType is extracted from the Measure attributes.
 - VariantId is extracted from the MeasureSet attributes.
 
 **MedGen, OMIM, Orphanet IDs**
