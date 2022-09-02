@@ -325,22 +325,22 @@ The ClinVar ``.nsa`` and ``.nsi`` for Nirvana can be built using the ``SAUtils``
 Two input ``.xml`` files and a ``.version`` file are required in order to build the ``.nsa`` and ``.nsi`` file. You should have the following files:
 
 ```scss
-ClinVarFullRelease_2021-06.xml.gz		ClinVarVariationRelease_2021-06.xml.gz
-ClinVarFullRelease_2021-06.xml.gz.version
+ClinVarFullRelease_00-latest.xml.gz		ClinVarVariationRelease_00-latest.xml.gz
+ClinVarFullRelease_00-latest.xml.gz.version
 ```
 The version file is a text file with the follwoing format.
 ```scss
 NAME=ClinVar
-VERSION=20210603
-DATE=2021-06-03
+VERSION=20220505
+DATE=2022-05-05
 DESCRIPTION=A freely accessible, public archive of reports of the relationships among human variations and phenotypes, with supporting evidence
 ```
 The help menu for the utility is as follows:
 ```scss
 dotnet SAUtils.dll clinvar
 ---------------------------------------------------------------------------
-SAUtils                                             (c) 2021 Illumina, Inc.
-Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.15.0
+SAUtils                                             (c) 2022 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.18.1
 ---------------------------------------------------------------------------
 
 USAGE: dotnet SAUtils.dll clinvar [options]
@@ -358,12 +358,12 @@ dotnet SAUtils.dll clinvar
 ```
 Here is a sample execution:
 ```scss
-dotnet ~/development/Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll clinvar \\
---ref ~/development/References/7/Homo_sapiens.GRCh38.Nirvana.dat --rcv ClinVarFullRelease_2021-06.xml.gz \\
---vcv ClinVarVariationRelease_2021-06.xml.gz --out ~/development/SupplementaryDatabase/63/GRCh38
+dotnet ~/development/Nirvana/bin/Debug/net6.0/SAUtils.dll clinvar \\
+--ref ~/development/References/7/Homo_sapiens.GRCh38.Nirvana.dat --rcv ClinVarFullRelease_00-latest.xml.gz \\
+--vcv ClinVarVariationRelease_00-latest.xml.gz --out ~/development/SupplementaryDatabase/63/GRCh38
 ---------------------------------------------------------------------------
-SAUtils                                             (c) 2020 Illumina, Inc.
-Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.13.0
+SAUtils                                             (c) 2022 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.18.1
 ---------------------------------------------------------------------------
 
 Found 1535677 VCV records
