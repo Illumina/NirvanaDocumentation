@@ -106,15 +106,17 @@ We only use the field with Type="Preferred". Multiple phenotypes may be reported
 - If a required allele is not available, we extract it from the reference sequence.
 - Only variants having a dbSNP id are extracted.
 - Note that a ClinVar accession may have multiple variants associated with it (possible in different locations)
+- VariantId is extracted from the MeasureSet attributes.
 - VariantType is extracted from the Measure attributes.
-- Note that we currently don't support the following variant types:
+:::caution unsupported variant types
+We currently don't support the following variant types:
   - Microsatellite
   - protein only
   - fusion
   - Complex
   - Variation
-Translocation
-- VariantId is extracted from the MeasureSet attributes.
+  - Translocation 
+:::
 
 **MedGen, OMIM, Orphanet IDs**
 
