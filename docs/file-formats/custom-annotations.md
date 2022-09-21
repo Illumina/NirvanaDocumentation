@@ -773,3 +773,7 @@ dotnet bin/Release/netcoreapp2.1/SAUtils.dll customgene \
 * the `--uga` argument specifies the Nirvana universal gene archive (UGA) path
 * the `-i` argument specifies the input TSV path
 * the `-o` argument specifies the output directory
+
+:::caution Nirvana_UGA file
+The Nirvana_UGA is not part of the official set of files retrieved using the Downloader utility. But it is available [here](http://annotations.nirvana.illumina.com/ab0cf104f39708eabd07b8cb67e149ba-Cache/27/UGA.tsv.gz).
+:::
