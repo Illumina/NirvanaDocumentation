@@ -139,7 +139,7 @@ From the TSV file, we're mainly interested in the following columns:
 For all the histologies and sites, we replace all the underlines with spaces. `salivary_gland` would become `salivary gland`.
 :::
 
-#### Aggregation
+#### Parsing
 
 To create the gene fusion entries in Nirvana, we perform the following on each row in the TSV file:
 * Group all entries by FUSION_ID
@@ -151,17 +151,9 @@ To create the gene fusion entries in Nirvana, we perform the following on each r
   * Tally the number of samples observed for each site
 * Extract the transcript IDs from the HGVS notation and lookup the associated gene symbols
 
-#### Aggregating Histologies
+#### Aggregating Histologies & Sites
 
-For histologies we want to capture the most specific description available. In the example above, we saw that the primary histology was `carcinoma`, but the 
-subtype was `ductal carcinoma`. In this case we would use the subtype for the annotation.
-
-COSMIC uses `NS` to show that a value is empty. If the subtype is `NS`, we will use the primary histology instead.
-
-#### Aggregating Sites
-
-For sites, we observe that the subtype provides additional description but is still dependent on the primary site value. For example, the primary site might be 
-`skin`, but the subtype is `foot`. Therefore, we will combine the values in the following manner: `skin (foot)`.
+[Aggregating Histologies & Sites](#aggregating-histologies--sites) was previously described in the small variants section.
 
 ### Known Issues
 
@@ -172,7 +164,10 @@ There are some issues with the HGVS RNA notation:
 
 ### Download URL
 
+#### GRCh37
 * [CosmicFusionExport.tsv.gz](https://cancer.sanger.ac.uk/cosmic/file_download/GRCh37/cosmic/v96/CosmicFusionExport.tsv.gz)
+
+#### GRCh38
 * [CosmicFusionExport.tsv.gz](https://cancer.sanger.ac.uk/cosmic/file_download/GRCh38/cosmic/v96/CosmicFusionExport.tsv.gz)
 
 ### JSON Output
