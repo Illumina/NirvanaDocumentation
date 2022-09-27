@@ -1,0 +1,66 @@
+---
+title: GERP
+---
+
+import JSON from './gerp-json.md'
+
+## Overview
+GERP identifies constrained elements in multiple alignments by quantifying substitution deficits.
+These deficits represent substitutions that would have occurred if the element were neutral DNA, but did not occur because the element has been under functional constraint (Rejected Substitutions).
+Nirvana uses GERP++ which is based on a significantly faster and more statistically robust maximum likelihood estimation procedure to compute expected rates of evolution.
+
+
+:::info Publication
+Davydov, Eugene V., et al. "Identifying a high fraction of the human genome to be under selective constraint using GERP++." *PLoS computational biology* **6.12** e1001025 (2010). [https://doi.org/10.1371/journal.pcbi.1001025](https://doi.org/10.1371/journal.pcbi.1001025)
+:::
+
+## Source Files
+
+### Example GRCh37
+GRCh37 file is a TSV format
+```tsv
+chr     position    GERP
+1       12177       0.83
+1       12178       -0.206
+1       12179       -0.492
+1       12180       -1.66
+1       12181       0.83
+1       12182       0.83
+1       12183       -0.417
+1       12184       0.83
+```
+
+### Example GRCh38
+GRCh38 file is a lift-over BED format
+```tsv
+chr     pos_start   pos_end     GERP
+1       12646       12647       0.298
+1       12647       12648       2.63
+1       12648       12649       1.87
+1       12649       12650       0.252
+1       12650       12651       -2.06
+1       12651       12652       2.61
+1       12652       12653       3.97
+```
+
+
+### Parsing
+
+From the CSV file, we are interested in columns:
+* `chr`
+* `position`
+* `GERP`
+
+## Known Issues
+None
+
+## Download URL
+### GRCh37
+[http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html](http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html)
+
+### GRCh38
+The data is not available for GRCh38 on GERP++ website, and was obtained from [https://personal.broadinstitute.org/konradk/loftee_data/GRCh38/](https://personal.broadinstitute.org/konradk/loftee_data/GRCh38/)
+
+## JSON Output
+
+<JSON />
