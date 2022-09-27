@@ -1,0 +1,71 @@
+---
+title: Amino Acid Conservation
+---
+
+import JSON from './amino-acid-conservation-json.md'
+
+## Overview
+
+Amino acid conservation scores are obtained from multiple alignments of vertebrate exomes to the human ones. The score indicate the frequency with which a particular AA is observed in Humans.
+
+:::info Publication
+Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K, Clawson H, Spieth J, Hillier LW, Richards S, et al. Evolutionarily conserved elements in vertebrate, insect, worm, and yeast genomes. **Genome Res. 2005** Aug;15(8):1034-50.  (http://www.genome.org/cgi/doi/10.1101/gr.3715005)
+:::
+
+## FASTA File
+The exon alignments are provided in FASTA files as follows:
+```scss
+>ENST00000641515.2_hg38_1_2 3 0 0 chr1:65565-65573+
+MKK
+>ENST00000641515.2_panTro4_1_2 3 0 0 chrUn_GL393541:146907-146915+
+MKK
+>ENST00000641515.2_gorGor3_1_2 3 0 0
+---
+>ENST00000641515.2_ponAbe2_1_2 3 0 0 chr15:99141417-99141425-
+MKK
+>ENST00000641515.2_hg38_2_2 324 0 0 chr1:69037-70008+
+VTAEAISWNESTSETNNSMVTEFIFLGLSDSQELQTFLFMLFFVFYGGIVFGNLLIVITVVSDSHLHSPMYFLLANLSLIDLSLSSVTAPKMITDFFSQRKVISFKGCLVQIFLLHFFGGSEMVILIAMGFDRYIAICKPLHYTTIMCGNACVGIMAVTWGIGFLHSVSQLAFAVHLLFCGPNEVDSFYCDLPRVIKLACTDTYRLDIMVIANSGVLTVCSFVLLIISYTIILMTIQHRPLDKSSKALSTLTAHITVVLLFFGPCVFIYAWPFPIKSLDKFLAVFYSVITPLLNPIIYTLRNKDMKTAIRQLRKWDAHSSVKFZ
+>ENST00000641515.2_panTro4_2_2 324 0 0 chrUn_GL393541:151333-152303+
+```
+
+## Parsing FASTA
+For each Ensembl transcript, we will need to aggregate all the exons together for each of the 100 species. From there, we should get a full alignment that can be used to determine conservation. For example, for ENST00000641515.2 we have:
+```scss
+Human (hg38) MKKVTAEAISWNESTSETNNSMVTEFIFLGLSDSQELQTFLFMLFFVFYGGIVFGNLLIVITVVSDSHLHSPMYFLLANLSLIDLSLSSVTAPKMITDFFSQRKVISFKGCLVQIFLL
+Chimp        MKKVTAEAISWNESTSETNNSMVTEFIFLGLSDSQELQTFL-MLFFVFYGGIVFGNLLIVRIVVSDSHLHSPMYFLLANLSLIDLSLCSVTAPKMITDFFSQRKVISFKGCLVQIFLL
+Gorilla      ----------------------------------------------------------------------------------------------------------------------
+Orangutan    MKKVTAEAISWNESTSKTNNSVVTEFIFLGLSDSQELQTFLFMLFFVFYGGIVFGNLLIVIIVVSDSHLHSPMYFLLANLSLIDLSLSSVTAPKMITDFFSQRKVISFKGCLVQIFLL
+Gibbon       ----------------------------------------------------------------------------------------------------------------------
+Rhesus       MKKVTEAAISWNESTSETNNSIVTEFIFLGLSDSQELQIFLFVLFLVFYGGIVFGNLLIVITVVSDSHLHSPMYLLLANLSVVDLSLSSVTAPKMITDFFSQRKAISFKGCLVQIFLL
+Macaque      MKKVTEAAISWNESTSETNNSIVTEFIFLGLSDSQELQIFLFVLFLVFYGGIVFGNLLIVITVVSDSHLHSPMYLLLANLSVIDLSLSSVTAPKMITDFFSQRKAISFKGCLVQIFLL
+```
+If we look at position 6, we see that humans have an Alanine (A) residue. This residue is shared by Chimp and Orangutan. However, Rhesus and Macaque have a Glutamic acid (E) residue at that position. Moreover, Gorilla and Gibbon don't even have data for that transcript.
+For position 6, we would say that we have 43% conservation (3/7) since three organisms share the same residue as humans.
+
+## Assigning scores to Nirvana transcripts
+The source FASTA file comes with Ensembl/UCSC transcript ids of the transcripts used for alignments. The Nirvana cache has RefSeq and Ensembl transcripts and our first attempt was to map the given Ensembl/UCSC ids to their equivalent RefSeq/Ensembl ids. This attempt was unsuccessful since UCSC Table Browser provided mapping without version numbers. So we proceeded as follows:
+* Take proteins which have a unique mapping (and hence one set of conservation scores). For ones that mapped to both ChrX and ChrY, we accepted the one from ChrX.
+* A Nirvana transcript having an exact peptide sequence match with a uniquely aligned protein is assigned the corresponding conservation scores.
+
+Unfortunately this left us with a very small number of transcripts having conservation scores.
+
+### GRCh37
+* Source FASTA contained 41957 protein alignments.
+* 38165 proteins had unique scores.
+* 88 aligned proteins existed in Nirvana cache.
+* 118 transcripts had conservation scores.
+
+### GRCh38
+* Source FASTA contained 110024 protein alignments.
+* 88961 proteins had unique scores.
+* 11688 aligned proteins existed in Nirvana cache.
+* 12098 transcripts had conservation scores.
+## Download URL
+
+GRCh37: [http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/alignments/knownGene.exonAA.fa.gz](http://hgdownload.soe.ucsc.edu/goldenPath/hg19/multiz100way/alignments/knownGene.exonAA.fa.gz)
+
+GRCh38: [http://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz100way/alignments/knownGene.exonAA.fa.gz](http://hgdownload.soe.ucsc.edu/goldenPath/hg38/multiz100way/alignments/knownGene.exonAA.fa.gz)
+
+## JSON Output
+Conservation scores are reported in the transcript section. One score is reported for each alt allele
+<JSON />
