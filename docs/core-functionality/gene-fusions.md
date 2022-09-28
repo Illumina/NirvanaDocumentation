@@ -26,7 +26,8 @@ The above explains where the transcripts are fused together, but it doesn't expl
 
 ![TMEM258 & FADS1 gene fusions](TMEM258_FADS1_GeneFusions.svg)
 
-Only two of the combinations yields a fusion contains both the transcription start site (TSS) and the stop codon. In one case, we can even detect an in-frame gene fusion.
+Only two of the combinations yields a fusion containing both the transcription start site (TSS) and the stop codon. In one case, we can even detect an in-frame gene fusion.
+If only unidirectional gene fusions are desired, only these two fusions can be detected. If `enable-bidirectional-fusions` is enabled, all four cases can be identified.
 
 :::info Interpreting translocation breakends
 
@@ -51,7 +52,7 @@ Specifically we can identify gene fusions from the following structural variant 
 ### Criteria
 
 The following criteria must be met for Nirvana to identify a gene fusion:
-1. After accounting for gene orientation and genomic rearrangements, both transcripts must have the same orientation if `enable-bidirectional-fusions` is not set. They can have the same or different orientations if `enable-bidirectional-fusions` is set.
+1. After accounting for gene orientation and genomic rearrangements, both transcripts must have the same orientation if `enable-bidirectional-fusions` is not enabled. They can have the same or different orientations if `enable-bidirectional-fusions` is set.
 1. Both transcripts must be from the same transcript source (i.e. we won't mix and match between RefSeq and Ensembl transcripts)
 1. Both transcripts must belong to different genes
 1. Both transcripts cannot have a coding region that already overlaps without the variant (i.e. in cases where two genes naturally overlap, we don't want to call a gene fusion)
@@ -352,7 +353,7 @@ When a gene fusion is identified, we add the following Sequence Ontology consequ
               ],
 ```
 * If both transcripts have the same orientation, we label it as `unidirectional_gene_fusion`, if they have different orientations, we label it as `bidirectional_gene_fusion`
-* If both unidirectional and bidirectional are detected, we label it as `gene_fusion`.
+* If both unidirectional and bidirectional ones are detected, we label it as `gene_fusion`.
 
 #### Gene Fusions Section
 
