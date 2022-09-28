@@ -27,7 +27,7 @@ function Version() {
     <Layout
       title="Versions"
       permalink="/versions"
-      description="Docusaurus 2 Versions page listing all documented site versions">
+      description="Nirvana Versions page listing all documented site versions">
       <main className="container margin-vert--lg">
         <h1>Nirvana documentation versions</h1>
 
@@ -93,10 +93,10 @@ function Version() {
         )}
         {pastVersions.length > 0 && (
           <div className="margin-bottom--lg">
-            <h3 id="archive">Past versions (Not maintained anymore)</h3>
+            <h3 id="archive">Past versions</h3>
             <p>
               Here you can find documentation for previous versions of
-              Docusaurus.
+              Nirvana.
             </p>
             <table>
               <tbody>
