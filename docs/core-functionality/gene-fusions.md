@@ -26,7 +26,8 @@ The above explains where the transcripts are fused together, but it doesn't expl
 
 ![TMEM258 & FADS1 gene fusions](TMEM258_FADS1_GeneFusions.svg)
 
-Only two of the combinations yields a fusion contains both the transcription start site (TSS) and the stop codon. In one case, we can even detect an in-frame gene fusion.
+Only two of the combinations yields a fusion containing both the transcription start site (TSS) and the stop codon. In one case, we can even detect an in-frame gene fusion.
+If only unidirectional gene fusions are desired, only these two fusions can be detected. If `enable-bidirectional-fusions` is enabled, all four cases can be identified.
 
 :::info Interpreting translocation breakends
 
@@ -51,7 +52,7 @@ Specifically we can identify gene fusions from the following structural variant 
 ### Criteria
 
 The following criteria must be met for Nirvana to identify a gene fusion:
-1. After accounting for gene orientation and genomic rearrangements, both transcripts must have the same orientation
+1. After accounting for gene orientation and genomic rearrangements, both transcripts must have the same orientation if `enable-bidirectional-fusions` is not enabled. They can have the same or different orientations if `enable-bidirectional-fusions` is set.
 1. Both transcripts must be from the same transcript source (i.e. we won't mix and match between RefSeq and Ensembl transcripts)
 1. Both transcripts must belong to different genes
 1. Both transcripts cannot have a coding region that already overlaps without the variant (i.e. in cases where two genes naturally overlap, we don't want to call a gene fusion)
@@ -85,7 +86,7 @@ When you put these calls together, the resulting genomic rearrangement looks som
 
 The annotation for the first variant in the VCF looks like this:
 
-```json {139,141-198,211,213-222}
+```json {139,141-205,218,220-230}
 {
   "chromosome": "chr12",
   "position": 12026270,
@@ -233,7 +234,8 @@ The annotation for the first variant in the VCF looks like this:
               "intron": 2,
               "geneId": "ENSG00000159216",
               "hgnc": "RUNX1",
-              "hgvsr": "ENST00000437180.1(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?"
+              "hgvsr": "ENST00000437180.1(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?",
+              "directionality":"uniDirectional"
             },
             {
               "transcript": "ENST00000300305.3",
@@ -241,7 +243,8 @@ The annotation for the first variant in the VCF looks like this:
               "intron": 1,
               "geneId": "ENSG00000159216",
               "hgnc": "RUNX1",
-              "hgvsr": "ENST00000300305.3(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?"
+              "hgvsr": "ENST00000300305.3(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?",
+              "directionality":"uniDirectional"
             },
             {
               "transcript": "ENST00000482318.1",
@@ -249,7 +252,8 @@ The annotation for the first variant in the VCF looks like this:
               "intron": 2,
               "geneId": "ENSG00000159216",
               "hgnc": "RUNX1",
-              "hgvsr": "ENST00000482318.1(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?"
+              "hgvsr": "ENST00000482318.1(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?",
+              "directionality":"uniDirectional"
             },
             {
               "transcript": "ENST00000486278.2",
@@ -257,7 +261,8 @@ The annotation for the first variant in the VCF looks like this:
               "intron": 2,
               "geneId": "ENSG00000159216",
               "hgnc": "RUNX1",
-              "hgvsr": "ENST00000486278.2(RUNX1):r.?_-15+274::ENST00000396373.4(ETV6):r.1009+3367_?"
+              "hgvsr": "ENST00000486278.2(RUNX1):r.?_-15+274::ENST00000396373.4(ETV6):r.1009+3367_?",
+              "directionality":"uniDirectional"
             },
             {
               "transcript": "ENST00000455571.1",
@@ -265,7 +270,8 @@ The annotation for the first variant in the VCF looks like this:
               "intron": 2,
               "geneId": "ENSG00000159216",
               "hgnc": "RUNX1",
-              "hgvsr": "ENST00000455571.1(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?"
+              "hgvsr": "ENST00000455571.1(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?",
+              "directionality":"uniDirectional"
             },
             {
               "transcript": "ENST00000475045.2",
@@ -273,7 +279,8 @@ The annotation for the first variant in the VCF looks like this:
               "intron": 11,
               "geneId": "ENSG00000159216",
               "hgnc": "RUNX1",
-              "hgvsr": "ENST00000475045.2(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?"
+              "hgvsr": "ENST00000475045.2(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?",
+              "directionality":"uniDirectional"
             },
             {
               "transcript": "ENST00000416754.1",
@@ -281,7 +288,8 @@ The annotation for the first variant in the VCF looks like this:
               "intron": 2,
               "geneId": "ENSG00000159216",
               "hgnc": "RUNX1",
-              "hgvsr": "ENST00000416754.1(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?"
+              "hgvsr": "ENST00000416754.1(RUNX1):r.?_58+274::ENST00000396373.4(ETV6):r.1009+3367_?",
+              "directionality":"uniDirectional"
             }
           ],
           "isCanonical": true,
@@ -305,7 +313,8 @@ The annotation for the first variant in the VCF looks like this:
               "intron": 2,
               "geneId": "861",
               "hgnc": "RUNX1",
-              "hgvsr": "NM_001754.4(RUNX1):r.?_58+274::NM_001987.4(ETV6):r.1009+3367_?"
+              "hgvsr": "NM_001754.4(RUNX1):r.?_58+274::NM_001987.4(ETV6):r.1009+3367_?",
+              "directionality":"uniDirectional"
             }
           ],
           "isCanonical": true,
@@ -340,9 +349,11 @@ When a gene fusion is identified, we add the following Sequence Ontology consequ
 ```json {3}
               "consequence": [
                 "transcript_variant",
-                "unidirectional_gene_fusion"
+                "gene_fusion"
               ],
 ```
+* If both transcripts have the same orientation, we label it as `unidirectional_gene_fusion`, if they have different orientations, we label it as `bidirectional_gene_fusion`
+* If both unidirectional and bidirectional ones are detected, we label it as `gene_fusion`.
 
 #### Gene Fusions Section
 
@@ -355,6 +366,7 @@ For each originating transcript, we report the following for each partner transc
 * transcript bio type (e.g. protein_coding)
 * intron or exon number containing the breakpoint
 * HGVS RNA notation
+* gene fusion directionality
 
 :::tip
 Before Nirvana 3.15, we provided HGVS coding notation. However, HGVS r. notation is more appropriate for these types fusion splicing events (see [HGVS SVD-WG007](https://varnomen.hgvs.org/bg-material/consultation/svd-wg007)).
@@ -368,7 +380,8 @@ Before Nirvana 3.15, we provided HGVS coding notation. However, HGVS r. notation
               "intron": 2,
               "geneId": "861",
               "hgnc": "RUNX1",
-              "hgvsr": "NM_001754.4(RUNX1):r.?_58+274::NM_001987.4(ETV6):r.1009+3367_?"
+              "hgvsr": "NM_001754.4(RUNX1):r.?_58+274::NM_001987.4(ETV6):r.1009+3367_?",
+              "directionality":"uniDirectional"
             }
           ],
 ```
