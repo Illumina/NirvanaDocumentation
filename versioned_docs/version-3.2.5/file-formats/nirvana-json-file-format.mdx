@@ -1,0 +1,416 @@
+---
+title: Nirvana JSON File Format
+---
+
+import ClinVar from '../data-sources/clinvar-json.md'
+import DbSNP from '../data-sources/dbsnp-json.md'
+import GnomadGenomesSmall from '../data-sources/gnomad-genomes-small-variants-json.md'
+import GnomadExomesSmall from '../data-sources/gnomad-exomes-small-variants-json.md'
+import ThousandGenomesSmall from '../data-sources/1000Genomes-snv-json.md'
+import ThousandGenomesSV from '../data-sources/1000Genomes-sv-json.md'
+
+## Overview
+
+### Conventions
+In the Nirvana JSON representation, we try to maximize the amount of useful information that is relayed in the output file. As such, we have several conventions that are useful to know about:
+
+- With boolean key/value pairs, we only output the keys that have a true value. I.e. there's no reason to display `"isStructuralVariant":false` a few million times when annotating a small variant VCF.
+- When transferring data from the VCF file to the JSON (e.g. for allele depths (AD)), it is common to use a period (.) as a placeholder for missing data in the VCF file. Nirvana treats periods like empty or null strings and therefore will not output those entries.
+
+### JSON Layout
+
+![](JSON-Layout.svg)
+
+:::info
+In general, each position corresponds to a row in the original VCF file.
+
+For each gene that was referenced in the transcripts found in the positions section, there will be additional gene-level annotation in the gene section.
+:::
+
+## Header
+```json
+{ 
+   "header":{ 
+      "annotator":"Nirvana 3.2.5",
+      "creationTime":"2022-12-05 16:43:41",
+      "genomeAssembly":"GRCh37",
+      "schemaVersion":6,
+      "dataVersion":"91.26.50",
+      "dataSources":[ 
+         { 
+            "name":"VEP",
+            "version":"91",
+            "description":"RefSeq",
+            "releaseDate":"2018-03-05"
+         },
+         { 
+            "name":"ClinVar",
+            "version":"20190204",
+            "description":"A freely accessible, public archive of reports of the relationships among human variations and phenotypes, with supporting evidence",
+            "releaseDate":"2019-02-04"
+         }
+      ],
+      "samples":[ 
+         "NA12878",
+         "NA12891",
+         "NA12892"
+      ]
+   },
+```
+
+| Field          | Type         | Notes |
+|:---------------|:------------:|:------|
+| annotator      | string       | the name of the annotator and the current version                |
+| creationTime   | string       | yyyy-MM-dd hh:mm:ss |
+| genomeAssembly | string       | see [possible values below](#genome-assemblies) |
+| schemaVersion  | integer      | incremented whenever the core structure of the JSON file introduces breaking changes |
+| dataVersion    | string       | |
+| dataSources    | object array | see [Data Source entry below](#data-source) |
+| samples        | string array | the order of these sample names will be used throughout the JSON file when enumerating samples |
+
+#### Data Source
+
+| Field        | Type         | Notes |
+|:-------------|:------------:|:------|
+| name         | string       | |
+| version      | string       | |
+| description  | string       | optional description of the data source |
+| releaseDate  | string       | yyyy-MM-dd |
+
+#### Genome Assemblies
+- GRCh37
+- GRCh38
+- hg19
+
+## Positions
+```json
+"positions":[ 
+   { 
+      "chromosome":"chr2",
+      "position":48010488,
+      "repeatUnit":"GGCCCC",
+      "refRepeatCount":3,
+      "svEnd":48020488,
+      "refAllele":"G",
+      "altAlleles":[ 
+         "A",
+         "GT"
+      ],
+      "quality":461,
+      "filters":[ 
+         "PASS"
+      ],
+      "ciPos":[ 
+         -170,
+         170
+      ],
+      "ciEnd":[ 
+         -175,
+         175
+      ],
+      "svLength":1000,
+      "strandBias":1.23,
+      "jointSomaticNormalQuality":29,
+      "cytogeneticBand":"2p16.3",
+```
+
+| Field                     | Type          | Variant Type  | Notes |
+|:--------------------------|:-------------:|:-------------:|:------|
+| chromosome                | string        | all           | exactly as displayed in the vcf |
+| postion                   | integer       | all           | exactly as displayed in the vcf (1-based notation). Range: 1 - 250 million |
+| repeatUnit                | string        | STR           | provided by ExpansionHunter |
+| refRepeatCount            | integer       | STR           | provided by ExpansionHunter |
+| svEnd                     | integer       | SV            | |
+| refAllele                 | string        | all           | exactly as displayed in the vcf|
+| altAllele                 | string array  | all           | exactly as displayed in the vcf|
+| quality                   | float         | all           | exactly as displayed in the vcf (Normally an integer, but some variant callers using floating point. Has been observed as high as 500k)|
+| filters                   | string array  | all           | exactly as displayed in the vcf |
+| ciPos                     | integer array | SV            | |
+| ciEnd                     | integer array | SV            | |
+| svLength                  | integer       | SV            | |
+| strandBias                | float         | small variant | provided by GATK (from SB) |
+| jointSomaticNormalQuality | integer       | SV            | provided by the Manta variant caller (SOMATICSCORE) |
+| cytogeneticBand           | string        | all           | e.g. 17p13.1 |
+
+### 1000 Genomes (SV)
+<ThousandGenomesSV />
+
+## Samples
+```json
+"samples":[
+   {
+      "genotype":"0/1",
+      "variantFrequencies":[
+         0.333,
+         0.5
+      ],
+      "totalDepth":57,
+      "genotypeQuality":12,
+      "copyNumber":3,
+      "repeatUnitCounts":[
+         10,
+         20
+      ],
+      "alleleDepths":[
+         10,
+         20,
+         30
+      ],
+      "failedFilter":true,
+      "splitReadCounts":[
+         10,
+         20
+      ],
+      "pairedEndReadCounts":[
+         10,
+         20
+      ],
+      "diseaseAffectedStatuses":[
+         "-"
+      ],
+      "artifactAdjustedQualityScore":89.3,
+      "likelihoodRatioQualityScore":78.2
+   }
+]
+```
+
+| Field                        | Type          | Notes |
+|:-----------------------------|:-------------:|:------|
+| genotype                     | string        | |
+| repeatNumbers                | string        | ExpansionHunter-specific |
+| repeatNumberSpans            | string        | ExpansionHunter-specific |
+| variantFrequencies           | float array   | range: 0 - 1.0. One value per alternate allele |
+| totalDepth                   | integer       | non-negative integer values |
+| genotypeQuality              | integer       | non-negative integer values. Typically maxes out at 99 |
+| copyNumber                   | integer       | non-negative integer values |
+| alleleDepths                 | integer array | non-negative integer values |
+| failedFilter                 | bool          | |
+| splitReadCounts              | integer array | Manta-specific |
+| pairedEndReadCounts          | integer array | Manta-specific |
+| lossOfHeterozygosity         | bool          | |
+| deNovoQuality                | float         | |
+| mpileupAlleleDepths          | int array     | SMN1-specific |
+| silentCarrierHaplotype       | string        | SMN1-specific |
+| paralogousEntrezGeneIds      | int array     | SMN1-specific |
+| paralogousGeneCopyNumbers    | int array     | SMN1-specific |
+| diseaseClassificationSources | string array  | SMN1-specific |
+| diseaseIds                   | string array  | SMN1-specific |
+| diseaseAffectedStatuses      | string array  | SMN1-specific |
+| proteinAlteringVariantPositions | int array     | SMN1-specific |
+| isCompoundHetCompatible      | bool          | SMN1-specific |
+| artifactAdjustedQualityScore | float         | PEPE-specific. Range: 0 - 100.0 |
+| likelihoodRatioQualityScore  | float         | PEPE-specific. Range: 0 - 100.0 |
+
+:::info Empty Samples
+
+If a sample does not contain any entries, we will create a sample object that contains the `isEmpty` key. This ensures that sample ordering is preserved while indicating that a sample is intentionally empty.
+
+```json
+"samples":[ 
+   { 
+      "isEmpty":true
+   }
+],
+```
+
+:::
+
+## Variants
+```json
+"variants":[ 
+   { 
+      "vid":"2:48010488:A",
+      "chromosome":"chr2",
+      "begin":48010488,
+      "end":48010488,
+      "isReferenceMinorAllele":true,
+      "isStructuralVariant":true,
+      "refAllele":"G",
+      "altAllele":"A",
+      "variantType":"SNV",
+      "isDecomposedVariant":true,
+      "isRecomposedVariant":true,
+      "hgvsg":"NC_000002.11:g.48010488G>A",
+      "phylopScore":0.459
+```
+
+| Field                  | Type         | Notes                                                                                                                | 
+|:-----------------------|:------------:|:---------------------------------------------------------------------------------------------------------------------| 
+| vid                    | string       | see [Variant Identifiers](../core-functionality/variant-ids)                                                         | 
+| chromosome             | string       |                                                                                                                      | 
+| begin                  | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          | 
+| end                    | int          | 1-based non-negative integer values. Range: 1 - 250 million                                                          | 
+| isReferenceMinorAllele | bool         | true when this is a reference minor allele                                                                           | 
+| isStructuralVariant    | bool         | true when the variant is a structural variant                                                                        | 
+| refAllele              | string       | parsimonious representation of the reference allele                                                                  | 
+| altAllele              | string       | parsimonious representation of the alternate allele.                                                                 | 
+| variantType            | string       | uses [Sequence Ontology sequence alterations](http://www.sequenceontology.org/browser/current_svn/term/SO:0001059)   | 
+| isDecomposedVariant    | bool         | true when the decomposed variant has been used to create another recomposed variant                                  | 
+| isRecomposedVariant    | bool         | true when the variant is recomposed from two or more decomposed variants                                             | 
+| hgvsg                  | string       | HGVS g. notation                                                                                                     | 
+| phylopScore            | float        | phyloP conservation score. Range: -14.08 to 6.424                                                                    | 
+
+:::info Reference Minor Alleles
+Nirvana supports annotating reference minor alleles. In such a case, `refAllele` will be replaced by the global major allele and `altAllele` will be replaced with the original reference allele.
+:::
+
+:::info Flagging Decomposed & Recomposed Variants
+When two or more decomposed variants are recomposed into an MNV, the decomposed variants will be marked with `"isDecomposedVariant":true`.
+
+Similarly, the recomposed variant will be shown as a new VCF position. This recomposed variant will be flagged with `"isRecomposedVariant":true`.
+:::
+
+### Transcripts
+```json
+"transcripts":[
+   {
+      "transcript":"ENST00000445503.1",
+      "source":"Ensembl",
+      "bioType":"nonsense_mediated_decay",
+      "codons":"gGg/gAg",
+      "aminoAcids":"G/E",
+      "cdnaPos":"268",
+      "cdsPos":"116",
+      "exons":"1/9",
+      "introns":"1/8",
+      "proteinPos":"39",
+      "geneId":"ENSG00000116062",
+      "hgnc":"MSH6",
+      "consequence":[
+         "missense_variant",
+         "NMD_transcript_variant"
+      ],
+      "hgvsc":"ENST00000445503.1:c.116G>A",
+      "hgvsp":"ENSP00000405294.1:p.(Gly39Glu)",
+      "geneFusion":{
+         "exon":6,
+         "intron":5,
+         "fusions":[
+            {
+               "hgvsc":"ETV6{ENST00000396373.4}:c.1_1009+3402_RUNX1{ENST00000437180.1}:c.58+568_1443",
+               "exon":3,
+               "intron":2
+            },
+            {
+               "hgvsc":"ETV6{ENST00000396373.4}:c.1_1009+3402_RUNX1{ENST00000300305.3}:c.58+568_1443",
+               "exon":2,
+               "intron":1
+            }
+         ]
+      },
+      "isCanonical":true,
+      "polyPhenScore":0.95,
+      "polyPhenPrediction":"probably damaging",
+      "proteinId":"ENSP00000405294.1",
+      "siftScore":0.61,
+      "siftPrediction":"tolerated",
+      "completeOverlap":true
+   }
+]
+```
+
+| Field              | Type         | Notes                                                                                                       |
+|:-------------------|:------------:|:------------------------------------------------------------------------------------------------------------|
+| transcript         | string       | transcript ID. e.g. ENST00000445503.1                                                                       |
+| source             | string       | RefSeq / Ensembl                                                                                            |
+| bioType            | string       | descriptions of the [biotypes from Ensembl](https://uswest.ensembl.org/info/genome/genebuild/biotypes.html) |
+| codons             | string       |                                                                                                             |
+| aminoAcids         | string       |                                                                                                             |
+| cdnaPos            | string       |                                                                                                             |
+| cdsPos             | string       |                                                                                                             |
+| exons              | string       | exons affected by the variant                                                                               |
+| introns            | string       | introns affected by the variant                                                                             |
+| proteinPos         | string       |                                                                                                             |
+| geneId             | string       | gene ID. e.g. ENSG00000116062                                                                               |
+| hgnc               | string       | gene symbol. e.g. MSH6                                                                                      |
+| consequence        | string array | [Sequence Ontology Consequences](http://www.sequenceontology.org/index.html)                                |
+| hgvsc              | string       | HGVS coding nomenclature                                                                                    |
+| hgvsp              | string       | HGVS protein nomenclature                                                                                   |
+| geneFusion         | object       | see [Gene Fusions entry below](#gene-fusions)                                                                  |
+| isCanonical        | bool         | true when this is a canonical transcript                                                                    |
+| polyPhenScore      | float        | range: 0 - 1.0                                                                                              |
+| polyPhenPrediction | string       | see [possible values below](#polyphen)                                                                      |
+| proteinId          | string       | protein ID. E.g. ENSP00000405294.1                                                                          |
+| siftScore          | float        | range: 0 - 1.0                                                                                              |
+| siftPrediction     | string       | see [possible values below](#sift)                                                                          |
+| completeOverlap    | bool         | true when this transcript is completely overlapped by the variant                                           |
+
+#### PolyPhen
+
+* probably damaging
+* possibly damaging
+* benign
+* unknown
+
+#### SIFT
+
+* tolerated
+* deleterious
+* tolerated - low confidence
+* deleterious - low confidence
+
+#### Gene Fusions
+
+| Field              | Type         | Notes                                          |
+|:-------------------|:------------:|:-----------------------------------------------|
+| exon               | int          | actual exon where the breakpoint was located   |
+| intron             | int          | actual intron where the breakpoint was located |
+| fusions            | object array | see [Fusion entry below](#fusion)              |
+
+#### Fusion
+
+| Field              | Type         | Notes                                                |
+|:-------------------|:------------:|:-----------------------------------------------------|
+| exon               | int          | actual exon where the other breakpoint was located   |
+| intron             | int          | actual intron where the other breakpoint was located |
+| hgvsc              | string       | HGVS coding nomenclature describing the two genes and the transcripts that are fused along with |
+
+### Regulatory Regions
+```json
+"regulatoryRegions":[ 
+   { 
+      "id":"ENSR00001542175",
+      "type":"promoter",
+      "consequence":[ 
+         "regulatory_region_variant"
+      ]
+   }
+]
+```
+
+| Field             | Type         | Notes | 
+|:------------------|:------------:|-------| 
+| id                | string       |       | 
+| type              | string       | see [possible values below](#regulatory-types) | 
+| consequence       | string array | see [possible values below](#regulatory-consequences) | 
+
+#### Regulatory Types
+
+* CTCF_binding_site
+* enhancer
+* open_chromatin_region
+* promoter
+* promoter_flanking_region
+* TF_binding_site
+
+#### Regulatory Consequences
+
+* regulatory_region_variant
+* regulatory_region_ablation
+* regulatory_region_amplification
+* regulatory_region_truncation
+
+### ClinVar
+<ClinVar />
+
+### 1000 Genomes
+<ThousandGenomesSmall />
+
+### gnomAD (genomes)
+<GnomadGenomesSmall />
+
+### gnomAD (exomes)
+<GnomadExomesSmall />
+
+### dbSNP
+<DbSNP />

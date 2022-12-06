@@ -1,0 +1,72 @@
+{
+  "version-3.2.5/docs": [
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Introduction",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.2.5/introduction/introduction"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.2.5/introduction/dependencies"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.2.5/introduction/getting-started"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Data Sources",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.2.5/data-sources/1000Genomes"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.2.5/data-sources/clinvar"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.2.5/data-sources/dbsnp"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.2.5/data-sources/gnomad"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "File Formats",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.2.5/file-formats/nirvana-json-file-format"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Core Functionality",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-3.2.5/core-functionality/variant-ids"
+        },
+        {
+          "type": "doc",
+          "id": "version-3.2.5/core-functionality/gene-fusions"
+        }
+      ]
+    }
+  ]
+}
