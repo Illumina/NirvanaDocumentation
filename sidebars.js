@@ -17,6 +17,7 @@ module.exports = {
       items: [
         'data-sources/1000Genomes',
         'data-sources/amino-acid-conservation',
+        'data-sources/cancer-hotspots',
         'data-sources/clingen',
         'data-sources/clinvar',
         'data-sources/cosmic',
