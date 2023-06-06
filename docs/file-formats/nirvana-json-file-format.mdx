@@ -381,6 +381,7 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 | siftScore          | float        | range: 0 - 1.0                                                                                              |
 | siftPrediction     | string       | see [possible values below](#sift)                                                                          |
 | completeOverlap    | bool         | true when this transcript is completely overlapped by the variant                                           |
+| cancerHotspots     | string array | see [Cancer Hotspots entry below](#cancer-hotspots)                                                         |
 
 #### PolyPhen
 
@@ -414,6 +415,15 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 | exon               | int          | actual exon where the other breakpoint was located   |
 | intron             | int          | actual intron where the other breakpoint was located |
 | hgvsc              | string       | HGVS coding nomenclature describing the two genes and the transcripts that are fused along with |
+
+#### Cancer Hotspots
+
+| Field                  | Type   | Notes                                                                                                   |
+|:-----------------------|:------:|:--------------------------------------------------------------------------------------------------------|
+| residue                | string |                                                                                                         |
+| numSamples             | int    | how many samples are associated with a variant at the same amino acid position                          |
+| numAltAminoAcidSamples | int    | how many samples are associated with a variant with the same position and alternate amino acid position |
+| qValue                 | double |                                                                                                         |
 
 ### Regulatory Regions
 ```json
