@@ -38,7 +38,7 @@ Alternatively, you can grab the latest binaries from our [GitHub Releases](https
 ```bash
 mkdir -p Nirvana/Data
 cd Nirvana
-unzip Nirvana-3.16.1-dotnet-3.1.0.zip
+unzip Nirvana-3.18.1-net6.0.zip
 ```
 
 ### Docker
@@ -77,7 +77,7 @@ sudo docker run --rm -it -v Data:/scratch annotation/nirvana:3.14 dotnet \
 To download the latest data sources (or update the ones that you already have), use the following command to automate the download from S3:
 
 ```bash
-dotnet bin/Release/netcoreapp3.1/Downloader.dll \
+dotnet bin/Release/net6.0/Downloader.dll \
      --ga GRCh37 \
      -o Data
 ```
@@ -106,8 +106,8 @@ curl -O https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz
 Once you have downloaded the data sets, use the following command to annotate your VCF:
 
 ```bash
-dotnet bin/Release/netcoreapp3.1/Nirvana.dll \
-     -c Data/Cache/GRCh37/Both \
+dotnet bin/Release/net6.0/Nirvana.dll \
+     -c Data/Cache/GRCh37 \
      --sd Data/SupplementaryAnnotation/GRCh37 \
      -r Data/References/Homo_sapiens.GRCh37.Nirvana.dat \
      -i HiSeq.10000.vcf.gz \
@@ -124,27 +124,26 @@ When running Nirvana, performance metrics are shown as it evaluates each chromos
 
 ```bash
 ---------------------------------------------------------------------------
-Nirvana                                             (c) 2021 Illumina, Inc.
-Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.16.1
+Nirvana                                             (c) 2023 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
 ---------------------------------------------------------------------------
 
 Initialization                                         Time     Positions/s
 ---------------------------------------------------------------------------
-Cache                                               00:00:01.2
-SA Position Scan                                    00:00:00.1       55,270
+Cache                                               00:00:00.0
+SA Position Scan                                    00:00:00.0      153,634
 
 Reference                                Preload    Annotation   Variants/s
 ---------------------------------------------------------------------------
-chr1                                    00:00:00.1  00:00:01.5        6,323
+chr1                                    00:00:00.2  00:00:00.8       11,873
 
 Summary                                                Time         Percent
 ---------------------------------------------------------------------------
-Initialization                                      00:00:01.3       23.9 %
-Preload                                             00:00:00.1        2.9 %
-Annotation                                          00:00:01.5       27.2 %
+Initialization                                      00:00:00.0        1.5 %
+Preload                                             00:00:00.2        4.9 %
+Annotation                                          00:00:00.8       18.5 %
 
-Peak memory usage: 1.434 GB
-Time: 00:00:05.2
+Time: 00:00:04.4
 ```
 
 The output will be a JSON file called `HiSeq.10000.json.gz`. Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.json.gz).
