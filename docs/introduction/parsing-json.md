@@ -89,7 +89,7 @@ One of the tools that we really like in the VCF ecosystem is [tabix](https://dx.
 Here's an example of how you might use JASIX:
 
 ```bash
-dotnet bin/Release/netcoreapp2.1/Jasix.dll -i dragen.json.gz -q chr1:942450-942455
+dotnet bin/Release/net6.0/Jasix.dll -i dragen.json.gz -q chr1:942450-942455
 ```
 
 * the `-i` argument specifies the Nirvana JSON path
