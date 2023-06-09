@@ -4,6 +4,7 @@ title: COSMIC
 
 import SmallVariantJSON from './cosmic-json.md'
 import GeneFusionJSON from './cosmic-gene-fusion-json.md'
+import CancerGeneCensusJSON from './cosmic-cancer-gene-census.md'
 
 ## Overview
 
@@ -173,3 +174,50 @@ There are some issues with the HGVS RNA notation:
 ### JSON Output
 
 <GeneFusionJSON />
+
+
+## Cancer Gene Census
+### TSV Extraction
+#### Example
+```scss
+GENE_NAME       CELL_TYPE       PUBMED_PMID     HALLMARK        IMPACT  DESCRIPTION     CELL_LINE
+PRDM16		18496560	role in cancer	oncogene	oncogene
+PRDM16		16015645	role in cancer	fusion	fusion
+```
+#### Parsing
+To extract information about TSGs and oncogenes, the data based on the "role in cancer" attribute is filtered.
+For tumor suppressor genes, rows with the value "TSG" and for oncogenes, rows with the value "oncogene" are filtered.
+Some genes have both "TSG/oncogene" as their role, which indicates that they can act as both.
+
+##### Columns
+Only following columns are needed to gather required roles in cancer:
+* `GENE_NAME`
+* `IMPACT`
+* `HALLMARK`
+
+
+##### Possible Roles in Cancer
+While parsing, only following roles in cancer are found:
+* `fusion`
+* `TSG`
+* `oncogene`
+
+
+##### Parsing Stats
+The file contained following number of instances for each role type
+
+| Role in cancer | Total Instances |
+|:---------------|:---------------:|
+| fusion         |       149       |
+| TSG            |       195       |
+| oncogene       |       181       |
+| Total          |       525       |
+
+### Known Issues
+None
+
+### Download URL
+* [Cancer_Gene_Census_Hallmarks_Of_Cancer.tsv.gz](https://cancer.sanger.ac.uk/cosmic/file_download/GRCh38/cosmic/v97/Cancer_Gene_Census_Hallmarks_Of_Cancer.tsv.gz)
+
+### JSON output
+<CancerGeneCensusJSON/>
