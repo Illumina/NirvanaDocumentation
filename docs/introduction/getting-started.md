@@ -45,11 +45,11 @@ unzip Nirvana-3.18.1-net6.0.zip
 
 You can find us on [Docker Hub](https://hub.docker.com/repository/docker/annotation/nirvana) under `annotation/nirvana`:
 
-:::caution 
+:::caution
 We think Docker is fantastic. However, because our data files are usually accessed through a Docker volume, there is a noticeable performance penalty when running Nirvana in Docker.
 :::
 
-```bash	
+```bash
 mkdir -p Nirvana/Data
 cd Nirvana
 docker pull annotation/nirvana:3.14
@@ -147,3 +147,69 @@ Time: 00:00:04.4
 ```
 
 The output will be a JSON file called `HiSeq.10000.json.gz`. Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.json.gz).
+
+## The Nirvana command line
+The full command line options can be viewed by using the `-h` option or no options
+```bash
+dotnet bin/Release/net6.0/Nirvana.dll
+---------------------------------------------------------------------------
+Nirvana                                             (c) 2023 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
+---------------------------------------------------------------------------
+
+USAGE: dotnet Nirvana.dll -i <vcf path> -c <cache dir> --sd <sa dir> -r <ref path> -o <base output filename>
+Annotates a set of variants
+
+OPTIONS:
+      --cache, -c <directory>
+                             input cache directory
+      --in, -i <path>        input VCF path
+      --out, -o <file path>  output file path
+      --ref, -r <path>       input compressed reference sequence path
+      --sd <directory>       input supplementary annotation directory
+      --sources, -s <VALUE>  annotation data sources to be used (comma
+                               separated list of supported tags)
+      --force-mt             forces to annotate mitochondrial variants
+      --legacy-vids          enables support for legacy VIDs
+      --enable-dq            report DQ from VCF samples field
+      --enable-bidirectional-fusions
+                             enables support for bidirectional gene fusions
+      --str <VALUE>          user provided STR annotation TSV file
+      --vcf-info <VALUE>     additional vcf info field keys (comma separated)
+                               desired in the output
+      --vcf-sample-info <VALUE>
+                             additional vcf format field keys (comma separated)
+                                desired in the output
+      --help, -h             displays the help menu
+      --version, -v          displays the version
+
+Supplementary annotation version: 69, Reference version: 7
+```
+### Specifying annotation sources
+By default, Nirvana will use all available data sources. However, the user can customize the set of sources using the `--sources|-s` option. If an unknown source is specified, a warning message will be printed.
+```bash
+dotnet bin/Release/net6.0/Nirvana.dll \
+     -c Data/Cache/GRCh37 \
+     --sd Data/SupplementaryAnnotation/GRCh37 \
+     -r Data/References/Homo_sapiens.GRCh37.Nirvana.dat \
+     -i HiSeq.10000.vcf.gz \
+     -o HiSeq.10000 \
+	 -s omim,gnomad,ense
+ ---------------------------------------------------------------------------
+ Nirvana                                             (c) 2023 Illumina, Inc.
+ Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
+ ---------------------------------------------------------------------------
+
+ WARNING: Unknown tag in data-sources: ense.
+ Available values are: aminoAcidConservation,primateAI,dbsnp,spliceAI,revel,cosmic,clinvar,gnomad,
+ mitomap,oneKg,gmeVariome,topmed,clingen,decipher,gnomAD-preview,clingenDosageSensitivityMap,
+ gerpScore,dannScore,omim,clingenGeneValidity,phylopScore,lowComplexityRegion,refMinor,
+ heteroplasmy,Ensembl,RefSeq
+
+ Initialization                                         Time     Positions/s
+ ---------------------------------------------------------------------------
+ SA Position Scan                                    00:00:00.3      307,966
+ ....
+ ..
+```
+The list of available values is compiled from the files provided (using `-c` and `--sd` options).
