@@ -5,7 +5,7 @@ title: Getting Started
 Nirvana is written in C# using [.NET Core](https://www.microsoft.com/net/download/core) (an amazing runtime environment that currently runs on Windows, Linux, Mac OS X, and in Docker images). Once .NET Core has been downloaded, all you need to do is grab the source, compile it, and grab the data files.
 
 :::tip
-Nirvana currently uses .NET6.0. Please make sure that you have the most current runtime from the [.NET Core downloads](https://www.microsoft.com/net/download/core) page.
+Nirvana currently uses .NET Core 3.1 or later. Please make sure that you have the most current runtime from the [.NET Core downloads](https://www.microsoft.com/net/download/core) page.
 :::
 
 ## Quick Start
@@ -107,14 +107,14 @@ Once you have downloaded the data sets, use the following command to annotate yo
 
 ```bash
 dotnet bin/Release/net6.0/Nirvana.dll \
-     -c Data/Cache \
+     -c Data/Cache/GRCh37 \
      --sd Data/SupplementaryAnnotation/GRCh37 \
      -r Data/References/Homo_sapiens.GRCh37.Nirvana.dat \
      -i HiSeq.10000.vcf.gz \
      -o HiSeq.10000
 ```
 
-* the `-c` argument specifies the cache directory
+* the `-c` argument specifies the cache prefix
 * the `--sd` argument specifies the supplementary annotation directory
 * the `-r` argument specifies the compressed reference path
 * the `-i` argument specifies the input VCF path

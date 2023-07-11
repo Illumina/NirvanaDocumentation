@@ -1,0 +1,241 @@
+---
+title: ClinGen
+---
+
+import CLINGENJSON from './clingen-json.md'
+import ClinGenDosageJson from './clingen-dosage-json.md'
+import ClinGenGeneValidity from './clingen-gene-validity-json.md'
+
+## Overview
+
+ClinGen is a National Institutes of Health (NIH)-funded resource dedicated to building a central resource that defines the clinical relevance of genes and variants for use in precision medicine and research.
+
+:::info Publication
+Heidi L. Rehm, Ph.D., Jonathan S. Berg, M.D., Ph.D., Lisa D. Brooks, Ph.D., Carlos D. Bustamante, Ph.D., James P. Evans, M.D., Ph.D., Melissa J. Landrum, Ph.D., David H. Ledbetter, Ph.D., Donna R. Maglott, Ph.D., Christa Lese Martin, Ph.D., Robert L. Nussbaum, M.D., Sharon E. Plon, M.D., Ph.D., Erin M. Ramos, Ph.D., Stephen T. Sherry, Ph.D., and Michael S. Watson, Ph.D., for ClinGen. **ClinGen The Clinical Genome Resource.** *N Engl J Med 2015; 372:2235-2242 June 4, 2015 DOI: 10.1056/NEJMsr1406261.*
+:::
+
+## ISCA Regions
+
+### TSV Extraction
+ClinGen contains only copy number variation variants, since the coordinates in ClinGen original file follow the same rule as BED format, the coordinates had to be adjusted to [BEGIN+1, END].
+
+```scss
+#bin    chrom   chromStart      chromEnd        name    score   strand  thickStart      thickEnd        attrCount       attrTags        attrVals
+nsv530705       1       564405  8597804 0       1       copy_number_loss        pathogenic      False   Developmental delay AND/OR other significant developmental or morphological phenotypes
+nsv530706       1       564424  3262790 0       1       copy_number_loss        pathogenic      False   Abnormal facial shape,Abnormality of cardiac morphology,Global developmental delay,Muscular hypotonia   HP:0001252,HP:0001263,HP:0001627,HP:0001999,MedGen:CN001147,MedGen:CN001157,MedGen:CN001482,MedGen:CN001810
+nsv530707       1       564424  7068738 0       1       copy_number_loss        pathogenic      False   Abnormality of cardiac morphology,Cleft upper lip,Failure to thrive,Global developmental delay,Intrauterine growth retardation,Microcephaly,Short stature       HP:0000204,HP:0000252,HP:0001263,HP:0001508,HP:0001511,HP:0001627,HP:0004322,MedGen:C0349588,MedGen:C1845868,MedGen:C1853481,MedGen:C2364119,MedGen:CN000197,MedGen:CN001157,MedGen:CN001482
+nsv533512       1       564435  649748  0       1       copy_number_loss        benign  False   Developmental delay AND/OR other significant developmental or morphological phenotypes
+nsv931338       1       714078  4958499 0       1       copy_number_loss        pathogenic      False   Developmental delay AND/OR other significant developmental or morphological phenotypes
+nsv530300       1       728138  5066371 1       0       copy_number_gain        pathogenic      False   Abnormality of cardiac morphology,Cleft palate,Global developmental delay       HP:0000175,HP:0001263,HP:0001627,MedGen:C2240378,MedGen:CN001157,MedGen:CN001482
+```
+#### Status levels
+* benign
+* curated benign
+* curated pathogenic
+* likely benign
+* likely pathogenic
+* path gain
+* path loss
+* pathogenic
+* uncertain
+
+#### Parsing
+We parse the ClinGen tsv file and extract the following:
+* chrom
+* chromStart (note this a 0-based coordinate)
+* chromEnd
+* attrTags
+* attrVals
+
+`attrTags` and `attrVals` are comma separated lists. `attrTags` contains the field keys and `attrVals` contains the field values. We will parse the following keys from the two fields:
+* parent (this will be used as the ID in our JSON output)
+* clinical_int
+* validated
+* phenotype (this should be a string array)
+* phenotype_id (this should be a string array)
+
+Observed losses and observed gains will be calculated from entries that share a common parent ID.
+* variants with a common parent ID and same coordinates are grouped
+    * calculated observed losses, observed gains for each group
+    * Clinical significance and validation status are collapsed using the priority strategy described below
+* Variants with the same parent ID can have different coordinates (mapped to hg38)
+    * nsv491508 : chr14:105583663-106881350 and chr14:105605043-106766076 (only one example)
+    * we kept both variants
+
+## Conflict Resolution
+### Clinical significance priority
+When there are a mixture of variants belonging to the same parent ID, we will choose the most pathogenic clinical significance from the available values. i.e. if 3 samples were deemed pathogenic and 2 samples were likely pathogenic, we would list the variant as pathogenic.
+
+**Priority** (high to low)
+* Priority
+* Pathogenic
+* Likely pathogenic
+* Benign
+* Likely benign
+* Uncertain significance
+
+### Validation Priority
+When there are a mixture of variants belonging to same parent ID, we will set the validation status to true if any of the variants were validated.
+### Download URL
+
+[https://cirm.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=iscaComposite](https://cirm.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=iscaComposite)
+
+### JSON Output
+
+<CLINGENJSON />
+
+## Dosage Sensitivity Map
+The Clinical Genome Resource (ClinGen) consortium is curating genes and regions of the genome to assess whether there is evidence to support that these genes/regions are dosage sensitive and should be targeted on a cytogenomic array. Nirvana reports these annotations for overlapping SVs.
+
+:::info Publication
+Riggs ER, Nelson T, Merz A, Ackley T, Bunke B, Collins CD, Collinson MN, Fan YS, Goodenberger ML, Golden DM, Haglund-Hazy L, Krgovic D, Lamb AN, Lewis Z, Li G, Liu Y, Meck J, Neufeld-Kaiser W, Runke CK, Sanmann JN, Stavropoulos DJ, Strong E, Su M, Tayeh MK, Kokalj Vokac N, Thorland EC, Andersen E, Martin CL. **Copy number variant discrepancy resolution using the ClinGen dosage sensitivity map results in updated clinical interpretations in ClinVar.** *Hum Mutat. 2018 Nov;39(11):1650-1659. doi: 10.1002/humu.23610. PMID: 30095202; PMCID: PMC7374944.*
+:::
+
+### TSV Source files
+**Regions**
+```scss
+#ClinGen Region Curation Results
+#07 May,2019
+#Genomic Locations are reported on GRCh38 (hg38): GCF_000001405.36
+#https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen
+#to create link: https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/clingen_region.cgi?id=key
+#ISCA ID    ISCA Region Name    cytoBand    Genomic Location    Haploinsufficiency Score    Haploinsufficiency Description  Haploinsufficiency PMID1    Haploinsufficiency PMID2    Haploinsufficiency PMID3    Triplosensitivity Score Triplosensitivity Description   Triplosensitivity PMID1 Triplosensitivity PMID2 Triplosensitivity PMID3 Date Last Evaluated Loss phenotype OMIM ID  Triplosensitive phenotype OMIM ID
+ISCA-46299  Xp11.22 region (includes HUWE1) Xp11.22 tbd 0   No evidence available               3   Sufficient evidence for dosage pathogenicity    22840365    20655035    26692240    2018-11-19
+ISCA-46295  15q13.3 recurrent region (D-CHRNA7 to BP5) (includes CHRNA7 and OTUD7A) 15q13.3 chr15:31727418-32153204 3   Sufficient evidence for dosage pathogenicity    19898479    20236110    22775350    40  Dosage sensitivity unlikely 26968334    22420048        2018-05-10
+ISCA-46291  7q11.23 recurrent distal region (includes HIP1, YWHAG)  7q11.23 chr7:75528718-76433859  2   Some evidence for dosage pathogenicity  21109226    16971481        1   Little evidence for dosage pathogenicity    21109226    27867344        2018-12-31
+ISCA-46290  Xp11.22p11.23 recurrent region (includes SHROOM4)   Xp11.22-p11.23  chrX: 48447780-52444264 0   No evidence available               3   Sufficient evidence for dosage pathogenicity    19716111    21418194    25425167    2017-12-14      300801
+```
+**Genes**
+```scss
+#ClinGen Gene Curation Results
+#24 May,2019
+#Genomic Locations are reported on GRCh37 (hg19): GCF_000001405.13
+#https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen
+#to create link: https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/clingen_gene.cgi?sym=Gene Symbol
+#Gene Symbol    Gene ID cytoBand    Genomic Location    Haploinsufficiency Score    Haploinsufficiency Description  Haploinsufficiency PMID1    Haploinsufficiency PMID2    Haploinsufficiency PMID3    Triplosensitivity Score Triplosensitivity Description   Triplosensitivity PMID1 Triplosensitivity PMID2 Triplosensitivity PMID3 Date Last Evaluated Loss phenotype OMIM ID  Triplosensitive phenotype OMIM ID
+A4GALT  53947   22q13.2 chr22:43088121-43117307 30  Gene associated with autosomal recessive phenotype              0   No evidence available               2014-12-11  111400
+AAGAB   79719   15q23   chr15:67493013-67547536 3   Sufficient evidence for dosage pathogenicity    23064416    23000146        0   No evidence available               2013-02-28  148600
+```
+
+### Dosage Rating System
+
+| Rating | Possible Clinical Interpretation                                                        |
+|--------|-----------------------------------------------------------------------------------------|
+| 0      | No evidence to suggest that dosage sensitivity is associated with clinical phenotype    |
+| 1      | Little evidence suggesting dosage sensitivity is associated with clinical phenotype     |
+| 2      | Emerging evidence suggesting dosage sensitivity is associated with clinical phenotype   |
+| 3      | Sufficient evidence suggesting dosage sensitivity is associated with clinical phenotype |
+| 30     | Gene associated with autosomal recessive phenotype                                      |
+| 40     | Dosage sensitivity unlikely                                                             |
+
+Reference: [https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/help.shtml](https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/help.shtml)
+
+### Download URL
+[ftp://ftp.clinicalgenome.org/](ftp://ftp.clinicalgenome.org/)
+
+### JSON Output
+<ClinGenDosageJson/>
+
+### Building the supplementary files
+The gene dosage sensitivity ``.nga`` for Nirvana can be built using the ``SAUtils`` command's ``DosageSensitivity`` subcommand. The required data file is ``ClinGen_gene_curation_list_{ASSEMBLY}.tsv`` (url provided above) and its associated ``.version`` file.
+```scss
+NAME=ClinGen Dosage Sensitivity Map
+VERSION=20211201
+DATE=2021-12-01
+DESCRIPTION=Dosage sensitivity map from ClinGen (dbVar)
+```
+Here is a sample run:
+```scss
+dotnet Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll DosageSensitivity --out SupplementaryDatabase/64/GRCh37 --tsv ClinGen_gene_curation_list_GRCh37.tsv
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+---------------------------------------------------------------------------
+
+
+Time: 00:00:00.1
+```
+For building the ``.nsi`` files, we use the ``SAUtils`` command's ``DosageMapRegions`` subcommand. The required data file is ``ClinGen_region_curation_list_{ASSEMBLY}.tsv`` (url provided above) and its associated ``.version`` file.
+```scss
+NAME=ClinGen Dosage Sensitivity Map
+VERSION=20211201
+DATE=2021-12-01
+DESCRIPTION=Dosage sensitivity map from ClinGen (dbVar)
+```
+Here is a sample run:
+```scss
+dotnet Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll DosageMapRegions --out SupplementaryDatabase/64/GRCh37 --ref References/7/Homo_sapiens.GRCh37.Nirvana.dat --tsv ClinGen_region_curation_list_GRCh37.tsv
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+---------------------------------------------------------------------------
+
+Writing 505 intervals to database...
+
+Time: 00:00:00.1
+```
+
+## Gene-Disease Validity
+The ClinGen Gene-Disease Clinical Validity curation process involves evaluating the strength of evidence supporting or refuting a claim that variation in a particular gene causes a particular disease. Nirvana reports these annotations for genes in the genes section of the JSON.
+
+:::info Publication
+Strande NT, Riggs ER, Buchanan AH, et al. **Evaluating the Clinical Validity of Gene-Disease Associations: An Evidence-Based Framework Developed by the Clinical Genome Resource.** *Am J Hum Genet. 2017;100(6):895-906. doi:10.1016/j.ajhg.2017.04.015*
+:::
+### Source TSV
+The source data comes in a CSV file that we convert to a TSV.
+```scss
+CLINGEN GENE VALIDITY CURATIONS
+FILE CREATED: 2019-05-28
+WEBPAGE: https://search.clinicalgenome.org/kb/gene-validity
++++++++++++,++++++++++++++,+++++++++++++,++++++++++++++++++,+++++++++,++++++++++++++,+++++++++++++,+++++++++++++++++++
+GENE SYMBOL,GENE ID (HGNC),DISEASE LABEL,DISEASE ID (MONDO),SOP,CLASSIFICATION,ONLINE REPORT,CLASSIFICATION DATE
++++++++++++,++++++++++++++,+++++++++++++,++++++++++++++++++,+++++++++,++++++++++++++,+++++++++++++,+++++++++++++++++++
+A2ML1,HGNC:23336,Noonan syndrome with multiple lentigines,MONDO_0007893,SOP5,No Reported Evidence,https://search.clinicalgenome.org/kb/gene-validity/59b87033-dd91-4f1e-aec1-c9b1f5124b16--2018-06-07T14:37:47,2018-06-07T14:37:47.175Z
+A2ML1,HGNC:23336,cardiofaciocutaneous syndrome,MONDO_0015280,SOP5,No Reported Evidence,https://search.clinicalgenome.org/kb/gene-validity/fc3c41d8-8497-489b-a350-c9e30016bc6a--2018-06-07T14:31:03,2018-06-07T14:31:03.696Z
+A2ML1,HGNC:23336,Costello syndrome,MONDO_0009026,SOP5,No Reported Evidence,https://search.clinicalgenome.org/kb/gene-validity/ea72ba8d-cf62-44bc-86be-da64e3848eba--2018-06-07T14:34:05,2018-06-07T14:34:05.324Z
+```
+### Download URL
+[https://search.clinicalgenome.org/kb/downloads#section_gene-disease-validity](https://search.clinicalgenome.org/kb/downloads#section_gene-disease-validity)
+
+### Conflict Resolution
+#### Multiple Classifications
+Here is an example of multiple classifications.
+```scss
+$ grep MONDO_0010192 ClinGen-Gene-Disease-Summary-2019-12-02.csv  | grep EDNRB
+EDNRB,HGNC:3180,Waardenburg syndrome type 4A,MONDO_0010192,SOP6,Moderate,https://search.clinicalgenome.org/kb/gene-validity/d7abbd45-7915-437b-849b-dea876bfc2f5--2018-05-08T04:00:00,2018-05-08T04:00:00.000Z
+EDNRB,HGNC:3180,Waardenburg syndrome type 4A,MONDO_0010192,SOP6,Limited,https://search.clinicalgenome.org/kb/gene-validity/73ee9727-60c1-40fd-830f-08c2b513d2ee--2018-05-08T04:00:00,2018-05-08T04:00:00.000Z
+```
+In such cases, we select the more severe classification.
+
+#### Multiple Dates
+```scss
+$ grep MONDO_0016419 ClinGen-Gene-Disease-Summary-2019-12-02.csv  | grep MUTYH
+MUTYH,HGNC:7527,hereditary breast carcinoma,MONDO_0016419,SOP4,No Reported Evidence,https://search.clinicalgenome.org/kb/gene-validity/9904,2017-05-24T00:00:00
+MUTYH,HGNC:7527,hereditary breast carcinoma,MONDO_0016419,SOP4,No Reported Evidence,https://search.clinicalgenome.org/kb/gene-validity/9902,2017-05-25T00:00:00
+```
+If the classifications are the same, we should select the latest classification date.
+
+### JSON Output
+<ClinGenGeneValidity/>
+
+### Building the supplementary files
+The gene disease validity ``.nga`` for Nirvana can be built using the ``SAUtils`` command's ``DiseaseValidity`` subcommand. The only required data file is ``Clingen-Gene-Disease-Summary-2021-12-01.tsv`` (url provided above) and its associated ``.version`` file.
+```scss
+NAME=ClinGen disease validity curations
+VERSION=20211201
+DATE=2021-12-01
+DESCRIPTION=Disease validity curations from ClinGen (dbVar)
+```
+Here is a sample run:
+```scss
+dotnet Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll DiseaseValidity --tsv Clingen-Gene-Disease-Summary-2021-12-01.tsv \\
+--uga Cache/27/UGA.tsv.gz --out SupplementaryDatabase/64/GRCh37
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2021 Illumina, Inc.
+Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+---------------------------------------------------------------------------
+
+Number of geneIds missing from the cache:0 (0%)
+
+Time: 00:00:00.2
+```
