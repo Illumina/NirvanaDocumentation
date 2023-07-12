@@ -146,10 +146,25 @@ DESCRIPTION=Dosage sensitivity map from ClinGen (dbVar)
 ```
 Here is a sample run:
 ```scss
-dotnet Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll DosageSensitivity --out SupplementaryDatabase/64/GRCh37 --tsv ClinGen_gene_curation_list_GRCh37.tsv
+dotnet NirvanaBuild/SAUtils.dll DosageSensitivity
 ---------------------------------------------------------------------------
-SAUtils                                             (c) 2021 Illumina, Inc.
-Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+SAUtils                                             (c) 2023 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al         3.21.0-0-gd2a0e953
+---------------------------------------------------------------------------
+
+USAGE: dotnet SAUtils.dll dosagesensitivity [options]
+Creates a gene annotation database from dbVar data
+
+OPTIONS:
+      --tsv, -t <VALUE>      input tsv file
+      --out, -o <VALUE>      output directory
+      --help, -h             displays the help menu
+      --version, -v          displays the version
+
+dotnet NirvanaBuild/SAUtils.dll DosageSensitivity --out SupplementaryDatabase/64/GRCh37 --tsv ClinGen_gene_curation_list_GRCh37.tsv
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2023 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al         3.21.0-0-gd2a0e953
 ---------------------------------------------------------------------------
 
 
@@ -164,10 +179,26 @@ DESCRIPTION=Dosage sensitivity map from ClinGen (dbVar)
 ```
 Here is a sample run:
 ```scss
-dotnet Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll DosageMapRegions --out SupplementaryDatabase/64/GRCh37 --ref References/7/Homo_sapiens.GRCh37.Nirvana.dat --tsv ClinGen_region_curation_list_GRCh37.tsv
+dotnet NirvanaBuild/SAUtils.dll DosageMapRegions 
 ---------------------------------------------------------------------------
-SAUtils                                             (c) 2021 Illumina, Inc.
-Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+SAUtils                                             (c) 2023 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al         3.21.0-0-gd2a0e953
+---------------------------------------------------------------------------
+
+USAGE: dotnet SAUtils.dll dosagemapregions [options]
+Creates an interval annotation database from dbVar data
+
+OPTIONS:
+      --tsv, -t <VALUE>      input tsv file
+      --ref, -r <filename>   input reference filename
+      --out, -o <VALUE>      output directory
+      --help, -h             displays the help menu
+      --version, -v          displays the version
+
+dotnet NirvanaBuild/SAUtils.dll DosageMapRegions --out SupplementaryDatabase/64/GRCh37 --ref References/7/Homo_sapiens.GRCh37.Nirvana.dat --tsv ClinGen_region_curation_list_GRCh37.tsv
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2023 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al         3.21.0-0-gd2a0e953
 ---------------------------------------------------------------------------
 
 Writing 505 intervals to database...
@@ -228,11 +259,29 @@ DESCRIPTION=Disease validity curations from ClinGen (dbVar)
 ```
 Here is a sample run:
 ```scss
-dotnet Nirvana/bin/Debug/netcoreapp3.1/SAUtils.dll DiseaseValidity --tsv Clingen-Gene-Disease-Summary-2021-12-01.tsv \\
---uga Cache/27/UGA.tsv.gz --out SupplementaryDatabase/64/GRCh37
+ dotnet NirvanaBuild/SAUtils.dll DiseaseValidity
 ---------------------------------------------------------------------------
-SAUtils                                             (c) 2021 Illumina, Inc.
-Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.17.0
+SAUtils                                             (c) 2023 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al         3.21.0-0-gd2a0e953
+---------------------------------------------------------------------------
+
+USAGE: dotnet SAUtils.dll diseasevalidity [options]
+Creates a gene annotation database from ClinGen gene validity data
+
+OPTIONS:
+      --csv, -i <VALUE>      ClinGen gene validity file path
+      --cache, -c <directory>
+                             input cache directory
+      --ref, -r <filename>   input reference filename
+      --out, -o <VALUE>      output directory
+      --help, -h             displays the help menu
+      --version, -v          displays the version
+
+dotnet NirvanaBuild/SAUtils.dll DiseaseValidity --tsv Clingen-Gene-Disease-Summary-2021-12-01.tsv \\
+--uga Cache --out SupplementaryDatabase
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2023 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al         3.21.0-0-gd2a0e953
 ---------------------------------------------------------------------------
 
 Number of geneIds missing from the cache:0 (0%)
