@@ -51,6 +51,7 @@ module.exports = {
       label: 'Core Functionality',
       items: [
         'core-functionality/canonical-transcripts',
+        'core-functionality/transcript-consequence-impacts',
         'core-functionality/gene-fusions',
         'core-functionality/mnv-recomposition',
         'core-functionality/variant-ids'
