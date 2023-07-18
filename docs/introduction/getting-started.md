@@ -9,12 +9,10 @@ Nirvana currently uses .NET6.0. Please make sure that you have the most current 
 :::
 
 ## Quick Start
-
-If you want to get started right away, we've created [a script](https://illumina.github.io/NirvanaDocumentation/files/TestNirvana.sh) that downloads Nirvana, compiles it, and starts annotating a test file:
+If you want to get started right away, we've created [a script](TestNirvana.sh) that unzips the [Nirvana build]((https://git.illumina.com/Bioinformatics/Nirvana/releases)), downloads the annotation data, and starts annotating a test file:
 
 ```bash
-curl -O https://illumina.github.io/NirvanaDocumentation/files/TestNirvana.sh
-bash ./TestNirvana.sh
+bash ./TestNirvana.sh NirvanaBuild.zip
 ```
 
 We have verified that this script works on Windows (using Git Bash or WSL), Linux, and Mac OS X.
