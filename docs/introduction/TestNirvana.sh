@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# The first argument is the path to the release zip file.
 # adjust these paths to reflect where you have downloaded the Nirvana data files
 # In this example, we assume that the Cache, References, and SupplementaryDatabase
 # folders have been downloaded into the NIRVANA_ROOT folder.
@@ -25,6 +26,18 @@ SA_DIR=$DATA_DIR/SupplementaryAnnotation/$GENOME_ASSEMBLY
 REF_DIR=$DATA_DIR/References
 CACHE_DIR=$DATA_DIR/Cache
 REF_TEST=$REF_DIR/Homo_sapiens.${GENOME_ASSEMBLY}.Nirvana.dat
+
+########## Help function #############
+PrintHelp(){
+	echo "USAGE: ./TestNirvana.sh /path/to/build/Nirvana.zip"
+}
+############ Checking arguments ########
+if [ "$#" -neq 1 ] ; then
+	PrintHelp
+	exit
+fi
+#######################################
+
 
 # =====================================================================
 
