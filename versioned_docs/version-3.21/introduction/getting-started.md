@@ -8,36 +8,28 @@ Nirvana is written in C# using [.NET Core](https://www.microsoft.com/net/downloa
 Nirvana currently uses .NET6.0. Please make sure that you have the most current runtime from the [.NET Core downloads](https://www.microsoft.com/net/download/core) page.
 :::
 
-## Quick Start
-If you want to get started right away, we've created [a script](TestNirvana.sh) that unzips the [Nirvana build]((https://git.illumina.com/Bioinformatics/Nirvana/releases)), downloads the annotation data, and starts annotating a test file:
-
-```bash
-bash ./TestNirvana.sh NirvanaBuild.zip
-```
-
-We have verified that this script works on Windows (using Git Bash or WSL), Linux, and Mac OS X.
-
 ## Getting Nirvana
 
-### Compile from Source
-
-The following will grab the latest version of Nirvana from GitHub and compile it using the .NET Core compiler:
-
-```bash
-git clone https://github.com/Illumina/Nirvana.git
-cd Nirvana
-dotnet build -c Release
-```
+### Latest Release
+Contact the team to obtain the latest release.
 
 ### GitHub Release Notes
 
-Alternatively, you can grab the latest binaries from our [GitHub Releases](https://github.com/Illumina/Nirvana/releases) page:
+Alternatively, you can grab the previous binaries from our [GitHub Releases](https://github.com/Illumina/Nirvana/releases) page:
 
 ```bash
 mkdir -p Nirvana/Data
 cd Nirvana
 unzip Nirvana-3.18.1-net6.0.zip
 ```
+
+### Quick Start
+If you want to get started right away, we've created [a script](TestNirvana.sh) that unzips the Nirvana build, downloads the annotation data, and starts annotating a test file:
+
+```bash
+bash ./TestNirvana.sh NirvanaBuild.zip
+```
+We have verified that this script works on Windows (using Git Bash or WSL), Linux, and Mac OS X.
 
 ### Docker
 
