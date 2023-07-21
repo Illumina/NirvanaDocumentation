@@ -9,9 +9,9 @@
 # installed on your computer:
 # https://www.microsoft.com/net/download/core
 
-TOP_DIR=.
+
 NIRVANA_BUILD_ZIP=$1
-NIRVANA_ROOT=$TOP_DIR/Nirvana
+NIRVANA_ROOT=~/NirvanaTest
 NIRVANA_BUILD_DIR=$NIRVANA_ROOT/build
 NIRVANA_BIN=$NIRVANA_BUILD_DIR/Nirvana.dll
 DOWNLOADER_BIN=$NIRVANA_BUILD_DIR/Downloader.dll
@@ -55,6 +55,7 @@ echo -e $RESET
 
 # create the data directories
 create_dir() {
+    echo "making directory $1"
     if [ ! -d $1 ]
     then
 	mkdir -p $1
@@ -80,12 +81,14 @@ unzip $NIRVANA_BUILD_ZIP
 # ==============================
 # download all of the data files
 # ==============================
+echo "Download all data files"
 create_dir $DATA_DIR
 dotnet $DOWNLOADER_BIN --ga $GENOME_ASSEMBLY --out $DATA_DIR
 
 # ==============================
 # run Nirvana on a test VCF file
 # ==============================
+echo "run Nirvana on a test VCF file"
 if [ ! -f $VCF_PATH ]
 then
     curl -O https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz
