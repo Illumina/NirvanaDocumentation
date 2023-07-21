@@ -6,97 +6,109 @@ import JSON from './primate-ai-json.md'
 
 ## Overview
 
-Primate AI is a deep residual neural network for classifying the pathogenicity of missense mutations. The method is described in the publication:
+Primate AI is a deep residual neural network for classifying the pathogenicity of missense mutations. The method is described in these publications:
 
 :::info Publication
-Sundaram, L., Gao, H., Padigepati, S.R. et al. Predicting the clinical impact of human mutation with deep neural networks. *Nat Genet* **50**, 1161–1170 (2018). [https://doi.org/10.1038/s41588-018-0167-z](https://doi.org/10.1038/s41588-018-0167-z)
+1. Hong Gao et al. ,The landscape of tolerated genetic variation in humans and primates. *Science* **380**, eabn8153 (2023). [https://doi.org/10.1126/science.abn8197](https://doi.org/10.1126/science.abn8197)
+2. Sundaram, L., Gao, H., Padigepati, S.R. et al. Predicting the clinical impact of human mutation with deep neural networks. *Nat Genet* **50**, 1161–1170 (2018). [https://doi.org/10.1038/s41588-018-0167-z](https://doi.org/10.1038/s41588-018-0167-z)
 :::
 
-## TSV File
+
+## CSV File
 
 ### Example
 
 ```scss
-chr	pos	ref	alt	refAA	altAA	strand_1pos_0neg	trinucleotide_context	UCSC_gene	ExAC_coverage	primateDL_score
-chr10	1046704	C	T	R	C	1	CCG	uc001ift.3	45.49	0.849114537239
-chr10	1046704	C	G	R	G	1	CCG	uc001ift.3	45.49	0.795686006546
+,chr,pos,non_flipped_ref,non_flipped_alt,gene_name,change_position_1based,ref_aa,alt_aa,score_PAI3D,percentile_PAI3D,refseq
+0,chr1,69094,G,A,ENST00000335137.4,2,V,M,0.6169436463713646,0.5200308441794135,NM_001005484.1
+1,chr1,69094,G,C,ENST00000335137.4,2,V,L,0.5557043975591658,0.4271457250214688,NM_001005484.1
+2,chr1,69094,G,T,ENST00000335137.4,2,V,L,0.5557043975591658,0.4271457391722522,NM_001005484.1
 ```
+
 
 ### Parsing
 
-From the TSV file, we're mainly interested in the following columns:
+From the CSV file, following columns are parsed:
 * `chr`
 * `pos`
 * `ref`
 * `alt`
-* `primateDL_score`
+* `gene_name`
+* `score_PAI3D`
+* `percentile_PAI3D`
+* `refseq`
 
-We also use `UCSC_gene` to filter out variants that don't have matching gene models in Nirvana.
+The fields `gene_name` and `refseq` define the Ensembl and RefSeq transcript IDs respectively.
+These fields are mapped to Gene Symbol in the output Json.
 
-## Pre-processing
 
-### Converting UCSC IDs
+## Parsing Run
+```text
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2023 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
+---------------------------------------------------------------------------
 
-Primate AI only provides UCSC IDs. As an initial pre-processing step, we'll need to convert these to either Entrez or Ensembl Gene IDs.
+Chromosome 1 completed in 00:02:47.9
+Chromosome 10 completed in 00:01:07.2
+Chromosome 11 completed in 00:01:37.4
+Chromosome 12 completed in 00:01:25.8
+Chromosome 13 completed in 00:00:28.6
+Chromosome 14 completed in 00:00:51.0
+Chromosome 15 completed in 00:01:06.4
+Chromosome 16 completed in 00:01:17.8
+Chromosome 17 completed in 00:01:48.8
+Chromosome 18 completed in 00:00:29.5
+Chromosome 19 completed in 00:02:00.0
+Chromosome 2 completed in 00:02:15.2
+Chromosome 20 completed in 00:00:45.5
+Chromosome 21 completed in 00:00:18.7
+Chromosome 22 completed in 00:00:39.2
+Chromosome 3 completed in 00:01:50.6
+Chromosome 4 completed in 00:01:17.8
+Chromosome 5 completed in 00:01:28.8
+Chromosome 6 completed in 00:01:34.4
+Chromosome 7 completed in 00:01:30.7
+Chromosome 8 completed in 00:01:04.5
+Chromosome 9 completed in 00:01:17.2
+Chromosome X completed in 00:01:10.7
+Chromosome Y completed in 00:00:04.7
+Maximum bp shifted for any variant:0
+{
+  "totalLines": 70667466,
+  "totalValid": 69853187,
+  "unrecognizedTranscriptIds": 814279,
+  "scoreMinimum": 0.0534,
+  "scoreMaximum": 0.9988
+}
 
-The following queries are used to download the conversions from UCSC:
 
-```bash
-mysql -h genome-mysql.soe.ucsc.edu -u genome -A -P 3306 \
-      -e "select * FROM knownToLocusLink;" hg19 > ucsc_locuslink.tsv
+Time: 00:30:24.2
 
-mysql -h genome-mysql.soe.ucsc.edu -u genome -A -P 3306 \
-      -e "select knownToEnsembl.name, knownToEnsembl.value, ensGene.name2 FROM knownToEnsembl, ensGene WHERE knownToEnsembl.value = ensGene.name;" \
-      hg19 > ucsc_ensembl.tsv
+Process finished with exit code 0.
 ```
+About 0.392% of the transcripts were not recognized in GRCh38 assembly.
 
-### Running the Pre-Processor
-
-The Primate AI pre-processor can be run as follows:
-
-```bash
-dotnet PrimateAiPreProcessor.dll UGA_develop.tsv PrimateAI_scores_v0.2.tsv.gz \
-     ucsc_locuslink.tsv ucsc_ensembl.tsv PrimateAI_0.2_GRCh37.tsv.gz
-```
-
-During conversion, 0.5% of the UCSC Ids cannot be converted to either Entrez or Ensembl gene IDs. Once the gene IDs have been acquired, we check to see which are available in Nirvana.
-
-The following Entrez Gene IDs were not found:
-
-```scss
-399753
-401980
-504189
-504191
-100293534
-```
-
-Here is the output from the pre-processor:
-
-```scss
-- loading UCSC to Entrez Gene ID dictionary... 73,432 genes loaded.
-- loading UCSC to Ensembl Gene ID dictionary... 76,178 genes loaded.
-- loading UGA gene ID to gene dictionary... 103,277 genes loaded.
-- parsing Primate AI variants... 70,121,953 variants parsed.
- 
-# variants with unknown gene ID: 27,253 / 70,121,953
-# genes with unknown gene ID:    109 / 19,614
- 
-# variants not in UGA: 2,036 / 70,121,953
-# genes not in UGA:    6 / 19,614
-```
 
 ## Known Issues
 
 :::caution Known Issues
-The Primate AI data set provides raw scores, but the scores are biased according to gene context. I.e. a 0.4 means something different in `TP53` than it does in `KRAS`.
-
-As a result, the Primate AI team provided guidance on aggregating these scores and presenting them as percentiles with respect to the associated gene. According to their research, the 25<sup>th</sup> percentile is a good proxy for benign variants and the 75<sup>th</sup> percentile is a good proxy for pathogenic variants.
+Some transcript IDs defined in the data file are obsolete, retired, or updated.
+In such a case, they cannot be mapped onto a gene and are ignored.
 :::
+
+### Example:
+This entry is skipped because a gene symbol cannot be assigned.
+
+**ENST00000643905.1** transcript is retired according to [Ensembl](https://useast.ensembl.org/Homo_sapiens/Transcript/Idhistory?db=core;t=ENST00000643905)
+
+**NM_182838.2** transcript is removed because it is a pseudo-gene according to [RefSeq](https://www.ncbi.nlm.nih.gov/nuccore/NM_182838.3)
+
 
 ## Download URL
 
-[https://basespace.illumina.com/s/cPgCSmecvhb4](https://basespace.illumina.com/s/cPgCSmecvhb4)
+[https://primad.basespace.illumina.com/](https://primad.basespace.illumina.com/)
+
 
 ## JSON Output
 
