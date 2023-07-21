@@ -9,7 +9,7 @@
 # installed on your computer:
 # https://www.microsoft.com/net/download/core
 
-TOP_DIR=~
+TOP_DIR=.
 NIRVANA_BUILD_ZIP=$1
 NIRVANA_ROOT=$TOP_DIR/Nirvana
 NIRVANA_BUILD_DIR=$NIRVANA_ROOT/build
