@@ -42,7 +42,7 @@ docker load < Nirvana-v3.21.0-net6.0-docker.tar.gz
 For Docker, we have special instructions for running the Downloader:
 
 ```bash
-sudo docker run --rm -it -v local/data/folder:/scratch nirvana:v3.21.0 Downloader --ga GRCh37 -o /scratch
+docker run --rm -it -v local/data/folder:/scratch nirvana:v3.21.0 Downloader --ga GRCh37 -o /scratch
 ```
 
 Similarly, we have special instructions for running Nirvana (Here's [a toy VCF](https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz) in case you need it):
