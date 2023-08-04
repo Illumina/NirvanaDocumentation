@@ -33,7 +33,7 @@ We have verified that this script works on Windows (using Git Bash or WSL), Linu
 
 ### Docker
 
-Assuming you have the docker image in a zip file (e.g. Nirvana-v3.21.0-net6.0-docker.tar.gz), you may load it as follows
+Obtain the docker image in a zip file (e.g. Nirvana-v3.21.0-net6.0-docker.tar.gz), and load it as follows
 
 ```bash
 docker load < Nirvana-v3.21.0-net6.0-docker.tar.gz
