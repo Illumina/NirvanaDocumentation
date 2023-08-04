@@ -57,7 +57,7 @@ docker run --rm -it -v local/data/folder:/scratch nirvana:v3.21.0 Nirvana -c /sc
 We think Docker is fantastic. However, because our data files are usually accessed through a Docker volume, there is a noticeable performance penalty when running Nirvana in Docker.
 :::
 :::tip
-For convenience, the user is incouraged to create aliases for the docker commands. For example:
+For convenience, the user is encouraged to create aliases for the docker commands. For example:
 ```bash
 alias nirvana="docker run --rm -it -v local/data/folder:/scratch nirvana:v3.21.0 Nirvana"
 ```
