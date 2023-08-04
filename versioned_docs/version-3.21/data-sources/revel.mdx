@@ -1,0 +1,54 @@
+---
+title: REVEL
+---
+
+import JSON from './revel-json.md'
+
+## Overview
+
+REVEL is an ensemble method for predicting the pathogenicity of missense variants based on a combination of scores from 13 individual tools: MutPred, FATHMM v2.3, VEST 3.0, PolyPhen-2, SIFT, PROVEAN, MutationAssessor, MutationTaster, LRT, GERP++, SiPhy, phyloP, and phastCons.
+
+:::info Publication
+Ioannidis, N. M. et al. REVEL: An Ensemble Method for Predicting the Pathogenicity of Rare Missense Variants. *The American Journal of Human Genetics* **99**, 877-885 (2016). [https://doi.org/10.1016/j.ajhg.2016.08.016](https://doi.org/10.1016/j.ajhg.2016.08.016)
+:::
+
+## CSV File
+
+### Example
+
+```scss
+chr,hg19_pos,grch38_pos,ref,alt,aaref,aaalt,REVEL
+1,35142,35142,G,A,T,M,0.027
+1,35142,35142,G,C,T,R,0.035
+1,35142,35142,G,T,T,K,0.043
+1,35143,35143,T,A,T,S,0.018
+1,35143,35143,T,C,T,A,0.034
+```
+
+### Parsing
+
+From the CSV file, we're mainly interested in the following columns:
+* `chr`
+* `hg19_pos`
+* `grch38_pos`
+* `ref`
+* `alt`
+* `REVEL`
+
+## Known Issues
+
+:::caution Sorting
+Since the input file contains positions for both GRCh37 and GRCh38, we split it into two **TSV** files (for the sake of better readability) with identical format. The positions for GRCh37 were sorted but not for GRCh38. So we re-sort the variants by position in the GRCh38 file.
+:::
+
+:::caution Conflicting Scores
+When there are multiple scores available for the same variant (i.e. the same position with the same alternative allele), we pick the highest score.
+:::
+
+## Download URL
+
+[https://sites.google.com/site/revelgenomics/downloads](https://sites.google.com/site/revelgenomics/downloads)
+
+## JSON Output
+
+<JSON />

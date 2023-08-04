@@ -1,18 +1,20 @@
 #!/bin/bash
 
+# The first argument is the path to the release zip file.
 # adjust these paths to reflect where you have downloaded the Nirvana data files
 # In this example, we assume that the Cache, References, and SupplementaryDatabase
 # folders have been downloaded into the NIRVANA_ROOT folder.
 
-# In addition to downloading the Nirvana data files, make sure you have .NET Core 2.0
+# In addition to downloading the Nirvana data files, make sure you have .NET 6.0
 # installed on your computer:
 # https://www.microsoft.com/net/download/core
 
-TOP_DIR=~
-TARGET_FRAMEWORK=netcoreapp3.1
-NIRVANA_ROOT=$TOP_DIR/Nirvana
-NIRVANA_BIN=$NIRVANA_ROOT/bin/Release/$TARGET_FRAMEWORK/Nirvana.dll
-DOWNLOADER_BIN=$NIRVANA_ROOT/bin/Release/$TARGET_FRAMEWORK/Downloader.dll
+
+NIRVANA_BUILD_ZIP=$1
+NIRVANA_ROOT=~/NirvanaTest
+NIRVANA_BUILD_DIR=$NIRVANA_ROOT/build
+NIRVANA_BIN=$NIRVANA_BUILD_DIR/Nirvana.dll
+DOWNLOADER_BIN=$NIRVANA_BUILD_DIR/Downloader.dll
 DATA_DIR=$NIRVANA_ROOT/Data
 
 VCF_PATH=HiSeq.10000.vcf.gz
@@ -22,8 +24,20 @@ GENOME_ASSEMBLY=GRCh37
 
 SA_DIR=$DATA_DIR/SupplementaryAnnotation/$GENOME_ASSEMBLY
 REF_DIR=$DATA_DIR/References
-CACHE_DIR=$DATA_DIR/Cache/$GENOME_ASSEMBLY
+CACHE_DIR=$DATA_DIR/Cache
 REF_TEST=$REF_DIR/Homo_sapiens.${GENOME_ASSEMBLY}.Nirvana.dat
+
+########## Help function #############
+PrintHelp(){
+	echo "USAGE: ./TestNirvana.sh /path/to/build/Nirvana.zip"
+}
+############ Checking arguments ########
+if [ "$#" -neq 1 ] ; then
+	PrintHelp
+	exit
+fi
+#######################################
+
 
 # =====================================================================
 
@@ -41,6 +55,7 @@ echo -e $RESET
 
 # create the data directories
 create_dir() {
+    echo "making directory $1"
     if [ ! -d $1 ]
     then
 	mkdir -p $1
@@ -56,71 +71,31 @@ popd () {
     command popd "$@" > /dev/null
 }
 
-download() {
-    FILENAME=$1
-    TOP_URL=$2
-    LOCAL_PATH=$SA_DIR/$FILENAME
-
-    if [ ! -f  $LOCAL_PATH ]
-    then
-	echo "- downloading $FILENAME"
-	pushd $SA_DIR
-	curl -s -O http://d24njugtyo9gfs.cloudfront.net/$TOP_URL/$GENOME_ASSEMBLY/$FILENAME
-	popd
-    fi
-}
-
-
-# ==================================
-# clone the Nirvana repo (if needed)
-# ==================================
-
-pushd $TOP_DIR
-
-if [ ! -d $NIRVANA_ROOT ]
-then
-    git clone https://github.com/Illumina/Nirvana.git
-fi
-
-# =============
-# build Nirvana
-# =============
-
-pushd $NIRVANA_ROOT
-
-if [ ! -f $NIRVANA_BIN ]
-then
-    # grab the latest release
-    LATEST_TAG=latesttag=$(git describe --tags)
-    git checkout $LATEST_TAG
-
-    # build Nirvana
-    dotnet build -c Release
-fi
+# ==============================
+# unzip the build
+# ==============================
+create_dir $NIRVANA_BUILD_DIR
+cd $NIRVANA_BUILD_DIR
+unzip $NIRVANA_BUILD_ZIP
 
 # ==============================
 # download all of the data files
 # ==============================
-
-# download the Nirvana data
-if [ ! -f $REF_TEST ]
-then
-    create_dir $DATA_DIR
-    dotnet $DOWNLOADER_BIN --ga $GENOME_ASSEMBLY --out $DATA_DIR
-fi
+echo "Download all data files"
+create_dir $DATA_DIR
+dotnet $DOWNLOADER_BIN --ga $GENOME_ASSEMBLY --out $DATA_DIR
 
 # ==============================
 # run Nirvana on a test VCF file
 # ==============================
-
-# download a test vcf file
+echo "run Nirvana on a test VCF file"
 if [ ! -f $VCF_PATH ]
 then
     curl -O https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz
 fi
 
 # analyze it with Nirvana
-dotnet $NIRVANA_BIN -c $CACHE_DIR/Both --sd $SA_DIR -r $REF_TEST -i $VCF_PATH -o HiSeq.10000
+dotnet $NIRVANA_BIN -c $CACHE_DIR --sd $SA_DIR -r $REF_TEST -i $VCF_PATH -o HiSeq.10000
 
 popd
 popd

@@ -11,7 +11,7 @@ Nirvana currently uses .NET6.0. Please make sure that you have the most current 
 ## Getting Nirvana
 
 ### Latest Release
-Contact the team (Nirvana@illumina.com) to obtain the latest release and or Docker image.
+Contact the team to obtain the latest release.
 
 ### GitHub Release Notes
 
@@ -33,35 +33,34 @@ We have verified that this script works on Windows (using Git Bash or WSL), Linu
 
 ### Docker
 
-Obtain the docker image in a zip file (e.g. Nirvana-v3.21.0-net6.0-docker.tar.gz), and load it as follows
+You can find us on [Docker Hub](https://hub.docker.com/repository/docker/annotation/nirvana) under `annotation/nirvana`:
+
+:::caution
+We think Docker is fantastic. However, because our data files are usually accessed through a Docker volume, there is a noticeable performance penalty when running Nirvana in Docker.
+:::
 
 ```bash
-docker load < Nirvana-v3.21.0-net6.0-docker.tar.gz
+mkdir -p Nirvana/Data
+cd Nirvana
+docker pull annotation/nirvana:3.14
 ```
 
 For Docker, we have special instructions for running the Downloader:
 
 ```bash
-docker run --rm -it -v local/data/folder:/scratch nirvana:v3.21.0 Downloader --ga GRCh37 -o /scratch
+sudo docker run --rm -it -v Data:/scratch annotation/nirvana:3.14 dotnet \
+     /opt/nirvana/Downloader.dll --ga GRCh37 -o /scratch
 ```
 
 Similarly, we have special instructions for running Nirvana (Here's [a toy VCF](https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz) in case you need it):
 
 ```bash
-docker run --rm -it -v local/data/folder:/scratch nirvana:v3.21.0 Nirvana -c /scratch/Cache/ \
+sudo docker run --rm -it -v Data:/scratch annotation/nirvana:3.14 dotnet \
+     /opt/nirvana/Nirvana.dll -c /scratch/Cache/GRCh37/Both \
      -r /scratch/References/Homo_sapiens.GRCh37.Nirvana.dat \
      --sd /scratch/SupplementaryAnnotation/GRCh37 \
      -i /scratch/HiSeq.10000.vcf.gz -o /scratch/HiSeq
 ```
-:::caution
-We think Docker is fantastic. However, because our data files are usually accessed through a Docker volume, there is a noticeable performance penalty when running Nirvana in Docker.
-:::
-:::tip
-For convenience, the user is encouraged to create aliases for the docker commands. For example:
-```bash
-alias nirvana="docker run --rm -it -v local/data/folder:/scratch nirvana:v3.21.0 Nirvana"
-```
-:::
 
 ## Downloading the data files
 

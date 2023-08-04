@@ -1,0 +1,105 @@
+---
+title: SAUtils
+---
+
+## Overview
+
+SAUtils is a utility tool that creates binary supplementary annotation files (*.nsa, *.gsa, *.npd, *.nsi, etc.) from original data files (e.g. VCFs, TSVs, XML, HTML, etc.) for various data sources (e.g. ClinVar, dbSNP, gnomAD, etc.). These binary files can be fed into the Nirvana Annotation engine to provide supplementary annotations in the output.
+
+## The SAUtils Menu
+
+SAUtils supports building binary files for many data sources. The help menu lists them out in the form of sub-commands.
+```scss
+dotnet Nirvana/bin/Release/net6.0/SAUtils.dll
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2023 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
+---------------------------------------------------------------------------
+
+Utilities focused on supplementary annotation
+
+USAGE: dotnet SAUtils.dll <command> [options]
+
+COMMAND: AutoDownloadGenerate   auto download and generate Omim, Clinvar, Clingen
+         AaCon                  create AA conservation database
+         ancestralAllele        create Ancestral allele database from 1000Genomes data
+         ClinGen                create ClinGen database
+         Downloader             download ClinGen database
+         clinvar                create ClinVar database
+         concat                 merge multiple NSA files for the same data source having non-overlapping regions
+         Cosmic                 create COSMIC database
+         CosmicSv               create COSMIC SV database
+         CosmicFusion           create COSMIC gene fusion database
+         CosmicCGC              create COSMIC cancer gene census database
+         CustomGene             create custom gene annotation database
+         CustomVar              create custom variant annotation database
+         Dann                   create DANN database
+         Dbsnp                  create dbSNP database
+         Dgv                    create DGV database
+         DiseaseValidity        create disease validity database
+         DosageMapRegions       create dosage map regions
+         DosageSensitivity      create dosage sensitivity database
+         DownloadOmim           download OMIM database
+         ExtractMiniSA          extracts mini SA
+         ExtractMiniXml         extracts mini XML (ClinVar)
+         FilterSpliceNetTsv     filter SpliceNet predictions
+         FusionCatcher          create FusionCatcher database
+         Gerp                   create GERP conservation database
+         GlobalMinor            create global minor allele database
+         Gnomad                 create gnomAD database
+         Gnomad-lcr             create gnomAD low complexity region database
+         GnomadGeneScores       create gnomAD gene scores database
+         GnomadSV               create gnomAD structural variant database
+         Index                  edit an index file
+         MitoHet                create mitochondrial Heteroplasmy database
+         MitomapSvDb            create MITOMAP structural variants database
+         MitomapVarDb           create MITOMAP small variants database
+         Omim                   create OMIM database
+         OneKGen                create 1000 Genome small variants database
+         OneKGenSv              create 1000 Genomes structural variants database
+         OneKGenSvVcfToBed      convert 1000 Genomes structural variants VCF file into a BED-like file
+         PhyloP                 create PhyloP database
+         PrimateAi              create PrimateAI database
+         RefMinor               create Reference Minor database from 1000 Genome 
+         RemapWithDbsnp         remap a VCF file given source and destination rsID mappings
+         Revel                  create REVEL database
+         SpliceAi               create SpliceAI database
+         TopMed                 create TOPMed database
+         Gme                    create GME Variome database
+         Decipher               create Decipher database
+```
+You can get further detailed help for each sub-command by typing in the subcommand. For example:
+```scss
+dotnet Nirvana/bin/Release/net6.0/SAUtils.dll clinvar
+---------------------------------------------------------------------------
+SAUtils                                             (c) 2023 Illumina, Inc.
+Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
+---------------------------------------------------------------------------
+
+USAGE: dotnet SAUtils.dll clinvar [options]
+Creates a supplementary database with ClinVar annotations
+
+OPTIONS:
+      --ref, -r <VALUE>      compressed reference sequence file
+      --rcv, -i <VALUE>      ClinVar Full release XML file
+      --vcv, -c <VALUE>      ClinVar Variation release XML file
+      --out, -o <VALUE>      output directory
+      --help, -h             displays the help menu
+      --version, -v          displays the version
+```
+More detailed instructions about each sub-command can be found in documentation of respective data sources.
+## Output File Formats
+The format of the binary file SAUtils produce depend on the type of annotation data represented in that file (e.g. small variant vs. structural variants vs. genes).
+
+| File Extension  | Description                                               |
+|-----------------|-----------------------------------------------------------|
+| .nsa            | Small variant annotations (e.g. SNV, insertions, deletions, etc.)|
+| .gsa            | Compact variant annotations (e.g. SNV, insertions, deletions, etc.)|
+| .idx            | Index file|
+| .nsi            | Interval annotations (e.g. SV, CNVs, intervals)|
+| .nga            | Gene annotations |
+| .npd            | Conservation scores|
+| .rma            | Reference Minor allele|
+| .gfs            | Gene fusions source|
+| .gfj            | Gene fusions JSON|
+| .schema         | JSON schema|
