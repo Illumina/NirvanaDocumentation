@@ -11,7 +11,7 @@ Nirvana currently uses .NET6.0. Please make sure that you have the most current 
 ## Getting Nirvana
 
 ### Latest Release
-Contact the team to obtain the latest release and or Docker image.
+Contact the team (nirvana@illumina.com) to obtain the latest release and or Docker image.
 
 ### GitHub Release Notes
 
