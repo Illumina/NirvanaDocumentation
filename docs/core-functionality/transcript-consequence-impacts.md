@@ -80,7 +80,7 @@ Following table gives the combined rating for all consequences recognized by Nir
 ## Example Transcript
 The key `impact` for each transcript gives the impact rating for the `consequence`.
 
-```json
+```json {20-24}
 {
   "variants": [
     {

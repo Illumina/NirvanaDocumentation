@@ -54,45 +54,13 @@ From the CSV file, all columns are parsed:
 The fields `gene_name` and `refseq` define the Ensembl and RefSeq transcript IDs respectively.
 These transcripts are passed as-is and some of them might be unrecognized/deprecated by RefSeq/Ensembl.
 
-#### Parsing Run
-```text
----------------------------------------------------------------------------
-SAUtils                                             (c) 2023 Illumina, Inc.
-Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
----------------------------------------------------------------------------
-
-Chromosome 1 completed in 00:04:14.6
-Chromosome 10 completed in 00:01:39.1
-Chromosome 11 completed in 00:02:29.0
-Chromosome 12 completed in 00:02:12.7
-Chromosome 13 completed in 00:00:46.1
-Chromosome 14 completed in 00:01:21.0
-Chromosome 15 completed in 00:01:27.1
-Chromosome 16 completed in 00:01:48.0
-Chromosome 17 completed in 00:02:26.4
-Chromosome 18 completed in 00:00:42.0
-Chromosome 19 completed in 00:02:42.7
-Chromosome 2 completed in 00:03:02.9
-Chromosome 20 completed in 00:01:01.3
-Chromosome 21 completed in 00:00:24.7
-Chromosome 22 completed in 00:00:52.8
-Chromosome 3 completed in 00:02:34.6
-Chromosome 4 completed in 00:01:47.9
-Chromosome 5 completed in 00:01:59.2
-Chromosome 6 completed in 00:02:05.6
-Chromosome 7 completed in 00:02:00.2
-Chromosome 8 completed in 00:01:29.4
-Chromosome 9 completed in 00:01:49.8
-Chromosome X completed in 00:01:35.9
-Chromosome Y completed in 00:00:06.3
-Maximum bp shifted for any variant:0
-{
-  "totalLines": 70667467,
-  "scoreMinimum": 0.0534,
-  "scoreMaximum": 0.9988
-}
-
-Time: 00:42:40.7
+#### Parsing Command
+```shell
+dotnet SAUtils.dll \
+PrimateAi \
+--r "${References}/Homo_sapiens.GRCh38.Nirvana.dat" \
+--i "${ExternalDataSources}/PrimateAI/3D/PAI3D_wholeProteome_23_04_11.percentiles.pkg.refseq.csv.gz" \
+--o "${SaUtilsOutput]"
 ```
 
 
