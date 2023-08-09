@@ -27,49 +27,49 @@ Following table gives the combined rating for all consequences recognized by Nir
 | Consequence                        | SnpEff Impact | VEP Impact | Nirvana Impact | Comment                               | 
 |------------------------------------|---------------|------------|----------------|---------------------------------------|
 | bidirectional_gene_fusion          | High          |            | High           | SnpEff                                |
- | coding_sequence_variant            | Low, Modifier | Modifier   | Modifier       | Based on CDS                          |
- | copy_number_change                 |               |            | Modifier       |                                       |
- | copy_number_decrease               |               |            | Modifier       |                                       |
- | copy_number_increase               |               |            | Modifier       |                                       |
- | downstream_gene_variant            | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
- | feature_elongation                 | Modifier      | High       | High           | VEP                                   |
- | feature_truncation                 |               | High       | High           | VEP                                   |
- | five_prime_duplicated_transcript   |               |            | Modifier       |                                       |
- | five_prime_UTR_variant             | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
- | frameshift_variant                 | High          | High       | High           | SnpEff + VEP                          |
- | gene_fusion                        | High          |            | High           | SnpEff                                |
- | incomplete_terminal_codon_variant  |               | Low        | Low            | VEP                                   |
- | inframe_deletion                   | Moderate      | Moderate   | Moderate       | SnpEff + VEP                          |
- | inframe_insertion                  | Moderate      | Moderate   | Moderate       | SnpEff + VEP                          |
- | intron_variant                     | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
- | mature_miRNA_variant               |               | Modifier   | Modifier       | VEP                                   |
- | missense_variant                   | Moderate      | Moderate   | Moderate       | SnpEff + VEP                          |
- | NMD_transcript_variant             |               | Modifier   | Modifier       | VEP                                   |
- | non_coding_transcript_exon_variant | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
- | non_coding_transcript_variant      | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
- | protein_altering_variant           |               | Moderate   | Moderate       | VEP                                   |
- | regulatory_region_ablation         |               | Modifier   | Modifier       | VEP                                   |
- | regulatory_region_amplification    |               | Modifier   | Modifier       | VEP                                   |
- | regulatory_region_variant          | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
- | short_tandem_repeat_change         |               |            | Modifier       |                                       |
- | short_tandem_repeat_contraction    |               |            | Modifier       |                                       |
- | short_tandem_repeat_expansion      |               |            | Modifier       |                                       |
- | splice_acceptor_variant            | High          | High       | High           | SnpEff + VEP                          |
- | splice_donor_variant               | High          | High       | High           | SnpEff + VEP                          |
- | splice_region_variant              | Moderate, Low | Low        | Low            | Based on SPLICE_SITE_REGION in snpeff |
- | start_lost                         | High          | High       | High           | SnpEff + VEP                          |
- | start_retained_variant             | Low           | Low        | Low            | SnpEff + VEP                          |
- | stop_gained                        | High          | High       | High           | SnpEff + VEP                          |
- | stop_lost                          | High          | High       | High           | SnpEff + VEP                          |
- | stop_retained_variant              | Low           | Low        | Low            | SnpEff + VEP                          |
- | synonymous_variant                 | Low           | Low        | Low            | SnpEff + VEP                          |
- | three_prime_duplicated_transcript  |               |            | Modifier       |                                       |
- | three_prime_UTR_variant            | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
- | transcript_ablation                | High          | High       | High           | SnpEff + VEP                          |
- | transcript_amplification           |               | High       | High           | VEP                                   |
- | transcript_variant                 | Modifier      |            | Modifier       | SnpEff                                |
- | unidirectional_gene_fusion         | High          |            | High           | SnpEff                                |
- | upstream_gene_variant              | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
+| coding_sequence_variant            | Low, Modifier | Modifier   | Modifier       | Based on CDS                          |
+| copy_number_change                 |               |            | Modifier       |                                       |
+| copy_number_decrease               |               |            | Modifier       |                                       |
+| copy_number_increase               |               |            | Modifier       |                                       |
+| downstream_gene_variant            | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
+| feature_elongation                 | Modifier      | High       | High           | VEP                                   |
+| feature_truncation                 |               | High       | High           | VEP                                   |
+| five_prime_duplicated_transcript   |               |            | Modifier       |                                       |
+| five_prime_UTR_variant             | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
+| frameshift_variant                 | High          | High       | High           | SnpEff + VEP                          |
+| gene_fusion                        | High          |            | High           | SnpEff                                |
+| incomplete_terminal_codon_variant  |               | Low        | Low            | VEP                                   |
+| inframe_deletion                   | Moderate      | Moderate   | Moderate       | SnpEff + VEP                          |
+| inframe_insertion                  | Moderate      | Moderate   | Moderate       | SnpEff + VEP                          |
+| intron_variant                     | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
+| mature_miRNA_variant               |               | Modifier   | Modifier       | VEP                                   |
+| missense_variant                   | Moderate      | Moderate   | Moderate       | SnpEff + VEP                          |
+| NMD_transcript_variant             |               | Modifier   | Modifier       | VEP                                   |
+| non_coding_transcript_exon_variant | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
+| non_coding_transcript_variant      | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
+| protein_altering_variant           |               | Moderate   | Moderate       | VEP                                   |
+| regulatory_region_ablation         |               | Modifier   | Modifier       | VEP                                   |
+| regulatory_region_amplification    |               | Modifier   | Modifier       | VEP                                   |
+| regulatory_region_variant          | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
+| short_tandem_repeat_change         |               |            | Modifier       |                                       |
+| short_tandem_repeat_contraction    |               |            | Modifier       |                                       |
+| short_tandem_repeat_expansion      |               |            | Modifier       |                                       |
+| splice_acceptor_variant            | High          | High       | High           | SnpEff + VEP                          |
+| splice_donor_variant               | High          | High       | High           | SnpEff + VEP                          |
+| splice_region_variant              | Moderate, Low | Low        | Low            | Based on SPLICE_SITE_REGION in snpeff |
+| start_lost                         | High          | High       | High           | SnpEff + VEP                          |
+| start_retained_variant             | Low           | Low        | Low            | SnpEff + VEP                          |
+| stop_gained                        | High          | High       | High           | SnpEff + VEP                          |
+| stop_lost                          | High          | High       | High           | SnpEff + VEP                          |
+| stop_retained_variant              | Low           | Low        | Low            | SnpEff + VEP                          |
+| synonymous_variant                 | Low           | Low        | Low            | SnpEff + VEP                          |
+| three_prime_duplicated_transcript  |               |            | Modifier       |                                       |
+| three_prime_UTR_variant            | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
+| transcript_ablation                | High          | High       | High           | SnpEff + VEP                          |
+| transcript_amplification           |               | High       | High           | VEP                                   |
+| transcript_variant                 | Modifier      |            | Modifier       | SnpEff                                |
+| unidirectional_gene_fusion         | High          |            | High           | SnpEff                                |
+| upstream_gene_variant              | Modifier      | Modifier   | Modifier       | SnpEff + VEP                          |
 
 
 :::info Note: 
