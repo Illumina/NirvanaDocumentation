@@ -27,7 +27,7 @@ Following table gives the combined rating for all consequences recognized by Nir
 | Consequence                        | SnpEff Impact | VEP Impact | Nirvana Impact | Comment                               | 
 |------------------------------------|---------------|------------|----------------|---------------------------------------|
 | bidirectional_gene_fusion          | HIGH          |            | HIGH           | SnpEff                                |
-| coding_sequence_variant            | Low, MODIFIER | MODIFIER   | MODIFIER       | Based on CDS                          |
+| coding_sequence_variant            | LOW, MODIFIER | MODIFIER   | MODIFIER       | Based on CDS                          |
 | copy_number_change                 |               |            | MODIFIER       |                                       |
 | copy_number_decrease               |               |            | MODIFIER       |                                       |
 | copy_number_increase               |               |            | MODIFIER       |                                       |
