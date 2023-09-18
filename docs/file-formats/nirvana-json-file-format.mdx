@@ -376,6 +376,7 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 | hgvsp              | string       | HGVS protein nomenclature                                                                                   |
 | geneFusion         | object       | see [Gene Fusions entry below](#gene-fusions)                                                               |
 | isCanonical        | bool         | true when this is a canonical transcript                                                                    |
+| isManeSelect       | bool         | true when this is a MANE select transcript                                                                  |
 | polyPhenScore      | float        | range: 0 - 1.0                                                                                              |
 | polyPhenPrediction | string       | see [possible values below](#polyphen)                                                                      |
 | proteinId          | string       | protein ID. E.g. ENSP00000405294.1                                                                          |
@@ -384,6 +385,9 @@ Similarly, the recomposed variant will be shown as a new VCF position. This reco
 | completeOverlap    | bool         | true when this transcript is completely overlapped by the variant                                           |
 | cancerHotspots     | string array | see [Cancer Hotspots entry below](#cancer-hotspots)                                                         |
 
+:::caution MANE Select
+MANE select tags are only available for RefSeq transcripts on GRCh38.
+:::
 #### PolyPhen
 
 * probably damaging
