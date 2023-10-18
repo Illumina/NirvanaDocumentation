@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # The first argument is the path to the release zip file.
-# adjust these paths to reflect where you have downloaded the Nirvana data files
+# adjust these paths to reflect where you have downloaded the Illumina Annotator data files
 # In this example, we assume that the Cache, References, and SupplementaryDatabase
 # folders have been downloaded into the NIRVANA_ROOT folder.
 

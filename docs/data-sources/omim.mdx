@@ -16,7 +16,7 @@ Amberger JS, Bocchini CA, Schiettecatte FJM, Scott AF, Hamosh A. OMIM.org: Onlin
 
 ## Parse OMIM data
 
-Nirvana uses gene symbols as the gene identifiers internally. To generate the OMIM database, we first map the MIM numbers, which are the primary identifiers used by OMIM, to gene symbols supported by Nirvana. Please note that there can be multiple MIM numbers mapped to one gene symbol. Only MIM numbers successfully mapped to a Nirvana gene symbol are further processed. The OMIM API is used to fetch all the information associated with a gene MIM number, except the gene symbols.
+Illumina Annotator uses gene symbols as the gene identifiers internally. To generate the OMIM database, we first map the MIM numbers, which are the primary identifiers used by OMIM, to gene symbols supported by Nirvana. Please note that there can be multiple MIM numbers mapped to one gene symbol. Only MIM numbers successfully mapped to a Illumina Annotator gene symbol are further processed. The OMIM API is used to fetch all the information associated with a gene MIM number, except the gene symbols.
 
 ### mim2gene.txt
 
@@ -39,11 +39,11 @@ This mim2gene.txt ([http://omim.org/static/omim/data/mim2gene.txt](http://omim.o
 100678  gene    39  ACAT2   ENSG00000120437
 ```
 
-The information in the "Entrez Gene ID (NCBI)",  "Approved Gene Symbol (HGNC)" and "Ensembl Gene ID (Ensembl)" columns are used to find the proper gene symbol supported by Nirvana, which may or may not be the same as the gene symbol listed here.
+The information in the "Entrez Gene ID (NCBI)",  "Approved Gene Symbol (HGNC)" and "Ensembl Gene ID (Ensembl)" columns are used to find the proper gene symbol supported by Illumina Annotator, which may or may not be the same as the gene symbol listed here.
 
 ### OMIM API
 
-Nirvana retrieves the OMIM annotations from the [OMIM API](https://www.omim.org/api) JSON responses. The "entry" handler is used to fetch all the annotations associated with a given OMIM gene. A sample JSON response from the API is provided there.
+Illumina Annotator retrieves the OMIM annotations from the [OMIM API](https://www.omim.org/api) JSON responses. The "entry" handler is used to fetch all the annotations associated with a given OMIM gene. A sample JSON response from the API is provided there.
 
 ```json
 {
@@ -172,11 +172,11 @@ Nirvana retrieves the OMIM annotations from the [OMIM API](https://www.omim.org/
 }
 ```
 
-Content from the OMIM API JSON response is reorganized as shown in the Nirvana [JSON Output](#json-output)
+Content from the OMIM API JSON response is reorganized as shown in the Illumina Annotator [JSON Output](#json-output)
 
-Mappings between the Nirvana JSON output and OMIM JSON API are listed in the table below:
+Mappings between the Illumina Annotator JSON output and OMIM JSON API are listed in the table below:
 
-| Nirvana JSON key chain       | OMIM API JSON key chain                                                                                                          |
+| Illumina Annotator JSON key chain       | OMIM API JSON key chain                                                                                                          |
 |:-----------------------------|:---------------------------------------------------------------------------------------------------------------------------------|
 | omim:mimNumber               | omim:entryList:entry:mimNumber                                                                                                   |
 | omim:geneName                | omim:entryList:entry:geneMap:geneName                                                                                            |

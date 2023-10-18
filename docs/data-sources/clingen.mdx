@@ -85,7 +85,7 @@ When there are a mixture of variants belonging to same parent ID, we will set th
 <CLINGENJSON />
 
 ## Dosage Sensitivity Map
-The Clinical Genome Resource (ClinGen) consortium is curating genes and regions of the genome to assess whether there is evidence to support that these genes/regions are dosage sensitive and should be targeted on a cytogenomic array. Nirvana reports these annotations for overlapping SVs.
+The Clinical Genome Resource (ClinGen) consortium is curating genes and regions of the genome to assess whether there is evidence to support that these genes/regions are dosage sensitive and should be targeted on a cytogenomic array.Illumina Annotatorreports these annotations for overlapping SVs.
 
 :::info Publication
 Riggs ER, Nelson T, Merz A, Ackley T, Bunke B, Collins CD, Collinson MN, Fan YS, Goodenberger ML, Golden DM, Haglund-Hazy L, Krgovic D, Lamb AN, Lewis Z, Li G, Liu Y, Meck J, Neufeld-Kaiser W, Runke CK, Sanmann JN, Stavropoulos DJ, Strong E, Su M, Tayeh MK, Kokalj Vokac N, Thorland EC, Andersen E, Martin CL. **Copy number variant discrepancy resolution using the ClinGen dosage sensitivity map results in updated clinical interpretations in ClinVar.** *Hum Mutat. 2018 Nov;39(11):1650-1659. doi: 10.1002/humu.23610. PMID: 30095202; PMCID: PMC7374944.*
@@ -137,7 +137,7 @@ Reference: [https://www.ncbi.nlm.nih.gov/projects/dbvar/clingen/help.shtml](http
 <ClinGenDosageJson/>
 
 ### Building the supplementary files
-The gene dosage sensitivity ``.nga`` for Nirvana can be built using the ``SAUtils`` command's ``DosageSensitivity`` subcommand. The required data file is ``ClinGen_gene_curation_list_{ASSEMBLY}.tsv`` (url provided above) and its associated ``.version`` file.
+The gene dosage sensitivity ``.nga`` for Illumina Annotator can be built using the ``SAUtils`` command's ``DosageSensitivity`` subcommand. The required data file is ``ClinGen_gene_curation_list_{ASSEMBLY}.tsv`` (url provided above) and its associated ``.version`` file.
 ```scss
 NAME=ClinGen Dosage Sensitivity Map
 VERSION=20211201
@@ -207,7 +207,7 @@ Time: 00:00:00.1
 ```
 
 ## Gene-Disease Validity
-The ClinGen Gene-Disease Clinical Validity curation process involves evaluating the strength of evidence supporting or refuting a claim that variation in a particular gene causes a particular disease. Nirvana reports these annotations for genes in the genes section of the JSON.
+The ClinGen Gene-Disease Clinical Validity curation process involves evaluating the strength of evidence supporting or refuting a claim that variation in a particular gene causes a particular disease. Illumina Annotator reports these annotations for genes in the genes section of the JSON.
 
 :::info Publication
 Strande NT, Riggs ER, Buchanan AH, et al. **Evaluating the Clinical Validity of Gene-Disease Associations: An Evidence-Based Framework Developed by the Clinical Genome Resource.** *Am J Hum Genet. 2017;100(6):895-906. doi:10.1016/j.ajhg.2017.04.015*
@@ -250,7 +250,7 @@ If the classifications are the same, we should select the latest classification 
 <ClinGenGeneValidity/>
 
 ### Building the supplementary files
-The gene disease validity ``.nga`` for Nirvana can be built using the ``SAUtils`` command's ``DiseaseValidity`` subcommand. The only required data file is ``Clingen-Gene-Disease-Summary-2021-12-01.tsv`` (url provided above) and its associated ``.version`` file.
+The gene disease validity ``.nga`` for Illumina Annotator can be built using the ``SAUtils`` command's ``DiseaseValidity`` subcommand. The only required data file is ``Clingen-Gene-Disease-Summary-2021-12-01.tsv`` (url provided above) and its associated ``.version`` file.
 ```scss
 NAME=ClinGen disease validity curations
 VERSION=20211201

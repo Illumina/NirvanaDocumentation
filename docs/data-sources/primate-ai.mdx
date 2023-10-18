@@ -68,7 +68,7 @@ PrimateAi \
 
 :::caution Known Issues
 Some transcript IDs defined in the data file are obsolete, retired, or updated.
-They are not removed or modified by Nirvana, and are passed as-is from the PrimateAI-3D data source.
+They are not removed or modified by Illumina Annotator, and are passed as-is from the PrimateAI-3D data source.
 
 #### Example:
 **ENST00000643905.1** transcript is retired according to [Ensembl](https://useast.ensembl.org/Homo_sapiens/Transcript/Idhistory?db=core;t=ENST00000643905)
@@ -127,7 +127,7 @@ dotnet PrimateAiPreProcessor.dll UGA_develop.tsv PrimateAI_scores_v0.2.tsv.gz \
      ucsc_locuslink.tsv ucsc_ensembl.tsv PrimateAI_0.2_GRCh37.tsv.gz
 ```
 
-During conversion, 0.5% of the UCSC Ids cannot be converted to either Entrez or Ensembl gene IDs. Once the gene IDs have been acquired, we check to see which are available in Nirvana.
+During conversion, 0.5% of the UCSC Ids cannot be converted to either Entrez or Ensembl gene IDs. Once the gene IDs have been acquired, we check to see which are available in Illumina Annotator.
 
 The following Entrez Gene IDs were not found:
 
