@@ -2,10 +2,10 @@
 title: Getting Started
 ---
 
-Nirvana is written in C# using [.NET Core](https://www.microsoft.com/net/download/core) (an amazing runtime environment that currently runs on Windows, Linux, Mac OS X, and in Docker images). Once .NET Core has been downloaded, all you need to do is grab the source, compile it, and grab the data files.
+Illumina Annotator is written in C# using [.NET Core](https://www.microsoft.com/net/download/core) (an amazing runtime environment that currently runs on Windows, Linux, Mac OS X, and in Docker images). Once .NET Core has been downloaded, all you need to do is grab the source, compile it, and grab the data files.
 
 :::tip
-Nirvana currently uses .NET Core 2.1 or later. Please make sure that you have the most current runtime from the [.NET Core downloads](https://www.microsoft.com/net/download/core) page.
+Illumina Annotator currently uses .NET Core 2.1 or later. Please make sure that you have the most current runtime from the [.NET Core downloads](https://www.microsoft.com/net/download/core) page.
 :::
 
 ## Quick Start
@@ -23,7 +23,7 @@ We have verified that this script works on Windows (using Git Bash or WSL), Linu
 
 ### Compile from Source
 
-The following will grab the latest version of Nirvana from GitHub and compile it using the .NET Core compiler:
+The following will grab the latest version of Illumina Annotator from GitHub and compile it using the .NET Core compiler:
 
 ```bash
 git clone https://github.com/Illumina/Nirvana.git
@@ -46,7 +46,7 @@ unzip Nirvana-3.12.0-dotnet-2.1.0.zip
 You can find us on [Docker Hub](https://hub.docker.com/repository/docker/annotation/nirvana) under `annotation/nirvana`:
 
 :::caution 
-We think Docker is fantastic. However, because our data files are usually accessed through a Docker volume, there is a noticeable performance penalty when running Nirvana in Docker.
+We think Docker is fantastic. However, because our data files are usually accessed through a Docker volume, there is a noticeable performance penalty when running Illumina Annotator in Docker.
 :::
 
 ```bash	
@@ -62,7 +62,7 @@ sudo docker run --rm -it -v Data:/scratch annotation/nirvana:3.9.1 dotnet \
      /opt/nirvana/Downloader.dll --ga GRCh37 -o /scratch
 ```
 
-Similarly, we have special instructions for running Nirvana (Here's [a toy VCF](https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz) in case you need it):
+Similarly, we have special instructions for running Illumina Annotator (Here's [a toy VCF](https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz) in case you need it):
 
 ```bash
 sudo docker run --rm -it -v Data:/scratch annotation/nirvana:3.9.1 dotnet \

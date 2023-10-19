@@ -5,7 +5,7 @@
 # In this example, we assume that the Cache, References, and SupplementaryDatabase
 # folders have been downloaded into the NIRVANA_ROOT folder.
 
-# In addition to downloading the Nirvana data files, make sure you have .NET 6.0
+# In addition to downloading the Illumina Annotator data files, make sure you have .NET 6.0
 # installed on your computer:
 # https://www.microsoft.com/net/download/core
 
@@ -86,9 +86,9 @@ create_dir $DATA_DIR
 dotnet $DOWNLOADER_BIN --ga $GENOME_ASSEMBLY --out $DATA_DIR
 
 # ==============================
-# run Nirvana on a test VCF file
+# run Illumina Annotator on a test VCF file
 # ==============================
-echo "run Nirvana on a test VCF file"
+echo "run Illumina Annotator on a test VCF file"
 if [ ! -f $VCF_PATH ]
 then
     curl -O https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz

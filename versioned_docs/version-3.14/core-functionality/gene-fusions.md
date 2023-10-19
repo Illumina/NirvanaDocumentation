@@ -18,7 +18,7 @@ Kumar-Sinha, C., Kalyana-Sundaram, S. & Chinnaiyan, A.M. [Landscape of gene fusi
 
 ## Approach
 
-Nirvana uses structural variant calls to evaluate if they form either putative intra-chromosomal or inter-chromosomal gene fusions. 
+Illumina Annotator uses structural variant calls to evaluate if they form either putative intra-chromosomal or inter-chromosomal gene fusions. 
 
 For each originating transcript, we report the following:
 * originating intron or exon number
@@ -36,7 +36,7 @@ Specifically we can identify gene fusions from the following structural variant 
 
 ### Criteria
 
-The following criteria must be met for Nirvana to identify a gene fusion:
+The following criteria must be met for Illumina Annotator to identify a gene fusion:
 1. Both transcripts must possess a coding region
 1. After accounting for genomic rearrangements, both transcripts must have the same orientation
 1. Both transcripts must be from the same transcript source (i.e. we won't mix and match between RefSeq and Ensembl transcripts)
@@ -233,11 +233,11 @@ When a gene fusion is identified, we add the following Sequence Ontology consequ
 
 In this section we describe all the pairwise gene fusions that obey the criteria outlined above. In the case of `ENST00000396373.4`, there 7 other Ensembl transcripts that would produce a gene fusion. For `NM_001987.4`, there was only one transcript (`NM_001754.4`) that produce a gene fusion.
 
-In each case, Nirvana outputs which intron or exon contained the breakpoint in both of the transcripts that form the gene fusion.
+In each case, Illumina Annotator outputs which intron or exon contained the breakpoint in both of the transcripts that form the gene fusion.
 
 #### HGVS coding notation
 
-Finally, Nirvana also describes the gene fusion using HGVS c. notation:
+Finally, Illumina Annotator also describes the gene fusion using HGVS c. notation:
 
 ```json {3}
                 "fusions": [

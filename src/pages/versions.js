@@ -27,9 +27,9 @@ function Version() {
     <Layout
       title="Versions"
       permalink="/versions"
-      description="Nirvana Versions page listing all documented site versions">
+      description="Illumina Annotator Versions page listing all documented site versions">
       <main className="container margin-vert--lg">
-        <h1>Nirvana documentation versions</h1>
+        <h1>Illumina Annotator documentation versions</h1>
 
         {stableVersion && (
           <div className="margin-bottom--lg">

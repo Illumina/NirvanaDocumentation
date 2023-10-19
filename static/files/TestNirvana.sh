@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# adjust these paths to reflect where you have downloaded the Nirvana data files
+# adjust these paths to reflect where you have downloaded the Illumina Annotator data files
 # In this example, we assume that the Cache, References, and SupplementaryDatabase
 # folders have been downloaded into the NIRVANA_ROOT folder.
 
-# In addition to downloading the Nirvana data files, make sure you have .NET Core 2.0
+# In addition to downloading the Illumina Annotator data files, make sure you have .NET Core 2.0
 # installed on your computer:
 # https://www.microsoft.com/net/download/core
 
@@ -102,7 +102,7 @@ fi
 # download all of the data files
 # ==============================
 
-# download the Nirvana data
+# download the Illumina Annotator data
 if [ ! -f $REF_TEST ]
 then
     create_dir $DATA_DIR
@@ -110,7 +110,7 @@ then
 fi
 
 # ==============================
-# run Nirvana on a test VCF file
+# run Illumina Annotator on a test VCF file
 # ==============================
 
 # download a test vcf file

@@ -2,7 +2,7 @@
 title: Annotating COVID-19
 ---
 
-The Nirvana development team is mainly focused on providing annotations for the human genome. This focus allows us to maximize our resources towards understanding human health.
+The Illumina Annotator development team is mainly focused on providing annotations for the human genome. This focus allows us to maximize our resources towards understanding human health.
 
 However, nothing in our architecture prevents us from supporting other genomes. Earlier this year, we had an opportunity to put that statement to the test - we added support for annotating the **SARS-CoV-2** genome, the virus that causes the **COVID-19** disease.
 
@@ -11,18 +11,18 @@ In addition to normal transcript annotation, we also supply:
 * protein domains
 
 :::tip SARS-CoV-2 Galaxy Project
-The allele frequencies used by Nirvana were provided by the [SARS-CoV-2 Galaxy Project](https://github.com/galaxyproject/SARS-CoV-2). This is an international effort that provides ongoing analysis of COVID-19 using Galaxy, BioConda, and public research infrastructures.
+The allele frequencies used by Illumina Annotator were provided by the [SARS-CoV-2 Galaxy Project](https://github.com/galaxyproject/SARS-CoV-2). This is an international effort that provides ongoing analysis of COVID-19 using Galaxy, BioConda, and public research infrastructures.
 :::
 
 ## Getting Nirvana
 
-If you don't have Nirvana already, please consult our [Getting Started](getting-started) page first.
+If you don't have Illumina Annotator already, please consult our [Getting Started](getting-started) page first.
 
 ## Downloading the COVID-19 data files
 
 Here's [a data zip file](https://illumina.github.io/NirvanaDocumentation/files/Covid19Data.zip) containing new gene models, reference, and external data sources for SARS-CoV-2:
 
-Just go to the directory that contains your Nirvana `Data` directory.
+Just go to the directory that contains your Illumina Annotator `Data` directory.
 
 ```bash
 cd ~/Nirvana
