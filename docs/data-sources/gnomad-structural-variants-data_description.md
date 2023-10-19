@@ -14,9 +14,9 @@ nssv15777856	gnomAD-SV_v2.1_CNV_10_564_alt_1	copy number variation	1		1	GRCh38.p
 
 #### Structural Variant Type Mapping
 The source files represented the structural variants with keys using various naming conventions.
-In the Nirvana JSON output, these keys will be mapped according to the following. 
+In the Illumina Annotator JSON output, these keys will be mapped according to the following. 
 
-| Nirvana JSON SV Type Key      | GRCh37 Source SV Type Key | GRCh38 Source SV Type Key |
+| Illumina Annotator JSON SV Type Key      | GRCh37 Source SV Type Key | GRCh38 Source SV Type Key |
 |-------------------------------|---------------------------|---------------------------|
 | copy_number_variation         |                           | copy number variation     |
 | deletion                      | DEL, CN=0                 | deletion                  |

@@ -322,7 +322,7 @@ etc.) as their alternate allele
 <JSON />
 
 ## Building the supplementary files
-The ClinVar ``.nsa`` and ``.nsi`` for Nirvana can be built using the ``SAUtils`` command's ``clinvar`` subcommand.
+The ClinVar ``.nsa`` and ``.nsi`` for Illumina Annotator can be built using the ``SAUtils`` command's ``clinvar`` subcommand.
 ### Source data files
 Two input ``.xml`` files and a ``.version`` file are required in order to build the ``.nsa`` and ``.nsi`` file. You should have the following files:
 
@@ -360,7 +360,7 @@ dotnet SAUtils.dll clinvar
 ```
 Here is a sample execution:
 ```scss
-dotnet ~/development/Nirvana/bin/Debug/net6.0/SAUtils.dll clinvar \\
+dotnet SAUtils.dll clinvar \\
 --ref ~/development/References/7/Homo_sapiens.GRCh38.Nirvana.dat --rcv ClinVarFullRelease_00-latest.xml.gz \\
 --vcv ClinVarVariationRelease_00-latest.xml.gz --out ~/development/SupplementaryDatabase/63/GRCh38
 ---------------------------------------------------------------------------

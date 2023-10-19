@@ -61,13 +61,13 @@ The `nobs` value indicates how many observations were made. Ideally this would h
 
 The `vrf` (variant read frequency) array in the JSON object above is paired with with the `ad` array (allele depths) shown above.
 
-The data in the JSON object has a crazy number of significant digits. This means that as the number of samples increase, this array will grow. To make this more future-proof, Nirvana bins everything according to 0.1% increments.
+The data in the JSON object has a crazy number of significant digits. This means that as the number of samples increase, this array will grow. To make this more future-proof, Illumina Annotator bins everything according to 0.1% increments.
 
 With the binned data, we end up having 775 distinct `vrf` values in the entire JSON file. This also means that the variant with the largest number of VRFs would originally have 246 entries, but due to binning this will decrease to 143.
 
 #### Pre-processing the Data
 
-The JSON file is converted into a small TSV file that is [embedded in Nirvana](https://github.com/Illumina/Nirvana/blob/main/MitoHeteroplasmy/Resources/MitoHeteroplasmy.tsv.gz). Here is an example of the TSV file:
+The JSON file is converted into a small TSV file that is embedded in Illumina Annotator. Here is an example of the TSV file:
 
 ```scss
 #CHROM	POS	REF	ALT	VRF_BINS	VRF_COUNTS
@@ -77,10 +77,10 @@ chrM	2	A	.	0.981,0.987,0.988,0.989,0.99,0.991,0.992,0.993,0.994,0.995,0.996,0.99
 
 #### Algorithm
 
-Nirvana will calculate mitochondrial heteroplasmy data for every sample in the VCF. Using the computed VRF for each sample, we compute where in the empirical mitochondrial heteroplasmy distribution that VRF occurs and express that as a percentile.
+Illumina Annotator will calculate mitochondrial heteroplasmy data for every sample in the VCF. Using the computed VRF for each sample, we compute where in the empirical mitochondrial heteroplasmy distribution that VRF occurs and express that as a percentile.
 
 :::info Percentiles
-Nirvana uses the [statistical definition of percentile](https://en.wikipedia.org/wiki/Percentile) (indicating the value below which a given percentage of observations in a group of observations falls). Unless the sample's VRF is higher than all the VRFs represented in the distribution, the range will be [0, 1).
+Illumina Annotator uses the [statistical definition of percentile](https://en.wikipedia.org/wiki/Percentile) (indicating the value below which a given percentage of observations in a group of observations falls). Unless the sample's VRF is higher than all the VRFs represented in the distribution, the range will be [0, 1).
 :::
 
 ## Download URL

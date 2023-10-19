@@ -1,12 +1,12 @@
 ---
-title: Parsing Nirvana JSON
+title: Parsing Illumina Annotator JSON
 ---
 
 ## Why JSON?
 
 VCF is a fantastic file format that was developed during the methods development activities within the 1000 Genomes Project. Prior to that, variant callers were outputting information into a variety of tab-delimited formats. Sometimes based on existing standards (like GFF), while most were proprietary. The primary intent of VCF files was to provide a human-readable, standardized representation of genetic variants. Similar to SAM/BAM files, VCF files used BCF files as their binary counterpart.
 
-In the very beginning, Nirvana offered VCF output for annotation. While many variant annotators offer an option to output VCF files, one could argue if they are still human-readable. Here's an example from a VCF file produced by VEP v102:
+In the very beginning, Illumina Annotator offered VCF output for annotation. While many variant annotators offer an option to output VCF files, one could argue if they are still human-readable. Here's an example from a VCF file produced by VEP v102:
 
 ```
 chr3	107840527	.	A	ATTTTTTTTT,AT,ATTTTTTTT	153.51	PASS	AN=6;MQ=244.10;
@@ -27,7 +27,7 @@ ENST00000649048.1:n.179+5223_179+5231dup|||||||rs35564779||1||HGNC|HGNC:27702|||
 |||Ensembl||||||||||||||||||||||||||||||||||||||||||||0.792|-0.109757, (etc.)
 ```
 
-Originally Nirvana used the same VCF notation as VEP uses above. The problem is that you end up with a large amount of text that is difficult to parse out by eye and requires the use of several delimiters to divide the information into useful segments. When we originally annotated this variant using VEP, **this single variant used 488,909 bytes** (almost ½ MB). Surprisingly, we found that this broke some downstream tools that had preconceived notions of how long a single line could be in a VCF file.
+Originally Illumina Annotator used the same VCF notation as VEP uses above. The problem is that you end up with a large amount of text that is difficult to parse out by eye and requires the use of several delimiters to divide the information into useful segments. When we originally annotated this variant using VEP, **this single variant used 488,909 bytes** (almost ½ MB). Surprisingly, we found that this broke some downstream tools that had preconceived notions of how long a single line could be in a VCF file.
 
 :::caution
 Whitespace is not allowed in the VCF INFO field. This means that if you wanted to express a gene description from OMIM: **"HRAS PROTOONCOGENE, GTPase; HRAS"**, you would need to replace the spaces with something else like an underline. You would also need to hope that the VCF parser correctly handles embedded commas and semicolons in the description.
@@ -37,14 +37,14 @@ Whitespace is not allowed in the VCF INFO field. This means that if you wanted t
 
 Unfortunately, file format standardization has not made it all the way to variant annotation yet. The [GA4GH Annotation group](https://ga4gh-gks.github.io/variant_annotation.html) had many discussions on the topic several years ago. While a set of JSON schemas were created in that effort, there wasn't enough momentum to make this a new standard.
 
-While there is some overlap in general file formats (JSON vs VCF vs TSV), none of those are compatible with each other. I.e. the VCF representation in VEP and snpEff is different just like the JSON schemas used by VEP, Nirvana, and GA4GH are different.
+While there is some overlap in general file formats (JSON vs VCF vs TSV), none of those are compatible with each other. I.e. the VCF representation in VEP and snpEff is different just like the JSON schemas used by VEP, Illumina Annotator, and GA4GH are different.
 
 | Source  | Formats        |
 |---------|----------------|
 | VEP     | **JSON**, TSV, VCF |
 | snpEff  | VCF            |
 | Annovar | TSV            |
-| Nirvana | **JSON**           |
+| Illumina Annotator | **JSON**           |
 | GA4GH   | **JSON**           |
 
 We are interested in working together with others in the annotation space to develop a common annotation file format. Our belief is that this would accelerate methods development and benchmarking activities within annotation much in the same way the creation of SAM/BAM & VCF/BCF accelerated secondary analysis development.
@@ -63,7 +63,7 @@ Our JSON files are organized similarly to original VCF variants:
 
 ![](../file-formats/JSON-Layout.svg)
 
-Nirvana JSON files can get very large and sometimes we receive feedback that a bioinformatician tried to read the JSON file into Python or R resulting in a program that ran out of available RAM. This happens because those parsers try to load everything into memory all at once.
+Illumina Annotator JSON files can get very large and sometimes we receive feedback that a bioinformatician tried to read the JSON file into Python or R resulting in a program that ran out of available RAM. This happens because those parsers try to load everything into memory all at once.
 
 To get around those issues, we play some clever tricks with newlines that enables our users to parse our JSON files quickly and efficiently.
 
@@ -79,12 +79,12 @@ Our JSON file is arranged as follows:
 Knowing this, you can load each position line as an independent JSON object and extract the information you need. 
 
 :::info Jupyter Notebook
-To demonstrate this, we have put together a [Jupyter notebook demonstrating how to do this in Python](https://github.com/Illumina/NirvanaDocumentation/blob/master/static/files/parse-nirvana-json-python.ipynb) and a [R version](https://github.com/Illumina/NirvanaDocumentation/blob/master/static/files/parse-nirvana-json-r.ipynb) as well.
+To demonstrate this, we have put together a [Jupyter notebook demonstrating how to do this in Python](https://github.com/Illumina/IlluminaAnnotatorDocumentation/blob/master/static/files/parse-json-python.ipynb) and a [R version](https://github.com/Illumina/IlluminaAnnotatorDocumentation/blob/master/static/files/parse-json-r.ipynb) as well.
 :::
 
 ### JASIX
 
-One of the tools that we really like in the VCF ecosystem is [tabix](https://dx.doi.org/10.1093%2Fbioinformatics%2Fbtq671). Unfortunately, tabix only works for tab-delimited file formats. As a result, we created a similar tool for Nirvana JSON files called JASIX.
+One of the tools that we really like in the VCF ecosystem is [tabix](https://dx.doi.org/10.1093%2Fbioinformatics%2Fbtq671). Unfortunately, tabix only works for tab-delimited file formats. As a result, we created a similar tool for Illumina Annotator JSON files called JASIX.
 
 Here's an example of how you might use JASIX:
 
@@ -92,10 +92,10 @@ Here's an example of how you might use JASIX:
 dotnet bin/Release/net6.0/Jasix.dll -i dragen.json.gz -q chr1:942450-942455
 ```
 
-* the `-i` argument specifies the Nirvana JSON path
+* the `-i` argument specifies the Illumina Annotator JSON path
 * the `-q` argument specifies a genomic range *(you can use as many of these as you want)*
 
-JASIX also includes additional options for showing the Nirvana header or for extracting different sections (like the genes section).
+JASIX also includes additional options for showing the Illumina Annotator header or for extracting different sections (like the genes section).
 
 The output from JASIX is compliant JSON object shown in pretty-printed form:
 

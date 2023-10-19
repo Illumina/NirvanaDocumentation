@@ -6,7 +6,7 @@ import JSON from './fusioncatcher-json.md'
 
 ## Overview
 
-[FusionCatcher](https://github.com/ndaniel/fusioncatcher) is a well-known tool that searches for somatic novel/known fusion genes, translocations, and/or chimeras in RNA-seq data. While FusionCatcher itself is not part of Nirvana, we have included a subset of their genomic databases in Nirvana.
+[FusionCatcher](https://github.com/ndaniel/fusioncatcher) is a well-known tool that searches for somatic novel/known fusion genes, translocations, and/or chimeras in RNA-seq data. While FusionCatcher itself is not part of Illumina Annotator, we have included a subset of their genomic databases in Illumina Annotator.
 
 :::info Publication
 Daniel Nicorici, Mihaela Şatalan, Henrik Edgren, Sara Kangaspeska, Astrid Murumägi, Olli Kallioniemi, Sami Virtanen, Olavi Kilkku. (2014) [FusionCatcher – a tool for finding somatic fusion genes in paired-end RNA-sequencing data](https://www.biorxiv.org/content/10.1101/011650v1). *bioRxiv* 011650
@@ -26,7 +26,7 @@ The following data sources are aggregated and used to populate the `isOncogene` 
 
 ### Germline
 
-| Nirvana label        | Reference | Data    | FusionCatcher filename |
+| Illumina Annotator label        | Reference | Data    | FusionCatcher filename |
 |:---------------------|:----------|:--------|:-----------------------|
 | 1000 Genomes Project | [PLOS ONE](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0104567) | | 1000genomes.txt |
 | Healthy (strong support) | | | banned.txt |
@@ -44,7 +44,7 @@ The following data sources are aggregated and used to populate the `isOncogene` 
 
 ### Somatic
 
-| Nirvana label        | Reference | Data    | FusionCatcher filename |
+| Illumina Annotator label        | Reference | Data    | FusionCatcher filename |
 |:---------------------|:----------|:--------|:-----------------------|
 | Alaei-Mahabadi 18 cancers | [PNAS](https://www.pnas.org/content/113/48/13768.long) |  | 18cancers.txt |
 | DepMap CCLE | | [depmap.org](https://depmap.org/portal/download/) | ccle.txt |
@@ -91,7 +91,7 @@ ENSG00000066044 ENSG00000104980
 
 ### Parsing
 
-In Nirvana, we will only import a gene pair if both Ensembl gene IDs are recognized from either our GRCh37 or GRCh38 cache files.
+In Illumina Annotator, we will only import a gene pair if both Ensembl gene IDs are recognized from either our GRCh37 or GRCh38 cache files.
 
 ## Gene TSV File
 
@@ -119,9 +119,9 @@ ENSG00000008952
 ## Known Issues
 
 :::caution Known Issues
-FusionCatcher also uses creates custom Ensembl genes (e.g. `ENSG09000000002`) to handle missing Ensembl genes. Nirvana will ignore these entries since we only include the gene IDs that are currently recognized by Nirvana.
+FusionCatcher also uses creates custom Ensembl genes (e.g. `ENSG09000000002`) to handle missing Ensembl genes. Illumina Annotator will ignore these entries since we only include the gene IDs that are currently recognized by Illumina Annotator.
 
-I suspect that these were originally RefSeq genes and if so, we can support those directly in Nirvana in the future.
+I suspect that these were originally RefSeq genes and if so, we can support those directly in Illumina Annotator in the future.
 :::
 
 ## Download URL

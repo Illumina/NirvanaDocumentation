@@ -40,7 +40,7 @@ module.exports = {
     },
     navbar: {
       logo: {
-        src: 'img/NirvanaLogo.svg'
+        src: 'img/Logo.svg'
       },
       items: [
         {

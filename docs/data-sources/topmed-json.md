@@ -11,6 +11,6 @@
 |--------------|-------|-----------------------------------------------|
 | allAc        | int   | TOPMed allele count                           |
 | allAn        | int   | TOPMed allele number. Non-zero integer.       |
-| allAf        | float | TOPMed allele frequency (computed by Nirvana) |
+| allAf        | float | TOPMed allele frequency (computed by Illumina Annotator) |
 | allHc        | int   | TOPMed homozygous count                       |
 | failedFilter | bool  | True if this variant failed any filters       |
