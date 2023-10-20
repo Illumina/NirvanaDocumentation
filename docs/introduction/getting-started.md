@@ -93,7 +93,7 @@ curl -O https://illumina.github.io/IlluminaAnnotatorDocumentation/files/HiSeq.10
 Once you have downloaded the data sets, use the following command to annotate your VCF:
 
 ```bash
-dotnet IlluminaAnnotator.dll \
+dotnet Annotator.dll \
      -c Data/Cache \
      --sd Data/SupplementaryAnnotation/GRCh37 \
      -r Data/References/Homo_sapiens.GRCh37.Nirvana.dat \
@@ -138,13 +138,13 @@ The output will be a JSON file called `HiSeq.10000.json.gz`. Here's [the full JS
 ## The Illumina Annotator command line
 The full command line options can be viewed by using the `-h` option or no options
 ```bash
-dotnet IlluminaAnnotator.dll
+dotnet Annotator.dll
 ---------------------------------------------------------------------------
 IlluminaAnnotator                                   (c) 2020 Illumina, Inc.
 Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
 ---------------------------------------------------------------------------
 
-USAGE: dotnet IlluminaAnnotator.dll -i <vcf path> -c <cache dir> --sd <sa dir> -r <ref path> -o <base output filename>
+USAGE: dotnet Annotator.dll -i <vcf path> -c <cache dir> --sd <sa dir> -r <ref path> -o <base output filename>
 Annotates a set of variants
 
 OPTIONS:
@@ -175,7 +175,7 @@ Supplementary annotation version: 69, Reference version: 7
 ### Specifying annotation sources
 By default, Illumina Annotator will use all available data sources. However, the user can customize the set of sources using the `--sources|-s` option. If an unknown source is specified, a warning message will be printed.
 ```bash
-dotnet IlluminaAnnotator.dll \
+dotnet Annotator.dll \
      -c Data/Cache/GRCh37 \
      --sd Data/SupplementaryAnnotation/GRCh37 \
      -r Data/References/Homo_sapiens.GRCh37.Nirvana.dat \

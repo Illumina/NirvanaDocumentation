@@ -43,7 +43,7 @@ curl -O https://illumina.github.io/IlluminaAnnotatorDocumentation/files/Covid19M
 Once you have downloaded the data sets, use the following command to annotate your VCF:
 
 ```bash
-dotnet IlluminaAnnotator.dll \
+dotnet Annotator.dll \
      -c Data/Cache/SARS-CoV-2/SARS-CoV-2 \
      --sd Data/SupplementaryAnnotation/SARS-CoV-2 \
      -r Data/References/SARS-CoV-2.ASM985889v3.dat \

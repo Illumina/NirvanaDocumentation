@@ -13,7 +13,7 @@
 ILLUMINA_ANNOTATOR_BUILD_ZIP=$1
 ILLUMINA_ANNOTATOR_ROOT=~/IlluminaAnnotatorTest
 ILLUMINA_ANNOTATOR_BUILD_DIR=$ILLUMINA_ANNOTATOR_ROOT/build
-ILLUMINA_ANNOTATOR_BIN=$ILLUMINA_ANNOTATOR_BUILD_DIR/IlluminaAnnotator.dll
+ILLUMINA_ANNOTATOR_BIN=$ILLUMINA_ANNOTATOR_BUILD_DIR/Annotator.dll
 DOWNLOADER_BIN=$ILLUMINA_ANNOTATOR_BUILD_DIR/Downloader.dll
 DATA_DIR=$ILLUMINA_ANNOTATOR_ROOT/Data
 
@@ -29,7 +29,7 @@ REF_TEST=$REF_DIR/Homo_sapiens.${GENOME_ASSEMBLY}.Nirvana.dat
 
 ########## Help function #############
 PrintHelp(){
-	echo "USAGE: ./TestIlluminaAnnotator.sh /path/to/build/IlluminaAnnotator.zip"
+	echo "USAGE: ./TestIlluminaAnnotator.sh /path/to/build/Annotator.zip"
 }
 ############ Checking arguments ########
 if [ "$#" -neq 1 ] ; then

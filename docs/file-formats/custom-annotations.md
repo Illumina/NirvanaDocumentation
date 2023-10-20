@@ -110,7 +110,7 @@ Since Illumina Annotator can handle multiple directories with external annotatio
 the normal Illumina Annotator command-line.
 
 ```bash {3}
-$ dotnet IlluminaAnnotator.dll -c Data/Cache/GRCh38/Both \
+$ dotnet Annotator.dll -c Data/Cache/GRCh38/Both \
   -r Data/References/Homo_sapiens.GRCh38.Nirvana.dat \
   --sd Data/SupplementaryAnnotation/GRCh38 --sd CA -i TestCA.vcf -o TestCA
 ---------------------------------------------------------------------------
