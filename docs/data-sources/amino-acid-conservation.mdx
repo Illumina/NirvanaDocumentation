@@ -42,23 +42,23 @@ Macaque      MKKVTEAAISWNESTSETNNSIVTEFIFLGLSDSQELQIFLFVLFLVFYGGIVFGNLLIVITVVSDS
 If we look at position 6, we see that humans have an Alanine (A) residue. This residue is shared by Chimp and Orangutan. However, Rhesus and Macaque have a Glutamic acid (E) residue at that position. Moreover, Gorilla and Gibbon don't even have data for that transcript.
 For position 6, we would say that we have 43% conservation (3/7) since three organisms share the same residue as humans.
 
-## Assigning scores to Nirvana transcripts
-The source FASTA file comes with Ensembl/UCSC transcript ids of the transcripts used for alignments. The Nirvana cache has RefSeq and Ensembl transcripts and our first attempt was to map the given Ensembl/UCSC ids to their equivalent RefSeq/Ensembl ids. This attempt was unsuccessful since UCSC Table Browser provided mapping without version numbers. So we proceeded as follows:
+## Assigning scores to Illumina Annotator transcripts
+The source FASTA file comes with Ensembl/UCSC transcript ids of the transcripts used for alignments. The Illumina Annotator cache has RefSeq and Ensembl transcripts and our first attempt was to map the given Ensembl/UCSC ids to their equivalent RefSeq/Ensembl ids. This attempt was unsuccessful since UCSC Table Browser provided mapping without version numbers. So we proceeded as follows:
 * Take proteins which have a unique mapping (and hence one set of conservation scores). For ones that mapped to both ChrX and ChrY, we accepted the one from ChrX.
-* A Nirvana transcript having an exact peptide sequence match with a uniquely aligned protein is assigned the corresponding conservation scores.
+* A Illumina Annotator transcript having an exact peptide sequence match with a uniquely aligned protein is assigned the corresponding conservation scores.
 
 Unfortunately this left us with a very small number of transcripts having conservation scores.
 
 ### GRCh37
 * Source FASTA contained 41957 protein alignments.
 * 38165 proteins had unique scores.
-* 88 aligned proteins existed in Nirvana cache.
+* 88 aligned proteins existed in Illumina Annotator cache.
 * 118 transcripts had conservation scores.
 
 ### GRCh38
 * Source FASTA contained 110024 protein alignments.
 * 88961 proteins had unique scores.
-* 11688 aligned proteins existed in Nirvana cache.
+* 11688 aligned proteins existed in Illumina Annotator cache.
 * 12098 transcripts had conservation scores.
 ## Download URL
 

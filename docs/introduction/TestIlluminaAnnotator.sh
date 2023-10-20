@@ -1,21 +1,21 @@
 #!/bin/bash
 
 # The first argument is the path to the release zip file.
-# adjust these paths to reflect where you have downloaded the Nirvana data files
+# adjust these paths to reflect where you have downloaded the Illumina Annotator data files
 # In this example, we assume that the Cache, References, and SupplementaryDatabase
-# folders have been downloaded into the NIRVANA_ROOT folder.
+# folders have been downloaded into the ILLUMINA_ANNOTATOR_ROOT folder.
 
-# In addition to downloading the Nirvana data files, make sure you have .NET 6.0
+# In addition to downloading the Illumina Annotator data files, make sure you have .NET 6.0
 # installed on your computer:
 # https://www.microsoft.com/net/download/core
 
 
-NIRVANA_BUILD_ZIP=$1
-NIRVANA_ROOT=~/NirvanaTest
-NIRVANA_BUILD_DIR=$NIRVANA_ROOT/build
-NIRVANA_BIN=$NIRVANA_BUILD_DIR/Nirvana.dll
-DOWNLOADER_BIN=$NIRVANA_BUILD_DIR/Downloader.dll
-DATA_DIR=$NIRVANA_ROOT/Data
+ILLUMINA_ANNOTATOR_BUILD_ZIP=$1
+ILLUMINA_ANNOTATOR_ROOT=~/IlluminaAnnotatorTest
+ILLUMINA_ANNOTATOR_BUILD_DIR=$ILLUMINA_ANNOTATOR_ROOT/build
+ILLUMINA_ANNOTATOR_BIN=$ILLUMINA_ANNOTATOR_BUILD_DIR/Annotator.dll
+DOWNLOADER_BIN=$ILLUMINA_ANNOTATOR_BUILD_DIR/Downloader.dll
+DATA_DIR=$ILLUMINA_ANNOTATOR_ROOT/Data
 
 VCF_PATH=HiSeq.10000.vcf.gz
 
@@ -29,7 +29,7 @@ REF_TEST=$REF_DIR/Homo_sapiens.${GENOME_ASSEMBLY}.Nirvana.dat
 
 ########## Help function #############
 PrintHelp(){
-	echo "USAGE: ./TestNirvana.sh /path/to/build/Nirvana.zip"
+	echo "USAGE: ./TestIlluminaAnnotator.sh /path/to/build/Annotator.zip"
 }
 ############ Checking arguments ########
 if [ "$#" -neq 1 ] ; then
@@ -74,9 +74,9 @@ popd () {
 # ==============================
 # unzip the build
 # ==============================
-create_dir $NIRVANA_BUILD_DIR
-cd $NIRVANA_BUILD_DIR
-unzip $NIRVANA_BUILD_ZIP
+create_dir $ILLUMINA_ANNOTATOR_BUILD_DIR
+cd $ILLUMINA_ANNOTATOR_BUILD_DIR
+unzip $ILLUMINA_ANNOTATOR_BUILD_ZIP
 
 # ==============================
 # download all of the data files
@@ -86,16 +86,16 @@ create_dir $DATA_DIR
 dotnet $DOWNLOADER_BIN --ga $GENOME_ASSEMBLY --out $DATA_DIR
 
 # ==============================
-# run Nirvana on a test VCF file
+# run Illumina Annotator on a test VCF file
 # ==============================
-echo "run Nirvana on a test VCF file"
+echo "run Illumina Annotator on a test VCF file"
 if [ ! -f $VCF_PATH ]
 then
-    curl -O https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz
+    curl -O https://illumina.github.io/IlluminaAnnotatorDocumentation/files/HiSeq.10000.vcf.gz
 fi
 
-# analyze it with Nirvana
-dotnet $NIRVANA_BIN -c $CACHE_DIR --sd $SA_DIR -r $REF_TEST -i $VCF_PATH -o HiSeq.10000
+# analyze it with IlluminaAnnotator
+dotnet $ILLUMINA_ANNOTATOR_BIN -c $CACHE_DIR --sd $SA_DIR -r $REF_TEST -i $VCF_PATH -o HiSeq.10000
 
 popd
 popd

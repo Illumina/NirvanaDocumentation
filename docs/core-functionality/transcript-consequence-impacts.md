@@ -4,7 +4,7 @@ title: Transcript Consequence Impact
 
 ## Overview
 
-Nirvana provides transcript consequence impacts from [SnpEff](https://pcingola.github.io/SnpEff).
+Illumina Annotator provides transcript consequence impacts from [SnpEff](https://pcingola.github.io/SnpEff).
 
 Following definitions are used for the impact ratings as obtained from [SnpEff](https://github.com/pcingola/SnpEff/blob/master/src/docs/se_inputoutput.md#impact-prediction).
 
@@ -16,15 +16,15 @@ Following definitions are used for the impact ratings as obtained from [SnpEff](
 | modifier | Usually non-coding variants or variants affecting non-coding genes, where predictions are difficult or there is no evidence of impact.                               |
 
 ## Sources
-Not all consequences are rated by SnpEff, therefore Nirvana combines the ratings from SnpEff with those from VEP.
+Not all consequences are rated by SnpEff, therefore Illumina Annotator combines the ratings from SnpEff with those from VEP.
 1. SnpEff [Documentation](https://pcingola.github.io/SnpEff/se_inputoutput/) and [Codebase](https://github.com/pcingola/SnpEff/blob/001b947893b616e3af082e6c565e253eef59db98/src/main/java/org/snpeff/snpEffect/EffectType.java#L54)
 2. VEP [Documentation](https://useast.ensembl.org/info/genome/variation/prediction/predicted_data.html)
 
 ## Consequence Impacts
-Following table gives the combined rating for all consequences recognized by Nirvana.
+Following table gives the combined rating for all consequences recognized by Illumina Annotator.
 
 
-| Consequence                        | SnpEff Impact | VEP Impact | Nirvana Impact | Comment                               | 
+| Consequence                        | SnpEff Impact | VEP Impact | Illumina Annotator Impact | Comment                               | 
 |------------------------------------|---------------|------------|----------------|---------------------------------------|
 | bidirectional_gene_fusion          | high          |            | high           | SnpEff                                |
 | coding_sequence_variant            | low, modifier | modifier   | modifier       | Based on CDS                          |
@@ -74,7 +74,7 @@ Following table gives the combined rating for all consequences recognized by Nir
 
 :::info Note: 
 1. For transcripts with multiple consequences, the most severe impact rating is chosen.
-2. In case of consequences that do not have any impact rating from SnpEff or VEP, Nirvana provides `modifier`.
+2. In case of consequences that do not have any impact rating from SnpEff or VEP, Illumina Annotator provides `modifier`.
 
 :::
 
@@ -82,7 +82,7 @@ Following table gives the combined rating for all consequences recognized by Nir
 
 :::caution Known Issues
 The consequence `splice_polypyrimidine_tract_variant`, is rated as `low` by VEP. 
-However, this consequence is not annotated by Nirvana, therefore the impact will also not be provided.
+However, this consequence is not annotated by Illumina Annotator, therefore the impact will also not be provided.
 :::
 
 ## Example Transcript

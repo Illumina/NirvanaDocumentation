@@ -4,13 +4,13 @@ title: SAUtils
 
 ## Overview
 
-SAUtils is a utility tool that creates binary supplementary annotation files (*.nsa, *.gsa, *.npd, *.nsi, etc.) from original data files (e.g. VCFs, TSVs, XML, HTML, etc.) for various data sources (e.g. ClinVar, dbSNP, gnomAD, etc.). These binary files can be fed into the Nirvana Annotation engine to provide supplementary annotations in the output.
+SAUtils is a utility tool that creates binary supplementary annotation files (*.nsa, *.gsa, *.npd, *.nsi, etc.) from original data files (e.g. VCFs, TSVs, XML, HTML, etc.) for various data sources (e.g. ClinVar, dbSNP, gnomAD, etc.). These binary files can be fed into the Illumina Annotator Annotation engine to provide supplementary annotations in the output.
 
 ## The SAUtils Menu
 
 SAUtils supports building binary files for many data sources. The help menu lists them out in the form of sub-commands.
 ```scss
-dotnet Nirvana/bin/Release/net6.0/SAUtils.dll
+dotnet SAUtils.dll
 ---------------------------------------------------------------------------
 SAUtils                                             (c) 2023 Illumina, Inc.
 Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
@@ -70,7 +70,7 @@ COMMAND: AutoDownloadGenerate   auto download and generate Omim, Clinvar, Clinge
 ```
 You can get further detailed help for each sub-command by typing in the subcommand. For example:
 ```scss
-dotnet Nirvana/bin/Release/net6.0/SAUtils.dll clinvar
+dotnet SAUtils.dll clinvar
 ---------------------------------------------------------------------------
 SAUtils                                             (c) 2023 Illumina, Inc.
 Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0

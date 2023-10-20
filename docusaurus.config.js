@@ -17,10 +17,10 @@ function getNextVersionName() {
 }
 
 module.exports = {
-  title: 'Nirvana',
+  title: 'IlluminaAnnotator',
   tagline: 'Clinical-grade variant annotation',
   url: 'https://illumina.github.io',
-  baseUrl: '/NirvanaDocumentation/',
+  baseUrl: '/IlluminaAnnotatorDocumentation/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
   organizationName: 'illumina',
@@ -40,7 +40,7 @@ module.exports = {
     },
     navbar: {
       logo: {
-        src: 'img/NirvanaLogo.svg'
+        src: 'img/Logo.svg'
       },
       items: [
         {
@@ -54,12 +54,6 @@ module.exports = {
             },
           ],
         },
-        {
-          href: 'https://github.com/Illumina/Nirvana',
-          position: 'right',
-          className: 'header-github-link',
-          'aria-label': 'GitHub repository',
-        }
       ],
     },
     footer: {
@@ -78,7 +72,7 @@ module.exports = {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/Illumina/NirvanaDocumentation/edit/master/',
+            'https://github.com/Illumina/IlluminaAnnotatorDocumentation/edit/master/',
           lastVersion: 'current',
           versions: {
             current: {

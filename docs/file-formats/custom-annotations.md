@@ -17,22 +17,22 @@ while the other caters to gene annotations.
 In both cases, the custom annotation file format is a tab-delimited file that is separated into two parts: the header & the data.
 
 The header is where you can customize how you want the data to appear in the JSON file and provide context about the genome assembly and how
-Nirvana should match the variants.
+Illumina Annotator should match the variants.
 
-At Illumina, there are usually many components downstream of Nirvana that have to parse our annotations. If a customer provides a custom
+At Illumina, there are usually many components downstream of Illumina Annotator that have to parse our annotations. If a customer provides a custom
 annotation, those downstream tools need to understand more about the data such as:
 
 * data type (e.g. number, boolean, or a string)
 * data category (e.g. is this an allele count, allele number, allele frequency, etc.)
 * associated population (i.e. if this is an allele frequency)
 
-For each custom annotation, Nirvana uses this context to create a [JSON schema](https://json-schema.org/) that can be sent to downstream tools. If
+For each custom annotation, Illumina Annotator uses this context to create a [JSON schema](https://json-schema.org/) that can be sent to downstream tools. If
 a tool knows that this is an allele frequency, it can validate user input to ensure that it's in the range of [0, 1].
 
 ## Variant File Format
 
 :::caution File Format
-Nirvana expects plain text (or gzipped text) files. Using tools like Excel can add extra characters that can break parsing. We highly recommend creating and modifying these files with plain text editor like Notepad, Notepad++ or Atom.
+Illumina Annotator expects plain text (or gzipped text) files. Using tools like Excel can add extra characters that can break parsing. We highly recommend creating and modifying these files with plain text editor like Notepad, Notepad++ or Atom.
 :::
 
 ### Basic Allele Frequency Example
@@ -56,7 +56,7 @@ Imagine that you want to create a basic allele frequency custom annotation for s
 | chr16                   | 68801894 | G     | A     | 0.000006569     |
 | chr19                   | 11107436 | G     | A     | 0.00003291      |
 
-Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource.tsv).
+Here's [the full TSV file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/MyDataSource.tsv).
 
 Let's go over the header and discuss the contents:
 * `title` indicates the name of the JSON key
@@ -68,16 +68,16 @@ downstream tool that this means a global allele frequency using all sub-populati
 * `type` indicates to downstream tools the data type. Since allele frequencies are numbers, we'll write `number` in this column.
 
 :::caution Reference Base Checking
-Nirvana validates all the reference bases in a custom annotation. If a variant or genomic region is specified that has the wrong reference base, an error will be produced.
+Illumina Annotator validates all the reference bases in a custom annotation. If a variant or genomic region is specified that has the wrong reference base, an error will be produced.
 :::
 
 :::caution Sorting
 The variants within each chromosome must be sorted by genomic position.
 :::
 
-#### Convert to Nirvana Format
+#### Convert to Illumina Annotator Format
 
-First we need to convert the TSV file to Nirvana's native file format and let's put that file in a new directory called CA:
+First we need to convert the TSV file to Illumina Annotator's native file format and let's put that file in a new directory called CA:
 
 ```bash
 $ mkdir CA
@@ -94,7 +94,7 @@ Chromosome 19 completed in 00:00:00.0
 Time: 00:00:00.2
 ```
 
-#### Annotate with Nirvana
+#### Annotate with Illumina Annotator
 
 Let's annotate the following VCF (notice that it's one of the variants that we have in our custom annotation):
 
@@ -104,17 +104,17 @@ Let's annotate the following VCF (notice that it's one of the variants that we h
 16	68801894	.	G	A	.	.	.
 ```
 
-Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files/TestCA.vcf).
+Here's [the full VCF file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/TestCA.vcf).
 
-Since Nirvana can handle multiple directories with external annotations, all we need to do is specify our new CA directory in addition to
-the normal Nirvana command-line.
+Since Illumina Annotator can handle multiple directories with external annotations, all we need to do is specify our new CA directory in addition to
+the normal Illumina Annotator command-line.
 
 ```bash {3}
-$ dotnet bin/Release/netcoreapp2.1/Nirvana.dll -c Data/Cache/GRCh38/Both \
+$ dotnet Annotator.dll -c Data/Cache/GRCh38/Both \
   -r Data/References/Homo_sapiens.GRCh38.Nirvana.dat \
   --sd Data/SupplementaryAnnotation/GRCh38 --sd CA -i TestCA.vcf -o TestCA
 ---------------------------------------------------------------------------
-Nirvana                                             (c) 2020 Illumina, Inc.
+IlluminaAnnotator                                   (c) 2020 Illumina, Inc.
 Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.12.0
 ---------------------------------------------------------------------------
 
@@ -160,9 +160,9 @@ We would expect the following data to show up in our JSON output file:
           "clinvar": [
 ```
 
-Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/TestCA.json.gz).
+Here's [the full JSON file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/TestCA.json.gz).
 
-Nirvana preserves up to 6 decimal places for allele frequency data.
+Illumina Annotator preserves up to 6 decimal places for allele frequency data.
 
 ### Categories & Descriptions Example
 
@@ -183,21 +183,21 @@ Building on the previous example, we can add other types of annotations like pre
 | chr16                   | 68801894 | G     | A     | 0.000006569     | LP            | Seen in case 123 |
 | chr19                   | 11107436 | G     | A     | 0.00003291      | .             | . |
 
-Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource2.tsv).
+Here's [the full TSV file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/MyDataSource2.tsv).
 
 :::tip Placeholders
 You can use a period to denote an empty value (much in the same way as periods are used in VCF files to signify missing values). While
-Nirvana also accepts empty columns in the TSV file, we use them in these examples to promote readability.
+Illumina Annotator also accepts empty columns in the TSV file, we use them in these examples to promote readability.
 :::
 
 Let's go over what's new in this example:
-* **Column 6** adds a field called `pathogenicity` which uses the `Prediction` category. When using this category, Nirvana will
+* **Column 6** adds a field called `pathogenicity` which uses the `Prediction` category. When using this category, Illumina Annotator will
 validate to make
 sure that the field contains either the abbreviations (B, LB, VUS, LP, and P) or the long-form equivalents (e.g. benign or pathogenic).
 * **Column 7** adds a field called `notes` and it doesn't have a category or description. We're just going to use it to add some internal
 notes.
 
-#### Annotate with Nirvana
+#### Annotate with Illumina Annotator
 
 Let's use a new VCF file. It includes all the same positions as our custom annotation file, but only the middle variant also matches the
 alternate allele (allele-specific match):
@@ -210,7 +210,7 @@ alternate allele (allele-specific match):
 19	11107436	.	G	C	.	.	.
 ```
 
-Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files/TestCA2.vcf).
+Here's [the full VCF file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/TestCA2.vcf).
 
 #### Investigate the Results
 
@@ -238,7 +238,7 @@ Because we specified `#matchVariantsBy=allele` in our custom annotation file, on
           "clinvar": [
 ```
 
-Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/TestCA2.json.gz).
+Here's [the full JSON file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/TestCA2.json.gz).
 
 #### Using Positional Matches
 
@@ -310,7 +310,7 @@ In the previous example, we added a note for the middle variant, but sometimes i
 | #type                   | .        | .     | .     | string |
 | chr16                   | 20000000 | T     | 70000000 | Lots of false positives in this region |
 
-Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource3.tsv).
+Here's [the full TSV file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/MyDataSource3.tsv).
 
 Let's go over what's new in this example:
 * **Column 5** now has a field called `notes`. In essence, it looks exactly like column 7 from our previous example.
@@ -319,7 +319,7 @@ Let's go over what's new in this example:
 In the previous example we learned about positional matching vs allele-specific matching. For genomic regions, `#matchVariantsBy=allele` and `#matchVariantsBy=position` produce
 the same result.
 
-#### Annotate with Nirvana
+#### Annotate with Illumina Annotator
 
 Let's use the same VCF file as our previous example.
 
@@ -346,10 +346,10 @@ Let's use the same VCF file as our previous example.
       "variants": [
 ```
 
-Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/TestCA3.json.gz).
+Here's [the full JSON file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/TestCA3.json.gz).
 
 :::tip Reciprocal & Annotation Overlap
-For all intervals, Nirvana internally calculates two overlaps: a **variant overlap** and an **annotation overlap**. Variant overlap is the percentage of the variant's length that is
+For all intervals, Illumina Annotator internally calculates two overlaps: a **variant overlap** and an **annotation overlap**. Variant overlap is the percentage of the variant's length that is
 overlapped. Annotation overlap is the percentage of the annotation's length that is overlap.
 
 **Reciprocal overlap** is the minimum of those two overlaps. Given that the annotation is 50 Mbp and the deletion is one 1 bp, both overlaps will be pretty close to 0.
@@ -382,7 +382,7 @@ We will also see this annotation for the other variant on chr16:
 
 #### Create the Custom Annotation TSV
 
-Often we use genomic regions to represent other known CNVs and SVs in the genome. In this use case, we usually don't want to match these regions to other small variants. To force Nirvana to match regions only to other SVs, use the `#matchVariantsBy=sv` option in the header. Here is an example:
+Often we use genomic regions to represent other known CNVs and SVs in the genome. In this use case, we usually don't want to match these regions to other small variants. To force Illumina Annotator to match regions only to other SVs, use the `#matchVariantsBy=sv` option in the header. Here is an example:
 
 | Col 1                   | Col 2    | Col 3 | Col 4 | Col 5 |
 |:------------------------|:---------|:------|:------|:------|
@@ -395,12 +395,12 @@ Often we use genomic regions to represent other known CNVs and SVs in the genome
 | #type                   | .        | .     | .     | string |
 | chr16                   | 20000000 | T     | 70000000 | Lots of false positives in this region |
 
-Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource6.tsv).
+Here's [the full TSV file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/MyDataSource6.tsv).
 
 Let's go over what's new in this example:
 * The main difference is the header field `#matchVariantsBy=sv` which indicates that only structural variants that overlap these genomic regions will receive annotations.
 
-#### Annotate with Nirvana
+#### Annotate with Illumina Annotator
 
 Let's use a new VCF file. It contains the first variant from the previous file and a structural variant deletion- both of which overlap the given genomic region.
 
@@ -410,7 +410,7 @@ Let's use a new VCF file. It contains the first variant from the previous file a
 16	23603511	.	TG	T	.	.	.
 16	68801894	.	G	<DEL>	.	.	END=73683789;SVTYPE=DEL
 ```
-Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files/TestCA6.vcf).
+Here's [the full VCF file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/TestCA6.vcf).
 
 #### Investigate the Results
 Note that this time, `MyDataSource` only showed up for the `<DEL>` and not the deletion `16-23603511-TG-T`.
@@ -470,14 +470,14 @@ Previously we looked at examples that either had small variants or genomic regio
 | chr21                   | 10510818 | C     | &lt;DEL&gt;       | 10699435 | Interval #2          |
 | chr22                   | 12370388 | T     | T[chr22:12370729[ | .        | Known false-positive |
 
-Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource4.tsv).
+Here's [the full TSV file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/MyDataSource4.tsv).
 
 Let's go over what's new in this example:
 * **Column 4** now has the `REF` field. Exception for the case listed below, this is only used by small variants or translocation breakends.
 * **Column 5** now has the `END` field. This is only used by genomic regions.
-* There are two custom annotations on chr21 and the start and end coordinates look the same, so what's different? Interval #2 has **a symbolic allele in the ALT column**. When this is used in custom annotation, the start position is treated as the padding base (using VCF conventions). When Nirvana matches a variant to interval #2, it will ignore the padding base and consider the start position to be at position 10510819.
+* There are two custom annotations on chr21 and the start and end coordinates look the same, so what's different? Interval #2 has **a symbolic allele in the ALT column**. When this is used in custom annotation, the start position is treated as the padding base (using VCF conventions). When Illumina Annotator matches a variant to interval #2, it will ignore the padding base and consider the start position to be at position 10510819.
 
-#### Annotate with Nirvana
+#### Annotate with Illumina Annotator
 
 Let's use a new VCF file to study how matching works for intervals #1 and #2:
 
@@ -488,7 +488,7 @@ Let's use a new VCF file to study how matching works for intervals #1 and #2:
 22	12370388	.	T	T[chr22:12370729[	.	.	SVTYPE=BND
 ```
 
-Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files/TestCA3.vcf).
+Here's [the full VCF file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/TestCA3.vcf).
 
 The first variant is similar to the custom annotation labelled "interval #2". Position 10510818 is the padding base, so it effectively starts at position 10510819.
 
@@ -523,7 +523,7 @@ The first variant is similar to the custom annotation labelled "interval #2". Po
       ],
 ```
 
-Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/TestCA4.json.gz).
+Here's [the full JSON file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/TestCA4.json.gz).
 
 As expected, the variant and interval #2 have matching endpoints, therefore there is 100% overlap. Interval #1 technically starts 1 bp earlier, so its overlap 99.9%.
 
@@ -567,22 +567,22 @@ looks slightly different:
 | TP53                    | 7157            | Colorectal cancer, hereditary nonpolyposis, type 5 | .        |        
 | KRAS                    | ENSG00000133703 | Mismatch repair cancer syndrome                    | Seen in cohort 123 |
 
-Here's [the full TSV file](https://illumina.github.io/NirvanaDocumentation/files/MyDataSource5.tsv).
+Here's [the full TSV file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/MyDataSource5.tsv).
 
 Let's go over what's in this example:
 * **Column 2** has the `geneId` field. This can be either an **Entrez Gene ID** or an **Ensembl ID**.
 
 :::caution Gene Symbols
-Gene symbols are always in flux and are being updated on a daily basis at the NCBI and at HGNC. Due to this, Nirvana uses the `geneId` to match genes rather than the gene symbol. However, to
+Gene symbols are always in flux and are being updated on a daily basis at the NCBI and at HGNC. Due to this, Illumina Annotator uses the `geneId` to match genes rather than the gene symbol. However, to
 make the custom annotation files easier to read, we've included the `geneSymbol` column as well.
 :::
 
 :::caution Unknown Gene IDs
-When Nirvana parses the gene custom annotation file, it will note any gene IDs that are currently not recognized in Nirvana. In such a case, Nirvana will display an error showing all the
+When Illumina Annotator parses the gene custom annotation file, it will note any gene IDs that are currently not recognized in Illumina Annotator. In such a case, Illumina Annotator will display an error showing all the
 unrecognized gene IDs.
 :::
 
-#### Annotate with Nirvana
+#### Annotate with Illumina Annotator
 
 Let's use a VCF file that contain variants in TP53 and KRAS:
 
@@ -593,7 +593,7 @@ Let's use a VCF file that contain variants in TP53 and KRAS:
 17	7675074	.	C	A	.	.	.
 ```
 
-Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files/TestCA4.vcf).
+Here's [the full VCF file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/TestCA4.vcf).
 
 #### Investigate the Results
 
@@ -628,7 +628,7 @@ Here's [the full VCF file](https://illumina.github.io/NirvanaDocumentation/files
     },
 ```
 
-This is the abbreviated output for KRAS. Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/TestCA5.json.gz) if you want to see the complete KRAS entry.
+This is the abbreviated output for KRAS. Here's [the full JSON file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/TestCA5.json.gz) if you want to see the complete KRAS entry.
 
 ## Customizing the Header
 
@@ -658,7 +658,7 @@ The following genome assemblies can be specified:
 
 ### Matching Criteria
 
-The matching criteria instructs how Nirvana should match a VCF variant to the custom annotation.
+The matching criteria instructs how Illumina Annotator should match a VCF variant to the custom annotation.
 
 The following matching criteria can be specified:
 * `allele` - use this when you only want allele-specific matches. This is commonly the case when using allele frequency data sources like `gnomAD`
@@ -668,10 +668,10 @@ copy number intervals along the genome.
 
 ### Categories
 
-Categories are not used by Nirvana, but are often used by downstream tools. Categories provide hints for how those tools should filter or display
+Categories are not used by Illumina Annotator, but are often used by downstream tools. Categories provide hints for how those tools should filter or display
 the annotation data.
 
-When a category is specified, Nirvana will provide additional validation for those fields. The following table describes each category:
+When a category is specified, Illumina Annotator will provide additional validation for those fields. The following table describes each category:
 
 | Category        | Description                                                             | Validation |
 |:----------------|:------------------------------------------------------------------------|:-----------|
@@ -746,7 +746,7 @@ For boolean variables, only keys with a `true` value will be output to the JSON 
 
 ## Using SAUtils
 
-Nirvana includes a tool called `SAUtils` that converts various data sources into Nirvana's native binary format. The sub-commands `customvar` and `customgene` are used to specify a variant file or a gene file respectively.
+Illumina Annotator includes a tool called `SAUtils` that converts various data sources into Illumina Annotator's native binary format. The sub-commands `customvar` and `customgene` are used to specify a variant file or a gene file respectively.
 
 ### Convert Variant File
 
@@ -771,6 +771,6 @@ dotnet bin/Release/netcoreapp2.1/SAUtils.dll customgene \
      -o SupplementaryAnnotation
 ```
 
-* the `-c` argument specifies the Nirvana cache path
+* the `-c` argument specifies the Illumina Annotator cache path
 * the `-i` argument specifies the input TSV path
 * the `-o` argument specifies the output directory

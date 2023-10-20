@@ -1,5 +1,5 @@
 ---
-title: Nirvana JSON File Format
+title: Illumina Annotator JSON File Format
 ---
 
 import AminoAcidConservation from '../data-sources/amino-acid-conservation-json.md'
@@ -29,10 +29,10 @@ import COSMICCGC from '../data-sources/cosmic-cancer-gene-census.md'
 ## Overview
 
 ### Conventions
-In the Nirvana JSON representation, we try to maximize the amount of useful information that is relayed in the output file. As such, we have several conventions that are useful to know about:
+In the Illumina Annotator JSON representation, we try to maximize the amount of useful information that is relayed in the output file. As such, we have several conventions that are useful to know about:
 
 - With boolean key/value pairs, we only output the keys that have a true value. I.e. there's no reason to display `"isStructuralVariant":false` a few million times when annotating a small variant VCF.
-- When transferring data from the VCF file to the JSON (e.g. for allele depths (AD)), it is common to use a period (.) as a placeholder for missing data in the VCF file. Nirvana treats periods like empty or null strings and therefore will not output those entries.
+- When transferring data from the VCF file to the JSON (e.g. for allele depths (AD)), it is common to use a period (.) as a placeholder for missing data in the VCF file. Illumina Annotator treats periods like empty or null strings and therefore will not output those entries.
 
 ### JSON Layout
 
@@ -47,14 +47,14 @@ For each gene that was referenced in the transcripts found in the positions sect
 ### Parsing
 
 :::info
-We've put together a [new section that discusses how to parse our JSON files](../introduction/parsing-json) easily using examples in a [Python Jupyter notebook](https://github.com/Illumina/NirvanaDocumentation/blob/master/static/files/parse-nirvana-json-python.ipynb) and a [R version](https://github.com/Illumina/NirvanaDocumentation/blob/master/static/files/parse-nirvana-json-r.ipynb) as well. In addition, we have information about how to quickly dump content from our JSON file using a tabix-like utility called JASIX.
+We've put together a [new section that discusses how to parse our JSON files](../introduction/parsing-json) easily using examples in a [Python Jupyter notebook](https://github.com/Illumina/IlluminaAnnotatorDocumentation/blob/master/static/files/parse-json-python.ipynb) and a [R version](https://github.com/Illumina/IlluminaAnnotatorDocumentation/blob/master/static/files/parse-json-r.ipynb) as well. In addition, we have information about how to quickly dump content from our JSON file using a tabix-like utility called JASIX.
 :::
 
 ## Header
 ```json
 {
    "header":{
-      "annotator":"Nirvana 3.0.0-alpha.5+g6c52e247",
+      "annotator":"IlluminaAnnotator 3.0.0-alpha.5+g6c52e247",
       "creationTime":"2017-06-14 15:53:13",
       "genomeAssembly":"GRCh37",
       "dataSources":[
@@ -299,7 +299,7 @@ If a sample does not contain any entries, we will create a sample object that co
 | phylopScore            | float        | phyloP conservation score. Range: -14.08 to 6.424                                                                    |
 
 :::info Reference Minor Alleles
-Nirvana supports annotating reference minor alleles. In such a case, `refAllele` will be replaced by the global major allele and `altAllele` will be replaced with the original reference allele.
+Illumina Annotator supports annotating reference minor alleles. In such a case, `refAllele` will be replaced by the global major allele and `altAllele` will be replaced with the original reference allele.
 :::
 
 :::info Flagging Decomposed & Recomposed Variants
@@ -505,7 +505,7 @@ MANE select tags are only available for RefSeq transcripts on GRCh38.
 <TOPMed />
 
 ## Genes
-Nirvana repots gene annotations for all genes that have an overlapping variant with the exception of flanking variants (i.e. variants that only cause upstream_gene_variant or downstream_gene_variant).
+Illumina Annotator repots gene annotations for all genes that have an overlapping variant with the exception of flanking variants (i.e. variants that only cause upstream_gene_variant or downstream_gene_variant).
 ```json
 "genes":[
    {
