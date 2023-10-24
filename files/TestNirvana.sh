@@ -102,7 +102,7 @@ fi
 # download all of the data files
 # ==============================
 
-# download the Nirvana data
+# download the Nirvana source
 if [ ! -f $REF_TEST ]
 then
     create_dir $DATA_DIR

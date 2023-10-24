@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
                        xmlns:moz="http://www.mozilla.org/2006/browser/search/">
-  <ShortName>IlluminaAnnotator</ShortName>
-  <Description>Search IlluminaAnnotator</Description>
+  <ShortName>Nirvana</ShortName>
+  <Description>Search Nirvana</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/x-icon">https://illumina.github.io/IlluminaAnnotatorDocumentation/img/favicon.ico</Image>
-  <Url type="text/html" method="get" template="https://illumina.github.io/IlluminaAnnotatorDocumentation/search?q={searchTerms}"/>
-  <Url type="application/opensearchdescription+xml" rel="self" template="https://illumina.github.io/IlluminaAnnotatorDocumentation/opensearch.xml" />
-  <moz:SearchForm>https://illumina.github.io/IlluminaAnnotatorDocumentation/</moz:SearchForm>
+  <Image width="16" height="16" type="image/x-icon">https://illumina.github.io/NirvanaDocumentation/img/favicon.ico</Image>
+  <Url type="text/html" method="get" template="https://illumina.github.io/NirvanaDocumentation/search?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://illumina.github.io/NirvanaDocumentation/opensearch.xml" />
+  <moz:SearchForm>https://illumina.github.io/NirvanaDocumentation/</moz:SearchForm>
 </OpenSearchDescription>
