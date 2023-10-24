@@ -4,18 +4,18 @@ title: Jasix
 
 ## Overview
 
-The Jasix index is aimed at providing TABIX like indexing capabilities for the Illumina Annotator JSON output.
+The Jasix index is aimed at providing TABIX like indexing capabilities for the Nirvana JSON output.
 
 ## Creating the Jasix index
 
-The Jasix index (that comes in a .jsi) file is generated on-the-fly with Illumina Annotator output. It can also be generated independently by running the Jasix command line utility on the JSON output file. Please note that the Jasix utility can only consume JSON files that follow the Illumina Annotator JSON output format. The following code blocks demonstrate the help menu and index generating functionalities of Jasix.
+The Jasix index (that comes in a .jsi) file is generated on-the-fly with Nirvana output. It can also be generated independently by running the Jasix command line utility on the JSON output file. Please note that the Jasix utility can only consume JSON files that follow the Nirvana JSON output format. The following code blocks demonstrate the help menu and index generating functionalities of Jasix.
 
 ### Example
 
 ```scss
 dotnet Jasix.dll -h
 USAGE: dotnet Jasix.dll -i in.json.gz [options]
-Indexes a Illumina Annotator annotated JSON file
+Indexes a Nirvana annotated JSON file
 
 OPTIONS:
       --header, -t           print also the header lines
@@ -300,7 +300,7 @@ dotnet Jasix.dll -i input.json.gz  -q chrM:5000-7000 -q chrM:8500-9500 -t
 }
 ```
 ## Extracting a section
-The Illumina Annotator JSON file has three sections: header, positions and genes. Header can be printed using the -H option. If you are interested in only the positions or genes section, you can use the -s or --section option.
+The Nirvana JSON file has three sections: header, positions and genes. Header can be printed using the -H option. If you are interested in only the positions or genes section, you can use the -s or --section option.
 
 ```scss
 dotnet Jasix.dll -i input.json.gz  -s genes

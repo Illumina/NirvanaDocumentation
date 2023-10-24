@@ -2,62 +2,75 @@
 title: Getting Started
 ---
 
-Illumina Annotator is written in C# using [.NET Core](https://www.microsoft.com/net/download/core) (an amazing runtime environment that currently runs on Windows, Linux, Mac OS X, and in Docker images). Once .NET Core has been downloaded, all you need to do is grab the source, compile it, and grab the data files.
+Nirvana is written in C# using [.NET Core](https://www.microsoft.com/net/download/core) (an amazing runtime environment that currently runs on Windows, Linux, Mac OS X, and in Docker images). Once .NET Core has been downloaded, all you need to do is grab the source, compile it, and grab the data files.
 
 :::tip
-Illumina Annotator currently uses .NET6.0. Please make sure that you have the most current runtime from the [.NET Core downloads](https://www.microsoft.com/net/download/core) page.
+Nirvana currently uses .NET Core 3.1 or later. Please make sure that you have the most current runtime from the [.NET Core downloads](https://www.microsoft.com/net/download/core) page.
 :::
 
-## Getting Illumina Annotator
+## Quick Start
 
-### Latest Release
-Contact the team (annotation_support@illumina.com) to obtain the latest release and or Docker image.
-
-```bash
-mkdir -p IlluminaAnnotator/Data
-cd IlluminaAnnotator
-unzip IlluminaAnnotator-3.18.1-net6.0.zip
-```
-
-### Quick Start
-If you want to get started right away, we've created [a script](TestIlluminaAnnotator.sh) that unzips the Illumina Annotator build, downloads the annotation data, and starts annotating a test file:
+If you want to get started right away, we've created [a script](https://illumina.github.io/NirvanaDocumentation/files/TestNirvana.sh) that downloads Nirvana, compiles it, and starts annotating a test file:
 
 ```bash
-bash ./TestIlluminaAnnotator.sh IlluminaAnnotatorBuild.zip
+curl -O https://illumina.github.io/NirvanaDocumentation/files/TestNirvana.sh
+bash ./TestNirvana.sh
 ```
+
 We have verified that this script works on Windows (using Git Bash or WSL), Linux, and Mac OS X.
+
+## Getting Nirvana
+
+### Compile from Source
+
+The following will grab the latest version of Nirvana from GitHub and compile it using the .NET Core compiler:
+
+```bash
+git clone https://github.com/Illumina/Nirvana.git
+cd Nirvana
+dotnet build -c Release
+```
+
+### GitHub Release Notes
+
+Alternatively, you can grab the latest binaries from our [GitHub Releases](https://github.com/Illumina/Nirvana/releases) page:
+
+```bash
+mkdir -p Nirvana/Data
+cd Nirvana
+unzip Nirvana-3.18.1-net6.0.zip
+```
 
 ### Docker
 
-Obtain the docker image in a zip file (e.g. IlluminaAnnotator-v3.21.0-net6.0-docker.tar.gz), and load it as follows
+You can find us on [Docker Hub](https://hub.docker.com/repository/docker/annotation/nirvana) under `annotation/nirvana`:
+
+:::caution
+We think Docker is fantastic. However, because our data files are usually accessed through a Docker volume, there is a noticeable performance penalty when running Nirvana in Docker.
+:::
 
 ```bash
-docker load < IlluminaAnnotator-v3.21.0-net6.0-docker.tar.gz
+mkdir -p Nirvana/Data
+cd Nirvana
+docker pull annotation/nirvana:3.14
 ```
 
 For Docker, we have special instructions for running the Downloader:
 
 ```bash
-docker run --rm -it -v local/data/folder:/scratch IlluminaAnnotator:v3.21.0 Downloader --ga GRCh37 -o /scratch
+sudo docker run --rm -it -v Data:/scratch annotation/nirvana:3.14 dotnet \
+     /opt/nirvana/Downloader.dll --ga GRCh37 -o /scratch
 ```
 
-Similarly, we have special instructions for running IlluminaAnnotator (Here's [a toy VCF](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/HiSeq.10000.vcf.gz) in case you need it):
+Similarly, we have special instructions for running Nirvana (Here's [a toy VCF](https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz) in case you need it):
 
 ```bash
-docker run --rm -it -v local/data/folder:/scratch IlluminaAnnotator:v3.21.0 IlluminaAnnotator -c /scratch/Cache/ \
+sudo docker run --rm -it -v Data:/scratch annotation/nirvana:3.14 dotnet \
+     /opt/nirvana/Nirvana.dll -c /scratch/Cache/GRCh37/Both \
      -r /scratch/References/Homo_sapiens.GRCh37.Nirvana.dat \
      --sd /scratch/SupplementaryAnnotation/GRCh37 \
      -i /scratch/HiSeq.10000.vcf.gz -o /scratch/HiSeq
 ```
-:::caution
-We think Docker is fantastic. However, because our data files are usually accessed through a Docker volume, there is a noticeable performance penalty when running Illumina Annotator in Docker.
-:::
-:::tip
-For convenience, the user is encouraged to create aliases for the docker commands. For example:
-```bash
-alias IlluminaAnnotator="docker run --rm -it -v local/data/folder:/scratch IlluminaAnnotator:v3.21.0 IlluminaAnnotator"
-```
-:::
 
 ## Downloading the data files
 
@@ -82,36 +95,36 @@ From time to time, you can re-run the Downloader to get the latest annotation fi
 
 ## Download a test VCF file
 
-Here's [a toy VCF file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/HiSeq.10000.vcf.gz) you can play around with:
+Here's [a toy VCF file](https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz) you can play around with:
 
 ```bash
-curl -O https://illumina.github.io/IlluminaAnnotatorDocumentation/files/HiSeq.10000.vcf.gz
+curl -O https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz
 ```
 
-## Running Illumina Annotator
+## Running Nirvana
 
 Once you have downloaded the data sets, use the following command to annotate your VCF:
 
 ```bash
-dotnet Annotator.dll \
-     -c Data/Cache \
+dotnet bin/Release/net6.0/Nirvana.dll \
+     -c Data/Cache/GRCh37 \
      --sd Data/SupplementaryAnnotation/GRCh37 \
      -r Data/References/Homo_sapiens.GRCh37.Nirvana.dat \
      -i HiSeq.10000.vcf.gz \
      -o HiSeq.10000
 ```
 
-* the `-c` argument specifies the cache directory
+* the `-c` argument specifies the cache prefix
 * the `--sd` argument specifies the supplementary annotation directory
 * the `-r` argument specifies the compressed reference path
 * the `-i` argument specifies the input VCF path
 * the `-o` argument specifies the output filename prefix
 
-When running Illumina Annotator, performance metrics are shown as it evaluates each chromosome in the input VCF file:
+When running Nirvana, performance metrics are shown as it evaluates each chromosome in the input VCF file:
 
 ```bash
 ---------------------------------------------------------------------------
-IlluminaAnnotator                                   (c) 2020 Illumina, Inc.
+Nirvana                                             (c) 2023 Illumina, Inc.
 Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
 ---------------------------------------------------------------------------
 
@@ -133,18 +146,18 @@ Annotation                                          00:00:00.8       18.5 %
 Time: 00:00:04.4
 ```
 
-The output will be a JSON file called `HiSeq.10000.json.gz`. Here's [the full JSON file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/HiSeq.10000.json.gz).
+The output will be a JSON file called `HiSeq.10000.json.gz`. Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.json.gz).
 
-## The Illumina Annotator command line
+## The Nirvana command line
 The full command line options can be viewed by using the `-h` option or no options
 ```bash
-dotnet Annotator.dll
+dotnet bin/Release/net6.0/Nirvana.dll
 ---------------------------------------------------------------------------
-IlluminaAnnotator                                   (c) 2020 Illumina, Inc.
+Nirvana                                             (c) 2023 Illumina, Inc.
 Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
 ---------------------------------------------------------------------------
 
-USAGE: dotnet Annotator.dll -i <vcf path> -c <cache dir> --sd <sa dir> -r <ref path> -o <base output filename>
+USAGE: dotnet Nirvana.dll -i <vcf path> -c <cache dir> --sd <sa dir> -r <ref path> -o <base output filename>
 Annotates a set of variants
 
 OPTIONS:
@@ -173,9 +186,9 @@ OPTIONS:
 Supplementary annotation version: 69, Reference version: 7
 ```
 ### Specifying annotation sources
-By default, Illumina Annotator will use all available data sources. However, the user can customize the set of sources using the `--sources|-s` option. If an unknown source is specified, a warning message will be printed.
+By default, Nirvana will use all available data sources. However, the user can customize the set of sources using the `--sources|-s` option. If an unknown source is specified, a warning message will be printed.
 ```bash
-dotnet Annotator.dll \
+dotnet bin/Release/net6.0/Nirvana.dll \
      -c Data/Cache/GRCh37 \
      --sd Data/SupplementaryAnnotation/GRCh37 \
      -r Data/References/Homo_sapiens.GRCh37.Nirvana.dat \
@@ -183,7 +196,7 @@ dotnet Annotator.dll \
      -o HiSeq.10000 \
 	 -s omim,gnomad,ense
  ---------------------------------------------------------------------------
- IlluminaAnnotator                                   (c) 2020 Illumina, Inc.
+ Nirvana                                             (c) 2023 Illumina, Inc.
  Stromberg, Roy, Platzer, Siddiqui, Ouyang, et al                     3.21.0
  ---------------------------------------------------------------------------
 

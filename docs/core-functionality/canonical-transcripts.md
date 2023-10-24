@@ -12,7 +12,7 @@ One of the more polarizing topics within annotation is the notion of canonical t
 A few years ago, the guys over at Golden Helix wrote an excellent post about the pitfalls and issues surrounding the identification of canonical transcripts: [What’s in a Name: The Intricacies of Identifying Variants](https://blog.goldenhelix.com/whats-in-a-name-the-intricacies-of-identifying-variants/).
 :::
 
-In Illumina Annotator, we wanted to identify an algorithm for determining the canonical transcript and apply it consistently to all of our transcript data sources.
+In Nirvana, we wanted to identify an algorithm for determining the canonical transcript and apply it consistently to all of our transcript data sources.
 
 ## Known Algorithms
 

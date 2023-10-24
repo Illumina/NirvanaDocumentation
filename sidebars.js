@@ -42,7 +42,7 @@ module.exports = {
       type: 'category',
       label: 'File Formats',
       items: [
-        'file-formats/illumina-annotator-json-file-format',
+        'file-formats/nirvana-json-file-format',
         'file-formats/custom-annotations'
       ],
     },

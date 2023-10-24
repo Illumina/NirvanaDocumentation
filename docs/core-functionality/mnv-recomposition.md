@@ -10,19 +10,19 @@ Most annotation tools handle variants independently. The problem with this appro
 
 When handled independently, the two variants (C→T & G→A) would be annotated as missense annotations. However, if we consider them together, the resulting MNV would yield a stop gain.
 
-By default, Illumina Annotator identifies these types of cases where two or more SNVs would affect the same codon. In addition, it's able to perform this operation on VCFs containing large numbers of samples (we've tested this on 2,500+ samples using the 1000 Genomes Project VCF files).
+By default, Nirvana identifies these types of cases where two or more SNVs would affect the same codon. In addition, it's able to perform this operation on VCFs containing large numbers of samples (we've tested this on 2,500+ samples using the 1000 Genomes Project VCF files).
 
 :::info Publication
 Petr Danecek, Shane A McCarthy, [BCFtools/csq: haplotype-aware variant consequences](https://academic.oup.com/bioinformatics/article-abstract/33/13/2037/3000373), Bioinformatics, Volume 33, Issue 13, 1 July 2017, Pages 2037–2039
 :::
 
 :::caution Supported variant types
-At the moment, **Illumina Annotator only supports recomposing multiple SNVs into an MNV**. The Danecek paper makes a compelling case for supporting frameshifting variants paired with frame-restoring variants. We've also received requests for supporting the recomposition of an SNV with insertions and deletions. While this is something we've looked into, it represents functionality that many of our clinical customers are not yet comfortable with.
+At the moment, **Nirvana only supports recomposing multiple SNVs into an MNV**. The Danecek paper makes a compelling case for supporting frameshifting variants paired with frame-restoring variants. We've also received requests for supporting the recomposition of an SNV with insertions and deletions. While this is something we've looked into, it represents functionality that many of our clinical customers are not yet comfortable with.
 :::
 
 ## Criteria
 
-Illumina Annotator will recompose a set of SNVs if two or more SNVs are located in the same codon for any codon in any of the overlapping transcripts.
+Nirvana will recompose a set of SNVs if two or more SNVs are located in the same codon for any codon in any of the overlapping transcripts.
 
 The following criteria must also be met for at least one sample:
 1. Genotypes are provided for the VCF variants and all variants are in phase or homozygous variant.
@@ -41,7 +41,7 @@ During variant recomposition, if two SNVs affect the same codon, it becomes the 
 * Three SNVs in two adjacent codons (larger distance). The recomposed alternate allele is `ATATCC`:
 ![](three-SNVs-larger-separation.png)
 
-* Illumina Annotator can use **multiple reading frames** to aggregate the seed codon. In this example, the seed codon is highlighted in green. If we look at reading frame 1, we see that the T→A variant occurs in the `ACT` codon. The adjacent codon to the left also has a variant C→T. As a result, there can be up to four bases between SNVs when aggregating the flanking codons. The recomposed alternate allele is `TTCACATAGCACTCAC`:
+* Nirvana can use **multiple reading frames** to aggregate the seed codon. In this example, the seed codon is highlighted in green. If we look at reading frame 1, we see that the T→A variant occurs in the `ACT` codon. The adjacent codon to the left also has a variant C→T. As a result, there can be up to four bases between SNVs when aggregating the flanking codons. The recomposed alternate allele is `TTCACATAGCACTCAC`:
 ![](multiple-reading-frames.png)
 
 * Nothing will be recomposed if there's no seed codon:
@@ -256,5 +256,5 @@ The recomposed variant gets a separate entry where the `isRecomposedVariant` fla
 ```
 
 :::info Recomposed QUAL, FILTER, and GQ
-Although the example above does not demonstrate it, Illumina Annotator tries to set the quality score, filter, and genotype quality (GQ) for the recomposed variant. The QUAL score is calculated to be the **minimum** QUAL score for all the constituent SNVs. The same method is used for the genotype quality (GQ) scores. For the `filters` field, `PASS` will be used if all constituent variants passed their filters, otherwise we set it to `FilteredVariantsRecomposed`.
+Although the example above does not demonstrate it, Nirvana tries to set the quality score, filter, and genotype quality (GQ) for the recomposed variant. The QUAL score is calculated to be the **minimum** QUAL score for all the constituent SNVs. The same method is used for the genotype quality (GQ) scores. For the `filters` field, `PASS` will be used if all constituent variants passed their filters, otherwise we set it to `FilteredVariantsRecomposed`.
 :::

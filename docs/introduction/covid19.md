@@ -2,7 +2,7 @@
 title: Annotating COVID-19
 ---
 
-The Illumina Annotator development team is mainly focused on providing annotations for the human genome. This focus allows us to maximize our resources towards understanding human health.
+The Nirvana development team is mainly focused on providing annotations for the human genome. This focus allows us to maximize our resources towards understanding human health.
 
 However, nothing in our architecture prevents us from supporting other genomes. Earlier this year, we had an opportunity to put that statement to the test - we added support for annotating the **SARS-CoV-2** genome, the virus that causes the **COVID-19** disease.
 
@@ -11,39 +11,39 @@ In addition to normal transcript annotation, we also supply:
 * protein domains
 
 :::tip SARS-CoV-2 Galaxy Project
-The allele frequencies used by Illumina Annotator were provided by the [SARS-CoV-2 Galaxy Project](https://github.com/galaxyproject/SARS-CoV-2). This is an international effort that provides ongoing analysis of COVID-19 using Galaxy, BioConda, and public research infrastructures.
+The allele frequencies used by Nirvana were provided by the [SARS-CoV-2 Galaxy Project](https://github.com/galaxyproject/SARS-CoV-2). This is an international effort that provides ongoing analysis of COVID-19 using Galaxy, BioConda, and public research infrastructures.
 :::
 
-## Getting Illumina Annotator
+## Getting Nirvana
 
-If you don't have Illumina Annotator already, please consult our [Getting Started](getting-started) page first.
+If you don't have Nirvana already, please consult our [Getting Started](getting-started) page first.
 
 ## Downloading the COVID-19 data files
 
-Here's [a data zip file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/Covid19Data.zip) containing new gene models, reference, and external data sources for SARS-CoV-2:
+Here's [a data zip file](https://illumina.github.io/NirvanaDocumentation/files/Covid19Data.zip) containing new gene models, reference, and external data sources for SARS-CoV-2:
 
-Just go to the directory that contains your Illumina Annotator `Data` directory.
+Just go to the directory that contains your Nirvana `Data` directory.
 
 ```bash
-cd ~/IlluminaAnnotator
-curl -O https://illumina.github.io/IlluminaAnnotatorDocumentation/files/Covid19Data.zip
+cd ~/Nirvana
+curl -O https://illumina.github.io/NirvanaDocumentation/files/Covid19Data.zip
 unzip Covid19Data.zip
 ```
 
 ## Download a COVID-19 VCF file
 
-Here's [a COVID-19 VCF file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/Covid19Mutations.vcf.gz) you can play around with:
+Here's [a COVID-19 VCF file](https://illumina.github.io/NirvanaDocumentation/files/Covid19Mutations.vcf.gz) you can play around with:
 
 ```bash
-curl -O https://illumina.github.io/IlluminaAnnotatorDocumentation/files/Covid19Mutations.vcf.gz
+curl -O https://illumina.github.io/NirvanaDocumentation/files/Covid19Mutations.vcf.gz
 ```
 
-## Running Illumina Annotator
+## Running Nirvana
 
 Once you have downloaded the data sets, use the following command to annotate your VCF:
 
 ```bash
-dotnet Annotator.dll \
+dotnet bin/Release/netcoreapp2.1/Nirvana.dll \
      -c Data/Cache/SARS-CoV-2/SARS-CoV-2 \
      --sd Data/SupplementaryAnnotation/SARS-CoV-2 \
      -r Data/References/SARS-CoV-2.ASM985889v3.dat \
@@ -57,11 +57,11 @@ dotnet Annotator.dll \
 * the `-i` argument specifies the input VCF path
 * the `-o` argument specifies the output filename prefix
 
-When running Illumina Annotator, performance metrics are shown as it evaluates each chromosome in the input VCF file:
+When running Nirvana, performance metrics are shown as it evaluates each chromosome in the input VCF file:
 
 ```bash
 ---------------------------------------------------------------------------
-IlluminaAnnotator                                   (c) 2020 Illumina, Inc.
+Nirvana                                             (c) 2020 Illumina, Inc.
 Stromberg, Roy, Lajugie, Jiang, Li, and Kang                         3.12.0
 ---------------------------------------------------------------------------
 
@@ -83,7 +83,7 @@ Annotation                                          00:00:00.1        6.0 %
 Time: 00:00:01.5
 ```
 
-The output will be a JSON file called `Covid19Mutations.json.gz`. Here's [the full JSON file](https://illumina.github.io/IlluminaAnnotatorDocumentation/files/Covid19Mutations.json.gz).
+The output will be a JSON file called `Covid19Mutations.json.gz`. Here's [the full JSON file](https://illumina.github.io/NirvanaDocumentation/files/Covid19Mutations.json.gz).
 
 ## Investigating the Results
 

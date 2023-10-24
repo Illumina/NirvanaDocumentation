@@ -6,7 +6,7 @@ title: Gene Fusion Detection
 
 Gene fusions often result from large genomic rearrangements such as structural variants. While WGS secondary analysis pipelines typically contain alignment and variant calling stages, very few of them contain dedicated gene fusion callers. When they are included, they are usually associated with RNA-Seq pipelines where gene fusions can be readily observed.
 
-Since gene fusions are frequently observed in cancer and since many sequencing experiments do not include paired RNA-Seq data, we have added gene fusion detection and annotation to Illumina Annotator.
+Since gene fusions are frequently observed in cancer and since many sequencing experiments do not include paired RNA-Seq data, we have added gene fusion detection and annotation to Nirvana.
 
 The rich diversity in gene fusion architectures and their likely mechanisms can be seen below:
 
@@ -18,7 +18,7 @@ Kumar-Sinha, C., Kalyana-Sundaram, S. & Chinnaiyan, A.M. [Landscape of gene fusi
 
 ## Approach
 
-Illumina Annotator uses structural variant calls to evaluate if they form either putative intra-chromosomal or inter-chromosomal gene fusions. Let's consider two transcripts, `NM_014206.3` (**TMEM258**) and `NM_013402.4` (**FADS1**). Both of these genes are on the reverse strand in the genome. The vertical bar indicates the breakpoint where these transcripts are fused:
+Nirvana uses structural variant calls to evaluate if they form either putative intra-chromosomal or inter-chromosomal gene fusions. Let's consider two transcripts, `NM_014206.3` (**TMEM258**) and `NM_013402.4` (**FADS1**). Both of these genes are on the reverse strand in the genome. The vertical bar indicates the breakpoint where these transcripts are fused:
 
 ![TMEM258 & FADS1 transcripts](TMEM258_FADS1_Transcripts.svg)
 
@@ -51,7 +51,7 @@ Specifically we can identify gene fusions from the following structural variant 
 
 ### Criteria
 
-The following criteria must be met for Illumina Annotator to identify a gene fusion:
+The following criteria must be met for Nirvana to identify a gene fusion:
 1. After accounting for gene orientation and genomic rearrangements, both transcripts must have the same orientation if `enable-bidirectional-fusions` is not enabled. They can have the same or different orientations if `enable-bidirectional-fusions` is set.
 1. Both transcripts must be from the same transcript source (i.e. we won't mix and match between RefSeq and Ensembl transcripts)
 1. Both transcripts must belong to different genes
@@ -369,7 +369,7 @@ For each originating transcript, we report the following for each partner transc
 * gene fusion directionality
 
 :::tip
-Before Illumina Annotator 3.15, we provided HGVS coding notation. However, HGVS r. notation is more appropriate for these types fusion splicing events (see [HGVS SVD-WG007](https://varnomen.hgvs.org/bg-material/consultation/svd-wg007)).
+Before Nirvana 3.15, we provided HGVS coding notation. However, HGVS r. notation is more appropriate for these types fusion splicing events (see [HGVS SVD-WG007](https://varnomen.hgvs.org/bg-material/consultation/svd-wg007)).
 :::
 
 ```json {8}

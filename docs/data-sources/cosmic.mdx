@@ -29,7 +29,7 @@ a license) access our COSMIC data sources.
 ## Small Variants
 
 Our main COSMIC deliverable provides annotations for both coding and non-coding variants throughout the genome. As of COSMIC v96, this includes 28.7M variants 
-spanning the human genome. Illumina Annotator currently parses four files to extract the relevant content:
+spanning the human genome. Nirvana currently parses four files to extract the relevant content:
 * CosmicCodingMuts.vcf.gz
 * CosmicNonCodingVariants.vcf.gz
 * CosmicMutantExport.tsv.gz
@@ -81,7 +81,7 @@ For all the histologies and sites, we replace all the underlines with spaces. `s
 
 #### Parsing
 
-To aggregate the data in Illumina Annotator, we perform the following:
+To aggregate the data in Nirvana, we perform the following:
 * Parse the coding and non-coding TSV files to retrieve the histologies, sites, PubMed IDs, somatic status, and resistance mutation status. Histologies and sites 
 are tracked with respect to sample IDs.
 * Parse the coding and non-coding VCF files to retrieve the genomic variant for each entry
@@ -142,7 +142,7 @@ For all the histologies and sites, we replace all the underlines with spaces. `s
 
 #### Parsing
 
-To create the gene fusion entries in Illumina Annotator, we perform the following on each row in the TSV file:
+To create the gene fusion entries in Nirvana, we perform the following on each row in the TSV file:
 * Group all entries by FUSION_ID
 * Using all the entries related to this FUSION_ID:
   * Collect all the PubMed IDs
