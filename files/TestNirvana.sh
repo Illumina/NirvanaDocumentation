@@ -102,7 +102,7 @@ fi
 # download all of the data files
 # ==============================
 
-# download the Nirvana data
+# download the Nirvana source
 if [ ! -f $REF_TEST ]
 then
     create_dir $DATA_DIR
@@ -116,7 +116,7 @@ fi
 # download a test vcf file
 if [ ! -f $VCF_PATH ]
 then
-    curl -O https://illumina.github.io/IlluminaConnectedAnnotationsDocumentation/files/HiSeq.10000.vcf.gz
+    curl -O https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz
 fi
 
 # analyze it with Nirvana
