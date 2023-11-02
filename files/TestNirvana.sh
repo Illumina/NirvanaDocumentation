@@ -116,7 +116,7 @@ fi
 # download a test vcf file
 if [ ! -f $VCF_PATH ]
 then
-    curl -O https://illumina.github.io/NirvanaDocumentation/files/HiSeq.10000.vcf.gz
+    curl -O https://illumina.github.io/IlluminaConnectedAnnotationsDocumentation/files/HiSeq.10000.vcf.gz
 fi
 
 # analyze it with Nirvana
